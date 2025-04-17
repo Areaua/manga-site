@@ -10,7 +10,7 @@ const FavouritesPage = ({ savedAnimes, genreEmojis, onSaveClick }) => {
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedManga, setSelectedManga] = useState(null);
   const [selectedAnime, setSelectedAnime] = useState(null);
-  const [pornFilter, setPornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
+  const [pornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
 
   const handleGenreClick = (genre) => setSelectedGenre(genre);
   const handleMangaClick = (manga) => setSelectedManga(manga);
@@ -20,6 +20,7 @@ const FavouritesPage = ({ savedAnimes, genreEmojis, onSaveClick }) => {
 
   const filteredAnimes = selectedGenre === 'all' ? savedAnimes : savedAnimes.filter((anime) => anime.genre === selectedGenre);
   const allAnimes = pornFilter ? filteredAnimes : filteredAnimes.filter((anime) => !anime.name.includes('18+'));
+
 
   const mangas = [
     {

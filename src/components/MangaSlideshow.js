@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ToggleSwitch from './ToggleSwitch';
 
 const MangaSlideshow = ({ mangas, onReadClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [pornFilter, setPornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -11,11 +9,6 @@ const MangaSlideshow = ({ mangas, onReadClick }) => {
     }, 5000);
     return () => clearInterval(interval);
   }, [mangas.length]);
-
-  const handleToggleChange = (checked) => {
-    setPornFilter(checked);
-    localStorage.setItem('pornFilter', checked);
-  };
 
   return (
     <div className="relative w-full h-64 overflow-hidden">
@@ -38,9 +31,6 @@ const MangaSlideshow = ({ mangas, onReadClick }) => {
           </div>
         </div>
       ))}
-      <div className="absolute top-4 right-4">
-        <ToggleSwitch onChange={handleToggleChange} checked={pornFilter} />
-      </div>
     </div>
   );
 };

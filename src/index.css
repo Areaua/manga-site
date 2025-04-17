@@ -176,7 +176,16 @@ body.dark .sidebar li a:hover .text {
   display: none; /* Скрываем текст в свернутом состоянии */
 }
 .sidebar.close .mode-content .sun-moon {
-  margin-right: 0;
+  display: none; /* Скрываем иконки луны и солнца в свернутом состоянии */
+}
+.toggle-switch-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 10px; /* Сдвигаем переключатель левее */
+}
+.sidebar.close .toggle-switch-wrapper {
+  margin-left: 0; /* Убираем отступ в свернутом состоянии */
 }
 .toggle-switch {
   position: relative;

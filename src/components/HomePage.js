@@ -19,11 +19,7 @@ const HomePage = ({ savedAnimes, setSavedAnimes }) => {
   const [showComicPage, setShowComicPage] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedAnime, setSelectedAnime] = useState(null);
-  const [pornFilter, setPornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
-
-  useEffect(() => {
-    localStorage.setItem('pornFilter', pornFilter);
-  }, [pornFilter]);
+  const [pornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
 
   const handleGenreClick = (genre) => setSelectedGenre(genre);
   const handleReadClick = () => setShowComicPage(true);
@@ -32,11 +28,8 @@ const HomePage = ({ savedAnimes, setSavedAnimes }) => {
   const handleSaveClick = (anime) => {
     if (savedAnimes.includes(anime)) {
       setSavedAnimes(savedAnimes.filter((savedAnime) => savedAnime !== anime));
-    } else {
-      setSavedAnimes([...savedAnimes, anime]);
-    }
+    } 
   };
-
 
 
   const animes = [

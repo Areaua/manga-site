@@ -33,28 +33,28 @@ const Sidebar = ({ activePage, setActivePage }) => {
         <div className="menu">
           <ul className="menu-links">
             <li className={`nav-link ${activePage === 'home' ? 'active' : ''}`}>
-              <a href="#" onClick={() => setActivePage('home')}>
+              <button onClick={() => setActivePage('home')} className="flex items-center w-full h-full">
                 <i className="bx bx-home-alt icon"></i>
                 <span className="text nav-text">Home</span>
-              </a>
+              </button>
             </li>
             <li className={`nav-link ${activePage === 'favourites' ? 'active' : ''}`}>
-              <a href="#" onClick={() => setActivePage('favourites')}>
+              <button onClick={() => setActivePage('favourites')} className="flex items-center w-full h-full">
                 <i className="bx bx-heart icon"></i>
                 <span className="text nav-text">Favourites</span>
-              </a>
+              </button>
             </li>
             <li className={`nav-link ${activePage === 'profile' ? 'active' : ''}`}>
-              <a href="#" onClick={() => setActivePage('profile')}>
+              <button onClick={() => setActivePage('profile')} className="flex items-center w-full h-full">
                 <i className="bx bx-user icon"></i>
                 <span className="text nav-text">Profile</span>
-              </a>
+              </button>
             </li>
             <li className={`nav-link ${activePage === 'settings' ? 'active' : ''}`}>
-              <a href="#" onClick={() => setActivePage('settings')}>
+              <button onClick={() => setActivePage('settings')} className="flex items-center w-full h-full">
                 <i className="bx bx-cog icon"></i>
                 <span className="text nav-text">Settings</span>
-              </a>
+              </button>
             </li>
           </ul>
         </div>
@@ -68,8 +68,10 @@ const Sidebar = ({ activePage, setActivePage }) => {
               </div>
               <span className="mode-text text">{isDarkMode ? 'Light mode' : 'Dark mode'}</span>
             </div>
-            <div className="toggle-switch" onClick={toggleDarkMode}>
-              <span className="switch"></span>
+            <div className="toggle-switch-wrapper">
+              <div className="toggle-switch" onClick={toggleDarkMode}>
+                <span className="switch"></span>
+              </div>
             </div>
           </li>
         </div>

@@ -2,13 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 
 const ProfilePage = () => {
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
-  const [showFAQModal, setShowFAQModal] = useState(false);
-  const [showComingSoonModal, setShowComingSoonModal] = useState(false);
-  const [showAboutUsModal, setShowAboutUsModal] = useState(false);
 
   const [userData, setUserData] = useState({
     username: '',
@@ -71,7 +65,9 @@ const ProfilePage = () => {
     }
   };
 
-  const handleGetPremium = () => setShowComingSoonModal(true);
+  const handleGetPremium = () => {
+    // Можно добавить логику для "Get Premium", если нужно
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -90,9 +86,6 @@ const ProfilePage = () => {
                 <span className="text-sm font-bold mr-2" style={{ color: 'var(--text-color)' }}>
                   Free Plan
                 </span>
-                <button onClick={() => setShowPremiumModal(true)} className="text-blue-500">
-                  <span className="rounded-full bg-gray-200 p-1">?</span>
-                </button>
               </div>
               <h3 className="text-2xl font-bold" style={{ color: 'var(--text-color)' }}>
                 {userData.username || 'User'}
