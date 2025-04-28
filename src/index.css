@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Глобальные настройки ===== */
 * {
   margin: 0;
   padding: 0;
@@ -9,11 +10,49 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* ===== Скрытие скроллбаров с сохранением прокрутки ===== */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+
+body {
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Класс для точечного скрытия скроллбаров */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== Цветовые переменные ===== */
 :root {
-  /* Светлая тема (бело-красная) */
-  --body-color: #ffffff; /* Белый фон */
-  --sidebar-color: #ffffff; /* Белый фон бокового меню */
-  --primary-color: #dc143c; /* Красный акцент */
+  /* Светлая тема */
+  --body-color: #ffffff;
+  --sidebar-color: #ffffff;
+  --primary-color: #dc143c;
   --primary-color-light: #f6f5ff;
   --toggle-color: #ddd;
   --text-color: #707070;
@@ -22,22 +61,23 @@
 }
 
 body.dark {
-  /* Темная тема (светло-синий фон) */
-  --body-color: #2a3b5b; /* Более светлый синий фон */
-  --sidebar-color: #2a3b5b; /* Более светлый синий фон бокового меню */
-  --primary-color: #ff69b4; /* Розовый акцент */
-  --primary-color-light: #3b4e7a; /* Еще более светлый синий */
-  --toggle-color: #ff69b4; /* Розовый для переключателя */
-  --text-color: #ffffff; /* Белый текст */
+  /* Темная тема */
+  --body-color: #2a3b5b;
+  --sidebar-color: #2a3b5b;
+  --primary-color: #ff69b4;
+  --primary-color-light: #3b4e7a;
+  --toggle-color: #ff69b4;
+  --text-color: #ffffff;
 }
 
+/* ===== Базовые стили ===== */
 body {
   min-height: 100vh;
   background-color: var(--body-color);
   transition: var(--tran-05);
 }
 
-/* Sidebar Styles */
+/* ===== Стили Sidebar ===== */
 .sidebar {
   position: fixed;
   top: 0;
@@ -49,6 +89,7 @@ body {
   transition: var(--tran-05);
   z-index: 100;
 }
+
 .sidebar.close {
   width: 88px;
 }
@@ -57,10 +98,12 @@ body {
   display: flex;
   align-items: center;
 }
+
 .sidebar .image img {
   width: 40px;
   border-radius: 6px;
 }
+
 .sidebar .text {
   color: var(--text-color);
   font-size: 17px;
@@ -68,6 +111,7 @@ body {
   white-space: nowrap;
   transition: var(--tran-03);
 }
+
 .sidebar.close .text {
   opacity: 0;
 }
@@ -88,7 +132,9 @@ body {
   font-size: 22px;
   cursor: pointer;
   transition: var(--tran-05);
+  z-index: 99;
 }
+
 .sidebar.close .toggle {
   transform: translateY(-50%) rotate(0deg);
 }
@@ -99,6 +145,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
+
 .sidebar li {
   height: 50px;
   list-style: none;
@@ -106,6 +153,7 @@ body {
   align-items: center;
   margin-top: 10px;
 }
+
 .sidebar li button {
   display: flex;
   align-items: center;
@@ -117,20 +165,25 @@ body {
   border: none;
   cursor: pointer;
 }
+
 .sidebar li button:hover {
   background-color: var(--primary-color);
 }
+
 .sidebar li button:hover .icon,
 .sidebar li button:hover .text {
   color: var(--sidebar-color);
 }
+
 body.dark .sidebar li button:hover {
   background-color: var(--primary-color);
 }
+
 body.dark .sidebar li button:hover .icon,
 body.dark .sidebar li button:hover .text {
-  color: #ffffff; /* Белый цвет при наведении в темной теме */
+  color: #ffffff;
 }
+
 .sidebar .icon {
   min-width: 60px;
   font-size: 20px;
@@ -140,7 +193,15 @@ body.dark .sidebar li button:hover .text {
   color: var(--text-color);
 }
 
-/* Content Area */
+/* ===== Стили Header ===== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--body-color);
+}
+
+/* ===== Основной контент ===== */
 .home {
   position: absolute;
   top: 0;
@@ -149,124 +210,38 @@ body.dark .sidebar li button:hover .text {
   width: calc(100% - 250px);
   background-color: var(--body-color);
   transition: var(--tran-05);
-  overflow-y: auto;
+  margin-left: 25px;
 }
+
 .sidebar.close ~ .home {
   left: 88px;
   width: calc(100% - 88px);
 }
 
-/* Dark Mode Toggle */
-.sidebar .mode {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  border-radius: 6px;
-  background-color: var(--primary-color-light);
-  transition: var(--tran-05);
-}
-.sidebar.close .mode {
-  justify-content: center;
-  padding: 0;
-}
-.sidebar .mode-content {
-  display: flex;
-  align-items: center;
-}
-.sidebar.close .mode-content {
-  justify-content: center;
-}
-.sidebar.close .mode-content .mode-text {
-  display: none; /* Скрываем текст в свернутом состоянии */
-}
-.sidebar.close .mode-content .sun-moon {
-  display: none; /* Скрываем иконки луны и солнца в свернутом состоянии */
-}
-.toggle-switch-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-left: 10px; /* Сдвигаем переключатель левее */
-}
-.sidebar.close .toggle-switch-wrapper {
-  margin-left: 0; /* Убираем отступ в свернутом состоянии */
-}
-.toggle-switch {
-  position: relative;
-  height: 22px;
-  width: 40px;
-  border-radius: 25px;
-  background-color: var(--toggle-color);
-  cursor: pointer;
-  transition: var(--tran-05);
-}
-.toggle-switch .switch {
-  position: absolute;
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-  background-color: var(--sidebar-color);
-  transition: var(--tran-04);
-}
-body.dark .toggle-switch .switch {
-  left: 20px;
-}
-
-/* Toggle Switch for 18+ */
-.toggle-switch-18 {
-  position: relative;
-  width: 40px;
-  height: 22px;
-  background-color: #ccc;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.toggle-switch-18.active {
-  background-color: var(--primary-color);
-}
-.toggle-switch-18::before {
-  content: '';
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: white;
-  border-radius: 50%;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-  transition: left 0.3s ease;
-}
-.toggle-switch-18.active::before {
-  left: 20px;
-}
-
-/* Read Button Styles */
+/* ===== Стили для кнопок ===== */
 .read-button {
-  background-color: #ffffff; /* Белый фон по умолчанию */
-  color: #000000; /* Черный текст */
+  background-color: #ffffff;
+  color: #000000;
   transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 body:not(.dark) .read-button:hover {
-  background-color: #dc143c; /* Красный фон в светлой теме при наведении */
-  color: #ffffff; /* Белый текст */
-  transform: scale(1.1); /* Анимация масштабирования */
-  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); /* Эффект пульсации через тень */
-  animation: pulse 0.5s infinite alternate;
-}
-body.dark .read-button:hover {
-  background-color: #ff69b4; /* Розовый фон в темной теме при наведении */
-  color: #ffffff; /* Белый текст */
-  transform: scale(1.1); /* Анимация масштабирования */
-  box-shadow: 0 0 10px rgba(255, 105, 180, 0.5); /* Эффект пульсации через тень */
+  background-color: #dc143c;
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
   animation: pulse 0.5s infinite alternate;
 }
 
-/* Slider Dots */
+body.dark .read-button:hover {
+  background-color: #ff69b4;
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+  animation: pulse 0.5s infinite alternate;
+}
+
+/* ===== Стили для слайдера ===== */
 .slider-dots {
   position: absolute;
   bottom: 10px;
@@ -275,6 +250,7 @@ body.dark .read-button:hover {
   display: flex;
   gap: 8px;
 }
+
 .slider-dot {
   width: 10px;
   height: 10px;
@@ -283,14 +259,16 @@ body.dark .read-button:hover {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 .slider-dot.active {
   background-color: var(--primary-color);
 }
 
-/* Animations */
+/* ===== Анимации ===== */
 .card-animation {
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
 .card-animation:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -299,9 +277,11 @@ body.dark .read-button:hover {
 .genre-filter-animation {
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
+
 .genre-filter-animation:hover {
   transform: scale(1.1);
 }
+
 .genre-bounce {
   animation: bounce 0.5s ease;
 }
@@ -323,6 +303,108 @@ body.dark .read-button:hover {
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
   }
   100% {
-    box-shadow: 0 0 15px rgba(255, 695, 255, 0.6);
+    box-shadow: 0 0 15px rgba(255, 105, 255, 0.6);
   }
+}
+
+/* ===== Переключатель 18+ ===== */
+.toggle-switch-18 {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background-color: #ccc;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-switch-18.active {
+  background-color: var(--primary-color);
+}
+
+.toggle-switch-18::before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  transition: left 0.3s ease;
+}
+
+.toggle-switch-18.active::before {
+  left: 20px;
+}
+
+/* ===== Темный режим ===== */
+.sidebar .mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-radius: 6px;
+  background-color: var(--primary-color-light);
+  transition: var(--tran-05);
+}
+
+.sidebar.close .mode {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar .mode-content {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar.close .mode-content {
+  justify-content: center;
+}
+
+.sidebar.close .mode-content .mode-text {
+  display: none;
+}
+
+.sidebar.close .mode-content .sun-moon {
+  display: none;
+}
+
+.toggle-switch-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.sidebar.close .toggle-switch-wrapper {
+  margin-left: 0;
+}
+
+.toggle-switch {
+  position: relative;
+  height: 22px;
+  width: 40px;
+  border-radius: 25px;
+  background-color: var(--toggle-color);
+  cursor: pointer;
+  transition: var(--tran-05);
+}
+
+.toggle-switch .switch {
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  background-color: var(--sidebar-color);
+  transition: var(--tran-04);
+}
+
+body.dark .toggle-switch .switch {
+  left: 20px;
 }
