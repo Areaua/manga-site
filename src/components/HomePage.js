@@ -19,18 +19,28 @@ const HomePage = ({ savedAnimes, setSavedAnimes }) => {
   const [showComicPage, setShowComicPage] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedAnime, setSelectedAnime] = useState(null);
-  const [pornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
+  const [pornFilter, setPornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setPornFilter(localStorage.getItem('pornFilter') === 'true');
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const handleGenreClick = (genre) => setSelectedGenre(genre);
   const handleReadClick = () => setShowComicPage(true);
   const handleBackClick = () => setShowComicPage(false);
   const handleAnimeClick = (anime) => setSelectedAnime(anime);
   const handleSaveClick = (anime) => {
-    if (savedAnimes.includes(anime)) {
-      setSavedAnimes(savedAnimes.filter((savedAnime) => savedAnime !== anime));
-    } 
+    const updatedAnimes = savedAnimes.includes(anime)
+      ? savedAnimes.filter((savedAnime) => savedAnime.name !== anime.name)
+      : [...savedAnimes, anime];
+    setSavedAnimes(updatedAnimes);
+    localStorage.setItem('savedAnimes', JSON.stringify(updatedAnimes));
   };
-
 
   const animes = [
     { name: 'Anime Thriller 1', genre: 'Thriller', href: 'https://example.com/page1.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
@@ -75,22 +85,12 @@ const HomePage = ({ savedAnimes, setSavedAnimes }) => {
   ];
 
   const mangas = [
-    {
-      title: "Cinderella Chef",
-      image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg"
-    },
-    {
-      title: "Another Manga",
-      image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg"
-    },
-    {
-      title: "Yet Another Manga",
-      image: "https://storage.googleapis.com/a1aa/image/3.jpg"
-    },
-    {
-      title: "Fourth Manga",
-      image: "https://storage.googleapis.com/a1aa/image/XzBJtjW6lypKPF4VLR6QDMAyilFn9ulNcm8EXLiZtxyaey3JA.jpg"
-    }
+    { title: "Cinderella Chef", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false },
+    { title: "Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false },
+    { title: "Yet Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true },
+    { title: "Fourth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: true },
+    { title: "Fifth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false },
+    { title: "Sixth Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false },
   ];
 
   const filteredAnimes = selectedGenre === 'all' ? animes : animes.filter((anime) => anime.genre === selectedGenre);
@@ -113,7 +113,7 @@ const HomePage = ({ savedAnimes, setSavedAnimes }) => {
   return (
     <div className="min-h-screen overflow-y-auto">
       <Header />
-      <MangaSlideshow mangas={mangas} onReadClick={handleReadClick} />
+      <MangaSlideshow mangas={mangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
       <GenreSelector genreEmojis={genreEmojis} selectedGenre={selectedGenre} handleGenreClick={handleGenreClick} />
       <div className="p-4 overflow-y-auto">
         <AnimeList

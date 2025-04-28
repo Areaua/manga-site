@@ -22,11 +22,11 @@
 }
 
 body.dark {
-  /* Темная тема (темно-синяя с розовыми акцентами) */
-  --body-color: #1e2a44; /* Темно-синий фон */
-  --sidebar-color: #1e2a44; /* Темно-синий фон бокового меню */
+  /* Темная тема (светло-синий фон) */
+  --body-color: #2a3b5b; /* Более светлый синий фон */
+  --sidebar-color: #2a3b5b; /* Более светлый синий фон бокового меню */
   --primary-color: #ff69b4; /* Розовый акцент */
-  --primary-color-light: #2a3b5b; /* Более светлый темно-синий */
+  --primary-color-light: #3b4e7a; /* Еще более светлый синий */
   --toggle-color: #ff69b4; /* Розовый для переключателя */
   --text-color: #ffffff; /* Белый текст */
 }
@@ -106,24 +106,29 @@ body {
   align-items: center;
   margin-top: 10px;
 }
-.sidebar li a {
+.sidebar li button {
   display: flex;
   align-items: center;
   width: 100%;
   height: 100%;
-  text-decoration: none;
   border-radius: 6px;
   transition: var(--tran-03);
+  background: none;
+  border: none;
+  cursor: pointer;
 }
-.sidebar li a:hover {
+.sidebar li button:hover {
   background-color: var(--primary-color);
 }
-.sidebar li a:hover .icon,
-.sidebar li a:hover .text {
+.sidebar li button:hover .icon,
+.sidebar li button:hover .text {
   color: var(--sidebar-color);
 }
-body.dark .sidebar li a:hover .icon,
-body.dark .sidebar li a:hover .text {
+body.dark .sidebar li button:hover {
+  background-color: var(--primary-color);
+}
+body.dark .sidebar li button:hover .icon,
+body.dark .sidebar li button:hover .text {
   color: #ffffff; /* Белый цвет при наведении в темной теме */
 }
 .sidebar .icon {
@@ -240,6 +245,48 @@ body.dark .toggle-switch .switch {
   left: 20px;
 }
 
+/* Read Button Styles */
+.read-button {
+  background-color: #ffffff; /* Белый фон по умолчанию */
+  color: #000000; /* Черный текст */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+body:not(.dark) .read-button:hover {
+  background-color: #dc143c; /* Красный фон в светлой теме при наведении */
+  color: #ffffff; /* Белый текст */
+  transform: scale(1.1); /* Анимация масштабирования */
+  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); /* Эффект пульсации через тень */
+  animation: pulse 0.5s infinite alternate;
+}
+body.dark .read-button:hover {
+  background-color: #ff69b4; /* Розовый фон в темной теме при наведении */
+  color: #ffffff; /* Белый текст */
+  transform: scale(1.1); /* Анимация масштабирования */
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.5); /* Эффект пульсации через тень */
+  animation: pulse 0.5s infinite alternate;
+}
+
+/* Slider Dots */
+.slider-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+.slider-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.slider-dot.active {
+  background-color: var(--primary-color);
+}
+
 /* Animations */
 .card-animation {
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -268,5 +315,14 @@ body.dark .toggle-switch .switch {
   }
   100% {
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(255, 695, 255, 0.6);
   }
 }
