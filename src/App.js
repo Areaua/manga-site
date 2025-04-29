@@ -12,10 +12,17 @@ const App = () => {
     const saved = localStorage.getItem('savedAnimes');
     return saved ? JSON.parse(saved) : [];
   });
+  const [pornFilter, setPornFilter] = useState(() => localStorage.getItem('pornFilter') === 'true');
 
   useEffect(() => {
     localStorage.setItem('savedAnimes', JSON.stringify(savedAnimes));
   }, [savedAnimes]);
+
+  useEffect(() => {
+    localStorage.setItem('pornFilter', pornFilter);
+  }, [pornFilter]);
+
+  const togglePornFilter = () => setPornFilter(!pornFilter);
 
   const genreEmojis = {
     Thriller: '💀',
@@ -44,7 +51,9 @@ const App = () => {
           />
         )}
         {activePage === 'profile' && <ProfilePage />}
-        {activePage === 'settings' && <SettingsPage />}
+        {activePage === 'settings' && (
+          <SettingsPage pornFilter={pornFilter} togglePornFilter={togglePornFilter} />
+        )}
       </div>
     </div>
   );

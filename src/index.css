@@ -49,25 +49,29 @@ body {
 
 /* ===== Цветовые переменные ===== */
 :root {
-  /* Светлая тема */
-  --body-color: #ffffff;
-  --sidebar-color: #ffffff;
-  --primary-color: #dc143c;
-  --primary-color-light: #f6f5ff;
-  --toggle-color: #ddd;
-  --text-color: #707070;
+  /* Светлая тема: бело-синяя */
+  --body-color: #ffffff; /* Белый фон */
+  --sidebar-color: #ffffff; /* Белый фон сайдбара */
+  --primary-color: #1e90ff; /* Синий акцент (как у кнопки Business) */
+  --primary-color-light: #e6f0fa; /* Очень светлый синий для акцентов */
+  --toggle-color: #add8e6; /* Светло-синий для переключателя */
+  --text-color: #707070; /* Серый текст */
+  --header-text-color: #ffffff; /* Белый текст для названия в светлой теме */
+  --header-bg-color: #1e90ff; /* Тот же синий, что и --primary-color */
   --tran-03: all 0.3s ease;
   --tran-05: all 0.5s ease;
 }
 
 body.dark {
-  /* Темная тема */
-  --body-color: #2a3b5b;
-  --sidebar-color: #2a3b5b;
-  --primary-color: #ff69b4;
-  --primary-color-light: #3b4e7a;
-  --toggle-color: #ff69b4;
-  --text-color: #ffffff;
+  /* Тёмная тема: сине-фиолетовая */
+  --body-color: #2a3b5b; /* Тёмный синий фон */
+  --sidebar-color: #2a3b5b; /* Тёмный синий фон сайдбара */
+  --primary-color: #a100a1; /* Светлый фиолетовый акцент */
+  --primary-color-light: #6a0080; /* Тёмный фиолетовый для акцентов */
+  --toggle-color: #6a0080; /* Более тёмный фиолетовый для переключателя */
+  --text-color: #ffffff; /* Белый текст */
+  --header-text-color: #ffffff; /* Белый текст для названия в тёмной теме */
+  --header-bg-color: #a100a1; /* Тот же фиолетовый, что и --primary-color */
 }
 
 /* ===== Базовые стили ===== */
@@ -198,7 +202,159 @@ body.dark .sidebar li button:hover .text {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--body-color);
+  background-color: var(--header-bg-color);
+  padding: 10px 20px;
+  transition: var(--tran-05);
+  animation: fadeInDown 0.8s ease-out forwards; /* Анимация появления */
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Название слева, элементы справа */
+}
+
+.header-title {
+  background-color: var(--primary-color);
+  color: var(--header-text-color);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  transition: var(--tran-05);
+  animation: shadowPulse 2s infinite alternate; /* Пульсация тени */
+}
+
+/* Стили для правой части хедера */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Стили для строки поиска */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--sidebar-color);
+  border-radius: 20px;
+  padding: 5px 10px;
+  transition: var(--tran-03);
+}
+
+.search-bar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .search-bar:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.search-icon {
+  font-size: 18px;
+  color: var(--text-color);
+  margin-right: 8px;
+}
+
+.search-input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-color);
+  font-size: 14px;
+  width: 150px;
+  transition: var(--tran-03);
+}
+
+.search-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.search-input:focus {
+  width: 180px;
+}
+
+/* Стили для отображения звания */
+.rank-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--primary-color-light);
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: var(--tran-03);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+body.dark .rank-display {
+  background-color: #2a3b5b; /* Тёмный синий цвет для прямоугольника звания в тёмной теме */
+}
+
+.rank-display:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .rank-display:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.rank-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.rank-progress {
+  font-size: 12px;
+  color: var(--text-color);
+}
+
+/* Анимация появления хедера */
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Пульсация тени для названия */
+@keyframes shadowPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+}
+
+body.dark .header-title {
+  animation: shadowPulseDark 2s infinite alternate; /* Пульсация тени для тёмной темы */
+}
+
+@keyframes shadowPulseDark {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Анимация появления для элементов */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* ===== Основной контент ===== */
@@ -226,18 +382,18 @@ body.dark .sidebar li button:hover .text {
 }
 
 body:not(.dark) .read-button:hover {
-  background-color: #dc143c;
+  background-color: #1e90ff; /* Синий в светлой теме */
   color: #ffffff;
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
   animation: pulse 0.5s infinite alternate;
 }
 
 body.dark .read-button:hover {
-  background-color: #ff69b4;
+  background-color: #a100a1; /* Светлый фиолетовый в тёмной теме */
   color: #ffffff;
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+  box-shadow: 0 0 10px rgba(161, 0, 161, 0.5);
   animation: pulse 0.5s infinite alternate;
 }
 
@@ -303,7 +459,7 @@ body.dark .read-button:hover {
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
   }
   100% {
-    box-shadow: 0 0 15px rgba(255, 105, 255, 0.6);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
   }
 }
 
@@ -339,6 +495,25 @@ body.dark .read-button:hover {
   left: 20px;
 }
 
+/* Выделение переключателя 18+ в настройках */
+.toggle-switch-18.settings-toggle {
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 5px rgba(30, 144, 255, 0.3); /* Синяя тень в светлой теме */
+  transition: box-shadow 0.3s ease;
+}
+
+body.dark .toggle-switch-18.settings-toggle {
+  box-shadow: 0 0 5px rgba(161, 0, 161, 0.3); /* Фиолетовая тень в тёмной теме */
+}
+
+.toggle-switch-18.settings-toggle:hover {
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5); /* Усиленная синяя тень при наведении в светлой теме */
+}
+
+body.dark .toggle-switch-18.settings-toggle:hover {
+  box-shadow: 0 0 10px rgba(161, 0, 161, 0.5); /* Усиленная фиолетовая тень при наведении в тёмной теме */
+}
+
 /* ===== Темный режим ===== */
 .sidebar .mode {
   display: flex;
@@ -348,6 +523,10 @@ body.dark .read-button:hover {
   border-radius: 6px;
   background-color: var(--primary-color-light);
   transition: var(--tran-05);
+}
+
+body.dark .sidebar .mode {
+  background-color: #a100a1; /* Явно указываем цвет, чтобы он остался #a100a1 */
 }
 
 .sidebar.close .mode {
@@ -407,4 +586,52 @@ body.dark .read-button:hover {
 
 body.dark .toggle-switch .switch {
   left: 20px;
+}
+/* Обновленные стили для хедера */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+/* Стили для контейнера поиска и наград */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Адаптивные стили для поиска */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--sidebar-color);
+  border-radius: 20px;
+  padding: 5px 10px;
+  transition: var(--tran-03);
+  min-width: 200px; /* Фиксированная минимальная ширина */
+}
+
+.search-input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-color);
+  width: 100%; /* Занимает всю доступную ширину */
+}
+
+/* Медиа-запрос для мобильных устройств */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .header-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .search-bar {
+    flex-grow: 1;
+  }
 }

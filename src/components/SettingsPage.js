@@ -1,40 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import Header from './Header';
+import React from 'react';
 
-const SettingsPage = () => {
-  const [pornFilter, setPornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
-
-  useEffect(() => {
-    localStorage.setItem('pornFilter', pornFilter);
-  }, [pornFilter]);
-
-  const handlePornFilterChange = (e) => {
-    setPornFilter(e.target.checked);
-  };
-
+const SettingsPage = ({ pornFilter, togglePornFilter }) => {
   return (
-    <div className="min-h-screen overflow-y-auto">
-      <Header />
-      <div className="p-4">
-        <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-color)' }}>
-          Settings
-        </h2>
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-lg" style={{ color: 'var(--text-color)' }}>
-            Show 18+ Content
+    <div className="min-h-screen overflow-y-auto p-4">
+      <h1 className="text-3xl font-bold mb-6" style={{ color: 'var(--text-color)' }}>
+        Settings
+      </h1>
+      <div className="space-y-6">
+        {/* Переключатель 18+ контента */}
+        <div className="flex items-center justify-between p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-opacity-10 bg-gray-100 dark:bg-gray-700">
+          <div className="flex items-center space-x-3">
+            <span className="text-lg font-semibold" style={{ color: 'var(--text-color)' }}>
+              🔞 Enable 18+ Content
+            </span>
+          </div>
+          <div
+            className={`toggle-switch-18 settings-toggle ${pornFilter ? 'active' : ''}`}
+            onClick={togglePornFilter}
+          />
+        </div>
+        {/* Пример другого пункта настроек */}
+        <div className="flex items-center justify-between p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-opacity-10 bg-gray-100 dark:bg-gray-700">
+          <span className="text-lg font-semibold" style={{ color: 'var(--text-color)' }}>
+            🔔 Notifications
           </span>
-          <label className="relative inline-block">
-            <input
-              type="checkbox"
-              checked={pornFilter}
-              onChange={handlePornFilterChange}
-              className="opacity-0 w-0 h-0"
-            />
-            <span
-              className={`toggle-switch-18 ${pornFilter ? 'active' : ''}`}
-              style={{ display: 'block', width: '40px', height: '22px' }}
-            ></span>
-          </label>
+          <div className="toggle-switch">
+            <div className="switch" />
+          </div>
         </div>
       </div>
     </div>
