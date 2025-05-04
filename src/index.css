@@ -49,29 +49,29 @@ body {
 
 /* ===== Цветовые переменные ===== */
 :root {
-  /* Светлая тема: бело-синяя */
-  --body-color: #ffffff; /* Белый фон */
-  --sidebar-color: #ffffff; /* Белый фон сайдбара */
-  --primary-color: #1e90ff; /* Синий акцент (как у кнопки Business) */
-  --primary-color-light: #e6f0fa; /* Очень светлый синий для акцентов */
-  --toggle-color: #add8e6; /* Светло-синий для переключателя */
+  /* Светлая тема: светло-желтая */
+  --body-color: #fff9e6; /* Светло-желтый фон */
+  --sidebar-color: #fff9e6; /* Светло-желтый фон сайдбара */
+  --primary-color: #f97316; /* Оранжевый акцент */
+  --primary-color-light: #fed7aa; /* Очень светлый оранжевый для акцентов */
+  --toggle-color: #fed7aa; /* Светло-оранжевый для переключателя */
   --text-color: #707070; /* Серый текст */
-  --header-text-color: #ffffff; /* Белый текст для названия в светлой теме */
-  --header-bg-color: #1e90ff; /* Тот же синий, что и --primary-color */
+  --header-text-color: #fff9e6; /* Светло-желтый текст для названия */
+  --header-bg-color: #f97316; /* Оранжевый */
   --tran-03: all 0.3s ease;
   --tran-05: all 0.5s ease;
 }
 
 body.dark {
-  /* Тёмная тема: сине-фиолетовая */
+  /* Тёмная тема: сине-синяя */
   --body-color: #2a3b5b; /* Тёмный синий фон */
   --sidebar-color: #2a3b5b; /* Тёмный синий фон сайдбара */
-  --primary-color: #a100a1; /* Светлый фиолетовый акцент */
-  --primary-color-light: #6a0080; /* Тёмный фиолетовый для акцентов */
-  --toggle-color: #6a0080; /* Более тёмный фиолетовый для переключателя */
+  --primary-color: #1e90ff; /* Синий акцент */
+  --primary-color-light: #e6f0fa; /* Очень светлый синий для акцентов */
+  --toggle-color: #add8e6; /* Светло-синий для переключателя */
   --text-color: #ffffff; /* Белый текст */
-  --header-text-color: #ffffff; /* Белый текст для названия в тёмной теме */
-  --header-bg-color: #a100a1; /* Тот же фиолетовый, что и --primary-color */
+  --header-text-color: #ffffff; /* Белый текст для названия */
+  --header-bg-color: #1e90ff; /* Синий для фона хедера */
 }
 
 /* ===== Базовые стили ===== */
@@ -376,24 +376,24 @@ body.dark .header-title {
 
 /* ===== Стили для кнопок ===== */
 .read-button {
-  background-color: #ffffff;
+  background-color: #fff9e6; /* Светло-желтый */
   color: #000000;
   transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 body:not(.dark) .read-button:hover {
-  background-color: #1e90ff; /* Синий в светлой теме */
+  background-color: #f97316; /* Оранжевый в светлой теме */
   color: #ffffff;
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5); /* Оранжевая тень */
   animation: pulse 0.5s infinite alternate;
 }
 
 body.dark .read-button:hover {
-  background-color: #a100a1; /* Светлый фиолетовый в тёмной теме */
+  background-color: #1e90ff; /* Синий в тёмной теме */
   color: #ffffff;
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(161, 0, 161, 0.5);
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5); /* Синяя тень */
   animation: pulse 0.5s infinite alternate;
 }
 
@@ -427,7 +427,7 @@ body.dark .read-button:hover {
 
 .card-animation:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .genre-filter-animation {
@@ -498,20 +498,20 @@ body.dark .read-button:hover {
 /* Выделение переключателя 18+ в настройках */
 .toggle-switch-18.settings-toggle {
   border: 2px solid var(--primary-color);
-  box-shadow: 0 0 5px rgba(30, 144, 255, 0.3); /* Синяя тень в светлой теме */
+  box-shadow: 0 0 5px rgba(249, 115, 22, 0.3); /* Оранжевая тень в светлой теме */
   transition: box-shadow 0.3s ease;
 }
 
 body.dark .toggle-switch-18.settings-toggle {
-  box-shadow: 0 0 5px rgba(161, 0, 161, 0.3); /* Фиолетовая тень в тёмной теме */
+  box-shadow: 0 0 5px rgba(30, 144, 255, 0.3); /* Синяя тень в тёмной теме */
 }
 
 .toggle-switch-18.settings-toggle:hover {
-  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5); /* Усиленная синяя тень при наведении в светлой теме */
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5); /* Усиленная оранжевая тень при наведении в светлой теме */
 }
 
 body.dark .toggle-switch-18.settings-toggle:hover {
-  box-shadow: 0 0 10px rgba(161, 0, 161, 0.5); /* Усиленная фиолетовая тень при наведении в тёмной теме */
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5); /* Усиленная синяя тень при наведении в тёмной теме */
 }
 
 /* ===== Темный режим ===== */
@@ -526,7 +526,7 @@ body.dark .toggle-switch-18.settings-toggle:hover {
 }
 
 body.dark .sidebar .mode {
-  background-color: #a100a1; /* Явно указываем цвет, чтобы он остался #a100a1 */
+  background-color: #1e90ff; /* Синий в тёмной теме */
 }
 
 .sidebar.close .mode {
@@ -587,6 +587,7 @@ body.dark .sidebar .mode {
 body.dark .toggle-switch .switch {
   left: 20px;
 }
+
 /* Обновленные стили для хедера */
 .header-content {
   display: flex;
@@ -634,4 +635,44 @@ body.dark .toggle-switch .switch {
   .search-bar {
     flex-grow: 1;
   }
+}
+
+/* Стили для MangaReader */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.bounce-animation {
+  animation: bounce 0.5s ease infinite;
+}
+
+.manga-container {
+  overflow-y: auto;
+}
+
+.progress-bar-container {
+  background-color: rgba(0, 0, 0, 0.1);
 }
