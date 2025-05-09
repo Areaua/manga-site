@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BackButton from './BackButton';
 import SaveButton from './SaveButton';
 import MangaReader from './MangaReader';
@@ -7,7 +7,12 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
   const [isSaved, setIsSaved] = useState(savedAnimes.includes(selectedAnime));
   const [isMangaOpen, setIsMangaOpen] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
-  const [sortOrder, setSortOrder] = useState('desc'); // 'desc' для новых сначала, 'asc' для старых сначала
+  const [sortOrder, setSortOrder] = useState('desc');
+
+  // Отладка: проверим начальное состояние
+  useEffect(() => {
+    console.log('AnimeDetails mounted with:', { isMangaOpen, selectedEpisode, selectedAnime });
+  }, []);
 
   const handleSaveClick = () => {
     onSaveClick(selectedAnime);
@@ -15,11 +20,13 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
   };
 
   const handleEpisodeClick = (episode) => {
+    console.log('Episode clicked:', episode);
     setSelectedEpisode(episode);
     setIsMangaOpen(true);
   };
 
   const handleMangaClose = () => {
+    console.log('Closing MangaReader');
     setIsMangaOpen(false);
     setSelectedEpisode(null);
   };
@@ -30,7 +37,7 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
       onBackClick();
     } else {
       console.warn('onBackClick is not defined, falling back to window.history.back()');
-      window.history.back(); // Запасной вариант
+      window.history.back();
     }
   };
 
@@ -47,14 +54,12 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
     Business: 'bg-orange-400 dark:bg-blue-500 text-white',
   };
 
-  // Массив эпизодов с датами
   const episodes = [
     { name: 'Prologue', date: '2024-05-20' },
     { name: 'Episode 1', date: '2024-05-20' },
     { name: 'Episode 2', date: '2024-05-20' },
   ];
 
-  // Сортировка эпизодов
   const sortedEpisodes = [...episodes].sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
@@ -63,11 +68,11 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden" style={{ backgroundColor: 'var(--body-color)' }}>
-      {isMangaOpen ? (
+      {isMangaOpen && selectedEpisode ? (
         <MangaReader episode={selectedEpisode} onClose={handleMangaClose} />
       ) : (
         <>
-          <div className="shadow-md z-[9999] relative" style={{ backgroundColor: 'var(--sidebar-color)' }}>
+          <div className="shadow-md z-[9999] relative pt-16" style={{ backgroundColor: 'var(--sidebar-color)' }}>
             <div className="flex justify-between items-center px-4 py-2">
               <BackButton onClick={handleBackClick} />
             </div>
