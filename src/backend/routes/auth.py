@@ -1,74 +1,134 @@
-from fastapi import APIRouter, HTTPException, Depends, Body
+from fastapi import APIRouter, HTTPException, Depends, Body, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer
 from datetime import timedelta
 import logging
+import uuid
+import os
 
 from src.backend.models.user import User, UserInDB
 from src.backend.utils.security import get_password_hash, verify_password, create_access_token, decode_access_token
 from src.backend.database import users_collection
 
 router = APIRouter()
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
-      try:
-          payload = decode_access_token(token)
-          if payload is None:
-              logger.error("Invalid or expired token")
-              raise HTTPException(status_code=401, detail="Invalid or expired token")
-          email = payload.get("sub")
-          user = users_collection.find_one({"email": email})
-          if user is None:
-              logger.error(f"User not found for email: {email}")
-              raise HTTPException(status_code=401, detail="User not found")
-          return user
-      except Exception as e:
-          logger.error(f"Error in get_current_user: {str(e)}")
-          raise
+    logger.info("Attempting to get current user")
+    try:
+        payload = decode_access_token(token)
+        if payload is None:
+            logger.error("Invalid or expired token")
+            raise HTTPException(status_code=401, detail="Invalid or expired token")
+        email = payload.get("sub")
+        user = users_collection.find_one({"email": email})
+        if user is None:
+            logger.error(f"User not found for email: {email}")
+            raise HTTPException(status_code=401, detail="User not found")
+        logger.info(f"User retrieved: {email}")
+        return user
+    except Exception as e:
+        logger.error(f"Error in get_current_user: {str(e)}")
+        raise
 
 @router.post("/register")
 async def register(user_data: dict = Body(...)):
-      try:
-          logger.info(f"Registration attempt for email: {user_data.get('email')}")
-          if not user_data.get("email") or not user_data.get("password"):
-              logger.error("Missing email or password")
-              raise HTTPException(status_code=422, detail="Email and password are required")
-          existing_user = users_collection.find_one({"email": user_data["email"]})
-          if existing_user:
-              logger.error(f"Email already registered: {user_data['email']}")
-              raise HTTPException(status_code=400, detail="Email already registered")
-          hashed_password = get_password_hash(user_data["password"])
-          user_in_db = UserInDB(email=user_data["email"], hashed_password=hashed_password)
-          users_collection.insert_one(user_in_db.dict())
-          logger.info(f"User registered successfully: {user_data['email']}")
-          return {"message": "User registered successfully"}
-      except Exception as e:
-          logger.error(f"Registration error: {str(e)}")
-          raise HTTPException(status_code=400, detail=str(e))
+    logger.info(f"Received registration request: {user_data}")
+    try:
+        if not user_data.get("email") or not user_data.get("password") or not user_data.get("username"):
+            logger.error("Missing required fields")
+            raise HTTPException(status_code=422, detail="Email, password, and username are required")
+        
+        existing_user_by_username = users_collection.find_one({"username": user_data["username"]})
+        if existing_user_by_username:
+            logger.error(f"Username already taken: {user_data['username']}")
+            raise HTTPException(status_code=400, detail="Username already taken")
+        
+        if user_data["password"] != user_data["confirm_password"]:
+            logger.error("Passwords do not match")
+            raise HTTPException(status_code=422, detail="Passwords do not match")
+
+        existing_user_by_email = users_collection.find_one({"email": user_data["email"]})
+        if existing_user_by_email:
+            logger.error(f"Email already registered: {user_data['email']}")
+            raise HTTPException(status_code=400, detail="Email already registered")
+
+        hashed_password = get_password_hash(user_data["password"])
+        user_in_db = UserInDB(
+            email=user_data["email"],
+            username=user_data["username"],
+            hashed_password=hashed_password,
+            avatar_url=None,
+            is_premium=False
+        )
+        users_collection.insert_one(user_in_db.dict(exclude={"password", "confirm_password"}))
+        logger.info(f"User registered successfully: {user_data['email']}")
+        return {"message": "User registered successfully"}
+    except Exception as e:
+        logger.error(f"Registration error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/login")
-async def login(user_data: dict = Body(...)):
-      try:
-          logger.info(f"Login attempt for email: {user_data.get('email')}")
-          if not user_data.get("email") or not user_data.get("password"):
-              logger.error("Missing email or password")
-              raise HTTPException(status_code=422, detail="Email and password are required")
-          db_user = users_collection.find_one({"email": user_data["email"]})
-          if db_user is None:
-              logger.error(f"User not found: {user_data['email']}")
-              raise HTTPException(status_code=401, detail="Incorrect email or password")
-          if not verify_password(user_data["password"], db_user["hashed_password"]):
-              logger.error("Invalid password")
-              raise HTTPException(status_code=401, detail="Incorrect email or password")
-          access_token = create_access_token(data={"sub": user_data["email"]}, expires_delta=timedelta(minutes=30))
-          logger.info(f"Login successful for: {user_data['email']}")
-          return {"access_token": access_token, "token_type": "bearer"}
-      except Exception as e:
-          logger.error(f"Login error: {str(e)}")
-          raise HTTPException(status_code=400, detail=str(e))
+async def login(credentials: dict = Body(...)):
+    logger.info(f"Received login request: {credentials}")
+    try:
+        identifier = credentials.get("email") or credentials.get("username")
+        password = credentials.get("password")
+        if not identifier or not password:
+            logger.error("Missing email/username or password")
+            raise HTTPException(status_code=422, detail="Email/username and password are required")
+
+        db_user = users_collection.find_one({"$or": [{"email": identifier}, {"username": identifier}]})
+        if db_user is None:
+            logger.error(f"User not found: {identifier}")
+            raise HTTPException(status_code=401, detail="Incorrect email/username or password")
+        if not verify_password(password, db_user["hashed_password"]):
+            logger.error("Invalid password")
+            raise HTTPException(status_code=401, detail="Incorrect email/username or password")
+        access_token = create_access_token(data={"sub": db_user["email"]}, expires_delta=timedelta(minutes=30))
+        logger.info(f"Login successful for: {db_user['email']}")
+        return {"access_token": access_token, "token_type": "bearer"}
+    except Exception as e:
+        logger.error(f"Login error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/me")
 async def read_users_me(current_user: dict = Depends(get_current_user)):
-      return {"email": current_user["email"]}
+    logger.info(f"Fetching user data for: {current_user['email']}")
+    return {
+        "email": current_user["email"],
+        "username": current_user["username"],
+        "avatar_url": current_user.get("avatar_url"),
+        "is_premium": current_user.get("is_premium", False),
+        "registered_at": current_user.get("registered_at", "Unknown")
+    }
+
+@router.post("/upload-avatar")
+async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
+    logger.info(f"Avatar upload request for: {current_user['email']}")
+    try:
+        os.makedirs("avatars", exist_ok=True)
+        
+        avatar_id = str(uuid.uuid4())
+        file_extension = file.filename.split('.')[-1]
+        avatar_filename = f"{avatar_id}.{file_extension}"
+        avatar_path = os.path.join("avatars", avatar_filename)
+        
+        with open(avatar_path, "wb") as f:
+            content = await file.read()
+            f.write(content)
+        
+        avatar_url = f"http://127.0.0.1:8000/avatars/{avatar_filename}"
+        
+        users_collection.update_one(
+            {"email": current_user["email"]},
+            {"$set": {"avatar_url": avatar_url}}
+        )
+        
+        logger.info(f"Avatar uploaded for: {current_user['email']}, URL: {avatar_url}")
+        return {"message": "Avatar uploaded", "avatar_url": avatar_url}
+    except Exception as e:
+        logger.error(f"Avatar upload error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))

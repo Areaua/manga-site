@@ -2,7 +2,7 @@ import React from 'react';
 
 const SettingsPage = ({ pornFilter, togglePornFilter }) => {
   return (
-    <div className="min-h-screen overflow-y-auto p-4">
+    <div className="min-h-screen overflow-y-auto p-4 pt-16"> {/* Добавлен отступ сверху */}
       <h1 className="text-3xl font-bold mb-6" style={{ color: 'var(--text-color)' }}>
         Settings
       </h1>

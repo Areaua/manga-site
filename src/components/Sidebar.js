@@ -1,12 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../index.css';
+import axios from 'axios';
+import './Sidebar.css';
 
 const Sidebar = () => {
   const [isClosed, setIsClosed] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [userData, setUserData] = useState({ username: 'Guest', avatar_url: 'https://www.gravatar.com/avatar/?d=mp', is_premium: false });
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/me', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUserData({
+            username: response.data.username || 'Guest',
+            avatar_url: response.data.avatar_url ? `${response.data.avatar_url}?t=${Date.now()}` : 'https://www.gravatar.com/avatar/?d=mp',
+            is_premium: response.data.is_premium || false
+          });
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const toggleSidebar = () => setIsClosed(!isClosed);
   const toggleDarkMode = () => {
@@ -23,22 +46,33 @@ const Sidebar = () => {
     return 'home';
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
   return (
     <nav className={`sidebar ${isClosed ? 'close' : ''}`}>
       <header>
-        <div className="image-text">
-          <span className="image">
-            <img
-              src="https://drive.google.com/uc?export=view&id=1ETZYgPpWbbBtpJnhi42_IR3vOwSOpR4z"
-              alt="Logo"
-            />
-          </span>
-          <div className="text logo-text">
-            <span className="name">Anime Hub</span>
-            <span className="profession">Explore Anime</span>
+        <div className="image-text flex items-center w-full">
+          <div className="flex items-center">
+            <span className="image">
+              <img
+                src={userData.avatar_url}
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full"
+                onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')}
+              />
+            </span>
+            <div className="text logo-text ml-2">
+              <span className="name" style={{ color: 'var(--text-color)' }}>{userData.username}</span>
+              <span className="profession text-xs" style={{ color: 'var(--text-color)', display: 'block' }}>
+                {userData.is_premium ? 'Premium' : 'Free'}
+              </span>
+            </div>
           </div>
+          <i className="bx bx-chevron-right toggle" onClick={toggleSidebar}></i>
         </div>
-        <i className="bx bx-chevron-right toggle" onClick={toggleSidebar}></i>
       </header>
 
       <div className="menu-bar">
@@ -68,6 +102,12 @@ const Sidebar = () => {
                 <span className="text nav-text">Settings</span>
               </button>
             </li>
+            <li className="nav-link">
+              <button onClick={handleLogout} className="flex items-center w-full h-full">
+                <i className="bx bx-log-out icon"></i>
+                <span className="text nav-text">Logout</span>
+              </button>
+            </li>
           </ul>
         </div>
 
@@ -91,5 +131,4 @@ const Sidebar = () => {
     </nav>
   );
 };
-
 export default Sidebar;

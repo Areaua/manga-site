@@ -7,6 +7,8 @@ import ProfilePage from './components/ProfilePage';
 import SettingsPage from './components/SettingsPage';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
+import Header from './components/Header';
+import AnimeDetails from './components/AnimeDetails'; // Добавляем импорт AnimeDetails
 import './index.css';
 import './welcome-auth.css';
 
@@ -15,14 +17,14 @@ const App = () => {
     const saved = localStorage.getItem('savedAnimes');
     return saved ? JSON.parse(saved) : [];
   });
-  const [pornFilter, setPornFilter] = useState(() => localStorage.getItem('pornFilter') === 'true');
+  const [pornFilter, setPornFilter] = useState(() => localStorage.getItem('PornFilter') === 'true');
 
   useEffect(() => {
     localStorage.setItem('savedAnimes', JSON.stringify(savedAnimes));
   }, [savedAnimes]);
 
   useEffect(() => {
-    localStorage.setItem('pornFilter', pornFilter);
+    localStorage.setItem('PornFilter', pornFilter);
   }, [pornFilter]);
 
   const togglePornFilter = () => setPornFilter(!pornFilter);
@@ -44,38 +46,76 @@ const App = () => {
         <Route
           path="/*"
           element={
-            <div>
-              <Sidebar />
-              <div className="home bg-black bg-opacity-50 min-h-screen">
-                <Routes>
-                  <Route
-                    path="/home"
-                    element={<HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} />}
-                  />
-                  <Route
-                    path="/favourites"
-                    element={
-                      <FavouritesPage
-                        savedAnimes={savedAnimes}
-                        genreEmojis={genreEmojis}
-                        onSaveClick={(anime) => {
-                          const updatedAnimes = savedAnimes.includes(anime)
-                            ? savedAnimes.filter((savedAnime) => savedAnime.name !== anime.name)
-                            : [...savedAnimes, anime];
-                          setSavedAnimes(updatedAnimes);
-                        }}
-                      />
-                    }
-                  />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route
-                    path="/settings"
-                    element={
-                      <SettingsPage pornFilter={pornFilter} togglePornFilter={togglePornFilter} />
-                    }
-                  />
-                  <Route path="*" element={<Navigate to="/home" />} />
-                </Routes>
+            <div className="app-container">
+              <div className="main-content">
+                <Sidebar />
+                <div className="home bg-black bg-opacity-50 min-h-screen">
+                  <Routes>
+                    <Route
+                      path="/home"
+                      element={
+                        <>
+                          <Header hideHeader={false} />
+                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/favourites"
+                      element={
+                        <>
+                          <Header hideHeader={false} />
+                          <FavouritesPage
+                            savedAnimes={savedAnimes}
+                            genreEmojis={genreEmojis}
+                            onSaveClick={(anime) => {
+                              if (!savedAnimes.includes(anime)) {
+                                const updatedAnimes = [...savedAnimes, anime];
+                                setSavedAnimes(updatedAnimes);
+                              }
+                            }}
+                          />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/profile"
+                      element={
+                        <>
+                          <Header hideHeader={false} />
+                          <ProfilePage />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/settings"
+                      element={
+                        <>
+                          <Header hideHeader={false} />
+                          <SettingsPage pornFilter={pornFilter} togglePornFilter={togglePornFilter} />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/anime/:id"
+                      element={
+                        <>
+                          <Header hideHeader={true} />
+                          <AnimeDetails
+                            savedAnimes={savedAnimes}
+                            onSaveClick={(anime) => {
+                              if (!savedAnimes.includes(anime)) {
+                                const updatedAnimes = [...savedAnimes, anime];
+                                setSavedAnimes(updatedAnimes);
+                              }
+                            }}
+                          />
+                        </>
+                      }
+                    />
+                    <Route path="*" element={<Navigate to="/home" />} />
+                  </Routes>
+                </div>
               </div>
             </div>
           }

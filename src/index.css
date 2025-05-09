@@ -50,28 +50,28 @@ body {
 /* ===== Цветовые переменные ===== */
 :root {
   /* Светлая тема: светло-желтая */
-  --body-color: #fff9e6; /* Светло-желтый фон */
-  --sidebar-color: #fff9e6; /* Светло-желтый фон сайдбара */
-  --primary-color: #f97316; /* Оранжевый акцент */
-  --primary-color-light: #fed7aa; /* Очень светлый оранжевый для акцентов */
-  --toggle-color: #fed7aa; /* Светло-оранжевый для переключателя */
-  --text-color: #707070; /* Серый текст */
-  --header-text-color: #fff9e6; /* Светло-желтый текст для названия */
-  --header-bg-color: #f97316; /* Оранжевый */
+  --body-color: #fff9e6;
+  --sidebar-color: #fff9e6;
+  --primary-color: #f97316;
+  --primary-color-light: #fed7aa;
+  --toggle-color: #fed7aa;
+  --text-color: #707070;
+  --header-text-color: #fff9e6;
+  --header-bg-color: #f97316;
   --tran-03: all 0.3s ease;
   --tran-05: all 0.5s ease;
 }
 
 body.dark {
   /* Тёмная тема: сине-синяя */
-  --body-color: #2a3b5b; /* Тёмный синий фон */
-  --sidebar-color: #2a3b5b; /* Тёмный синий фон сайдбара */
-  --primary-color: #1e90ff; /* Синий акцент */
-  --primary-color-light: #e6f0fa; /* Очень светлый синий для акцентов */
-  --toggle-color: #add8e6; /* Светло-синий для переключателя */
-  --text-color: #ffffff; /* Белый текст */
-  --header-text-color: #ffffff; /* Белый текст для названия */
-  --header-bg-color: #1e90ff; /* Синий для фона хедера */
+  --body-color: #2a3b5b;
+  --sidebar-color: #2a3b5b;
+  --primary-color: #1e90ff;
+  --primary-color-light: #e6f0fa;
+  --toggle-color: #add8e6;
+  --text-color: #ffffff;
+  --header-text-color: #ffffff;
+  --header-bg-color: #1e90ff;
 }
 
 /* ===== Базовые стили ===== */
@@ -79,282 +79,6 @@ body {
   min-height: 100vh;
   background-color: var(--body-color);
   transition: var(--tran-05);
-}
-
-/* ===== Стили Sidebar ===== */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 250px;
-  padding: 10px 14px;
-  background: var(--sidebar-color);
-  transition: var(--tran-05);
-  z-index: 100;
-}
-
-.sidebar.close {
-  width: 88px;
-}
-
-.sidebar .image-text {
-  display: flex;
-  align-items: center;
-}
-
-.sidebar .image img {
-  width: 40px;
-  border-radius: 6px;
-}
-
-.sidebar .text {
-  color: var(--text-color);
-  font-size: 17px;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: var(--tran-03);
-}
-
-.sidebar.close .text {
-  opacity: 0;
-}
-
-.sidebar .toggle {
-  position: absolute;
-  top: 50%;
-  right: -25px;
-  transform: translateY(-50%) rotate(180deg);
-  height: 25px;
-  width: 25px;
-  background-color: var(--primary-color);
-  color: var(--sidebar-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  transition: var(--tran-05);
-  z-index: 99;
-}
-
-.sidebar.close .toggle {
-  transform: translateY(-50%) rotate(0deg);
-}
-
-.sidebar .menu-bar {
-  height: calc(100% - 55px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.sidebar li {
-  height: 50px;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.sidebar li button {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 6px;
-  transition: var(--tran-03);
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.sidebar li button:hover {
-  background-color: var(--primary-color);
-}
-
-.sidebar li button:hover .icon,
-.sidebar li button:hover .text {
-  color: var(--sidebar-color);
-}
-
-body.dark .sidebar li button:hover {
-  background-color: var(--primary-color);
-}
-
-body.dark .sidebar li button:hover .icon,
-body.dark .sidebar li button:hover .text {
-  color: #ffffff;
-}
-
-.sidebar .icon {
-  min-width: 60px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-color);
-}
-
-/* ===== Стили Header ===== */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: var(--header-bg-color);
-  padding: 10px 20px;
-  transition: var(--tran-05);
-  animation: fadeInDown 0.8s ease-out forwards; /* Анимация появления */
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Название слева, элементы справа */
-}
-
-.header-title {
-  background-color: var(--primary-color);
-  color: var(--header-text-color);
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  transition: var(--tran-05);
-  animation: shadowPulse 2s infinite alternate; /* Пульсация тени */
-}
-
-/* Стили для правой части хедера */
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-/* Стили для строки поиска */
-.search-bar {
-  display: flex;
-  align-items: center;
-  background-color: var(--sidebar-color);
-  border-radius: 20px;
-  padding: 5px 10px;
-  transition: var(--tran-03);
-}
-
-.search-bar:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-body.dark .search-bar:hover {
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-.search-icon {
-  font-size: 18px;
-  color: var(--text-color);
-  margin-right: 8px;
-}
-
-.search-input {
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text-color);
-  font-size: 14px;
-  width: 150px;
-  transition: var(--tran-03);
-}
-
-.search-input::placeholder {
-  color: var(--text-color);
-  opacity: 0.7;
-}
-
-.search-input:focus {
-  width: 180px;
-}
-
-/* Стили для отображения звания */
-.rank-display {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: var(--primary-color-light);
-  padding: 5px 10px;
-  border-radius: 20px;
-  transition: var(--tran-03);
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
-body.dark .rank-display {
-  background-color: #2a3b5b; /* Тёмный синий цвет для прямоугольника звания в тёмной теме */
-}
-
-.rank-display:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-body.dark .rank-display:hover {
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-.rank-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--primary-color);
-}
-
-.rank-progress {
-  font-size: 12px;
-  color: var(--text-color);
-}
-
-/* Анимация появления хедера */
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Пульсация тени для названия */
-@keyframes shadowPulse {
-  0% {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-  100% {
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-  }
-}
-
-body.dark .header-title {
-  animation: shadowPulseDark 2s infinite alternate; /* Пульсация тени для тёмной темы */
-}
-
-@keyframes shadowPulseDark {
-  0% {
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
-  }
-  100% {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-  }
-}
-
-/* Анимация появления для элементов */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 /* ===== Основной контент ===== */
@@ -376,24 +100,24 @@ body.dark .header-title {
 
 /* ===== Стили для кнопок ===== */
 .read-button {
-  background-color: #fff9e6; /* Светло-желтый */
+  background-color: #fff9e6;
   color: #000000;
   transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 body:not(.dark) .read-button:hover {
-  background-color: #f97316; /* Оранжевый в светлой теме */
+  background-color: #f97316;
   color: #ffffff;
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5); /* Оранжевая тень */
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
   animation: pulse 0.5s infinite alternate;
 }
 
 body.dark .read-button:hover {
-  background-color: #1e90ff; /* Синий в тёмной теме */
+  background-color: #1e90ff;
   color: #ffffff;
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5); /* Синяя тень */
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
   animation: pulse 0.5s infinite alternate;
 }
 
@@ -498,143 +222,20 @@ body.dark .read-button:hover {
 /* Выделение переключателя 18+ в настройках */
 .toggle-switch-18.settings-toggle {
   border: 2px solid var(--primary-color);
-  box-shadow: 0 0 5px rgba(249, 115, 22, 0.3); /* Оранжевая тень в светлой теме */
+  box-shadow: 0 0 5px rgba(249, 115, 22, 0.3);
   transition: box-shadow 0.3s ease;
 }
 
 body.dark .toggle-switch-18.settings-toggle {
-  box-shadow: 0 0 5px rgba(30, 144, 255, 0.3); /* Синяя тень в тёмной теме */
+  box-shadow: 0 0 5px rgba(30, 144, 255, 0.3);
 }
 
 .toggle-switch-18.settings-toggle:hover {
-  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5); /* Усиленная оранжевая тень при наведении в светлой теме */
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
 }
 
 body.dark .toggle-switch-18.settings-toggle:hover {
-  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5); /* Усиленная синяя тень при наведении в тёмной теме */
-}
-
-/* ===== Темный режим ===== */
-.sidebar .mode {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  border-radius: 6px;
-  background-color: var(--primary-color-light);
-  transition: var(--tran-05);
-}
-
-body.dark .sidebar .mode {
-  background-color: #1e90ff; /* Синий в тёмной теме */
-}
-
-.sidebar.close .mode {
-  justify-content: center;
-  padding: 0;
-}
-
-.sidebar .mode-content {
-  display: flex;
-  align-items: center;
-}
-
-.sidebar.close .mode-content {
-  justify-content: center;
-}
-
-.sidebar.close .mode-content .mode-text {
-  display: none;
-}
-
-.sidebar.close .mode-content .sun-moon {
-  display: none;
-}
-
-.toggle-switch-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-}
-
-.sidebar.close .toggle-switch-wrapper {
-  margin-left: 0;
-}
-
-.toggle-switch {
-  position: relative;
-  height: 22px;
-  width: 40px;
-  border-radius: 25px;
-  background-color: var(--toggle-color);
-  cursor: pointer;
-  transition: var(--tran-05);
-}
-
-.toggle-switch .switch {
-  position: absolute;
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-  background-color: var(--sidebar-color);
-  transition: var(--tran-04);
-}
-
-body.dark .toggle-switch .switch {
-  left: 20px;
-}
-
-/* Обновленные стили для хедера */
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-}
-
-/* Стили для контейнера поиска и наград */
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-/* Адаптивные стили для поиска */
-.search-bar {
-  display: flex;
-  align-items: center;
-  background-color: var(--sidebar-color);
-  border-radius: 20px;
-  padding: 5px 10px;
-  transition: var(--tran-03);
-  min-width: 200px; /* Фиксированная минимальная ширина */
-}
-
-.search-input {
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text-color);
-  width: 100%; /* Занимает всю доступную ширину */
-}
-
-/* Медиа-запрос для мобильных устройств */
-@media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .header-left {
-    width: 100%;
-    justify-content: space-between;
-  }
-  .search-bar {
-    flex-grow: 1;
-  }
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
 }
 
 /* Стили для MangaReader */

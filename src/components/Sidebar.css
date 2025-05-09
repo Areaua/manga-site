@@ -1,0 +1,362 @@
+/* Стили для сайдбара */
+.sidebar {
+  position: fixed;
+  top: 100px; /* Опускаем сайдбар еще ниже */
+  left: 0;
+  height: calc(100% - 100px); /* Учитываем отступ сверху */
+  width: 250px;
+  padding: 10px 14px;
+  background: var(--sidebar-color);
+  transition: var(--tran-05);
+  z-index: 100;
+}
+
+.sidebar.close {
+  width: 88px;
+}
+
+.sidebar .image-text {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .image img {
+  width: 40px;
+  border-radius: 6px;
+}
+
+.sidebar .text {
+  color: var(--text-color);
+  font-size: 17px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: var(--tran-03);
+}
+
+.sidebar.close .text {
+  opacity: 0;
+}
+
+/* Убедимся, что аватарка видна даже в свернутом состоянии */
+.sidebar.close .image {
+  opacity: 1;
+  display: block;
+}
+
+.sidebar .toggle {
+  position: absolute;
+  top: 50%;
+  right: -25px;
+  transform: translateY(-50%) rotate(180deg);
+  height: 25px;
+  width: 25px;
+  background-color: var(--primary-color);
+  color: var(--sidebar-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  transition: var(--tran-05);
+  z-index: 99;
+}
+
+.sidebar.close .toggle {
+  transform: translateY(-50%) rotate(0deg);
+}
+
+.sidebar .menu-bar {
+  height: calc(100% - 55px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Элементы идут сверху вниз */
+}
+
+/* Перемещаем переключатель темы ниже */
+.sidebar .bottom-content {
+  margin-top: 40px; /* Увеличиваем отступ сверху для переключателя темы */
+}
+
+.sidebar li {
+  height: 50px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.sidebar li button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  transition: var(--tran-03);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.sidebar li button:hover {
+  background-color: var(--primary-color);
+}
+
+.sidebar li button:hover .icon,
+.sidebar li button:hover .text {
+  color: var(--sidebar-color);
+}
+
+body.dark .sidebar li button:hover {
+  background-color: var(--primary-color);
+}
+
+body.dark .sidebar li button:hover .icon,
+body.dark .sidebar li button:hover .text {
+  color: #ffffff;
+}
+
+.sidebar .icon {
+  min-width: 60px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+}
+
+/* Темный режим */
+.sidebar .mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-radius: 6px;
+  background-color: var(--primary-color-light);
+  transition: var(--tran-05);
+}
+
+body.dark .sidebar .mode {
+  background-color: #1e90ff;
+}
+
+.sidebar.close .mode {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar .mode-content {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar.close .mode-content {
+  justify-content: center;
+}
+
+.sidebar.close .mode-content .mode-text {
+  display: none;
+}
+
+.sidebar.close .mode-content .sun-moon {
+  display: none;
+}
+
+.toggle-switch-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.sidebar.close .toggle-switch-wrapper {
+  margin-left: 0;
+}
+
+.toggle-switch {
+  position: relative;
+  height: 22px;
+  width: 40px;
+  border-radius: 25px;
+  background-color: var(--toggle-color);
+  cursor: pointer;
+  transition: var(--tran-05);
+}
+
+.toggle-switch .switch {
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  background-color: var(--sidebar-color);
+  transition: var(--tran-04);
+}
+
+body.dark .toggle-switch .switch {
+  left: 20px;
+}
+
+/* Стили Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 101;
+  background-color: var(--header-bg-color);
+  padding: 10px 20px;
+  transition: var(--tran-05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.header-title {
+  background-color: var(--primary-color);
+  color: var(--header-text-color);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  transition: var(--tran-05);
+  animation: shadowPulse 2s infinite alternate;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Стили для строки поиска */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--sidebar-color);
+  border-radius: 20px;
+  padding: 5px 10px;
+  transition: var(--tran-03);
+  min-width: 200px;
+}
+
+.search-bar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .search-bar:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.search-icon {
+  font-size: 18px;
+  color: var(--text-color);
+  margin-right: 8px;
+}
+
+.search-input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-color);
+  font-size: 14px;
+  width: 100%;
+  transition: var(--tran-03);
+}
+
+.search-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.search-input:focus {
+  width: 180px;
+}
+
+/* Стили для отображения звания */
+.rank-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--primary-color-light);
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: var(--tran-03);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+body.dark .rank-display {
+  background-color: #2a3b5b;
+}
+
+.rank-display:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .rank-display:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.rank-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.rank-progress {
+  font-size: 12px;
+  color: var(--text-color);
+}
+
+/* Анимация появления хедера */
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Пульсация тени для названия */
+@keyframes shadowPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+}
+
+body.dark .header-title {
+  animation: shadowPulseDark 2s infinite alternate;
+}
+
+@keyframes shadowPulseDark {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Анимация появления для элементов */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

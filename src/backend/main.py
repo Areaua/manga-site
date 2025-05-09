@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from src.backend.routes.auth import router as auth_router
 
 app = FastAPI()
@@ -15,11 +16,14 @@ logger = logging.getLogger(__name__)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Указываем адрес фронтенда
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Монтуємо папку avatars для статичних файлів
+app.mount("/avatars", StaticFiles(directory="avatars"), name="avatars")
 
 app.include_router(auth_router)
 

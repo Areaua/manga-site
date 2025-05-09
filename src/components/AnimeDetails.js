@@ -3,13 +3,12 @@ import BackButton from './BackButton';
 import SaveButton from './SaveButton';
 import MangaReader from './MangaReader';
 
-const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, onSaveClick }) => {
+const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, onSaveClick, hideHeader }) => {
   const [isSaved, setIsSaved] = useState(savedAnimes.includes(selectedAnime));
   const [isMangaOpen, setIsMangaOpen] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [sortOrder, setSortOrder] = useState('desc');
 
-  // Отладка: проверим начальное состояние
   useEffect(() => {
     console.log('AnimeDetails mounted with:', { isMangaOpen, selectedEpisode, selectedAnime });
   }, []);
@@ -72,7 +71,7 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
         <MangaReader episode={selectedEpisode} onClose={handleMangaClose} />
       ) : (
         <>
-          <div className="shadow-md z-[9999] relative pt-16" style={{ backgroundColor: 'var(--sidebar-color)' }}>
+          <div className="shadow-md z-[9999] relative" style={{ backgroundColor: 'var(--sidebar-color)' }}>
             <div className="flex justify-between items-center px-4 py-2">
               <BackButton onClick={handleBackClick} />
             </div>
@@ -95,7 +94,7 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
               </span>
             </div>
             <p className="mt-4 fade-in" style={{ color: 'var(--text-color)' }}>
-              Disappearances in the city, old mystical skin scripture and one young boy with nightmares — how are they all connected? These days are complicated for Fang Zheng, but he can’t even imagine what challenges the future has in store. Only ancient runes can help him now.
+              Disappearances in the city, old mystical skin scripture and one young boy with nightmares — how are they all connected? These days are complicated for Fang Zheng, but he can't even imagine what challenges the future has in store. Only ancient runes can help him now.
             </p>
             <div className="flex justify-between items-center mt-6">
               <h3 className="text-lg font-bold fade-in" style={{ color: 'var(--text-color)' }}>

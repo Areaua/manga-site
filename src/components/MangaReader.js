@@ -3,7 +3,7 @@ import './MangaReader.css';
 
 const MangaReader = ({ episode, onClose }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10; // Для примера, 10 страниц в манге
+  const totalPages = 10;
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -17,10 +17,8 @@ const MangaReader = ({ episode, onClose }) => {
     }
   };
 
-  // Вычисляем процент прогресса
   const progress = (currentPage / totalPages) * 100;
 
-  // Анимация появления манги
   useEffect(() => {
     const mangaContainer = document.querySelector('.manga-container');
     if (mangaContainer) {
@@ -30,7 +28,6 @@ const MangaReader = ({ episode, onClose }) => {
 
   return (
     <div className="manga-container fixed inset-0 z-50" style={{ backgroundColor: 'var(--body-color)' }}>
-      {/* Полоса прогресса */}
       <div className="progress-bar-container fixed top-0 left-0 w-full h-2 z-50">
         <div
           className="progress-bar h-full transition-all duration-500 ease-in-out"
@@ -41,7 +38,6 @@ const MangaReader = ({ episode, onClose }) => {
         />
       </div>
 
-      {/* Заголовок и кнопка закрытия */}
       <div className="flex justify-between items-center p-4 pt-8 shadow-md" style={{ backgroundColor: 'var(--sidebar-color)' }}>
         <h2
           className="text-xl font-bold max-w-[70%] truncate whitespace-normal"
@@ -57,13 +53,11 @@ const MangaReader = ({ episode, onClose }) => {
         </button>
       </div>
 
-      {/* Контент манги (пока пустой) */}
       <div className="flex flex-col items-center justify-center h-full p-4">
         <div className="text-center mb-4" style={{ color: 'var(--text-color)' }}>
           <p>Страница {currentPage} из {totalPages}</p>
         </div>
 
-        {/* Кнопки листания с анимацией */}
         <div className="flex gap-4">
           <button
             onClick={handlePrevPage}
