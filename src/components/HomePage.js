@@ -6,16 +6,7 @@ import Header from './Header';
 import AnimeList from './AnimeList';
 import AnimeDetails from './AnimeDetails';
 
-const genreEmojis = {
-  Thriller: '💀',
-  Drama: '💔',
-  Supernatural: '🔮',
-  Romance: '❤️',
-  Adventure: '🗺️',
-  Business: '💼',
-};
-
-const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader }) => {
+const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
   const [showComicPage, setShowComicPage] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedAnime, setSelectedAnime] = useState(null);

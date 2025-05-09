@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import HomePage from './components/HomePage';
 import FavouritesPage from './components/FavouritesPage';
@@ -7,8 +7,31 @@ import ProfilePage from './components/ProfilePage';
 import SettingsPage from './components/SettingsPage';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
+import AnimeDetails from './components/AnimeDetails';
 import './index.css';
 import './welcome-auth.css';
+
+// Компонент-обёртка для обработки параметра :id
+const AnimeDetailsWrapper = ({ savedAnimes, setSavedAnimes }) => {
+  const { id } = useParams();
+  const anime = [...savedAnimes].find(a => a.name === id); // Ищем аниме по имени (можно изменить логику поиска)
+
+  return (
+    <AnimeDetails
+      selectedAnime={anime || { name: id, genre: 'Unknown', href: '#', image: '' }} // Заглушка, если аниме не найдено
+      savedAnimes={savedAnimes}
+      onSaveClick={(anime) => {
+        const updatedAnimes = savedAnimes.includes(anime)
+          ? savedAnimes.filter((savedAnime) => savedAnime.name !== anime.name)
+          : [...savedAnimes, anime];
+        setSavedAnimes(updatedAnimes);
+        localStorage.setItem('savedAnimes', JSON.stringify(updatedAnimes));
+      }}
+      onBackClick={() => window.history.back()}
+      hideHeader={true}
+    />
+  );
+};
 
 const App = () => {
   const [savedAnimes, setSavedAnimes] = useState(() => {
@@ -24,8 +47,6 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem('PornFilter', pornFilter);
   }, [pornFilter]);
-
-  const togglePornFilter = () => setPornFilter(!pornFilter);
 
   const genreEmojis = {
     Thriller: '💀',
@@ -53,7 +74,12 @@ const App = () => {
                       path="/home"
                       element={
                         <div>
-                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                          <HomePage
+                            savedAnimes={savedAnimes}
+                            setSavedAnimes={setSavedAnimes}
+                            hideHeader={false}
+                            genreEmojis={genreEmojis}
+                          />
                         </div>
                       }
                     />
@@ -61,7 +87,12 @@ const App = () => {
                       path="/favourites"
                       element={
                         <div>
-                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                          <FavouritesPage
+                            savedAnimes={savedAnimes}
+                            setSavedAnimes={setSavedAnimes}
+                            hideHeader={false}
+                            genreEmojis={genreEmojis}
+                          />
                         </div>
                       }
                     />
@@ -69,7 +100,7 @@ const App = () => {
                       path="/profile"
                       element={
                         <div>
-                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                          <ProfilePage hideHeader={false} />
                         </div>
                       }
                     />
@@ -77,7 +108,7 @@ const App = () => {
                       path="/settings"
                       element={
                         <div>
-                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                          <SettingsPage hideHeader={false} />
                         </div>
                       }
                     />
@@ -85,7 +116,10 @@ const App = () => {
                       path="/anime/:id"
                       element={
                         <div>
-                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={true} />
+                          <AnimeDetailsWrapper
+                            savedAnimes={savedAnimes}
+                            setSavedAnimes={setSavedAnimes}
+                          />
                         </div>
                       }
                     />
