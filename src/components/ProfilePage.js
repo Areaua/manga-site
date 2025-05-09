@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Header from './Header';
 
-const ProfilePage = () => {
+const ProfilePage = ({ hideHeader }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [userData, setUserData] = useState({
     username: '',
@@ -71,8 +72,11 @@ const ProfilePage = () => {
     }
   };
 
+  if (hideHeader) return null;
+
   return (
-    <div className="min-h-screen flex flex-col pt-16"> {/* Добавлен отступ сверху */}
+    <div className="min-h-screen flex flex-col">
+      <Header hideHeader={hideHeader} />
       <div className="p-4 flex-grow overflow-y-auto">
         <div className="p-4 mb-4 w-full max-w-md mx-auto">
           <div className="flex flex-col items-center mb-4">

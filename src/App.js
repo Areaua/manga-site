@@ -8,6 +8,7 @@ import SettingsPage from './components/SettingsPage';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
 import AnimeDetails from './components/AnimeDetails';
+import Header from './components/Header';
 import './index.css';
 import './welcome-auth.css';
 
@@ -100,6 +101,7 @@ const App = () => {
                       path="/profile"
                       element={
                         <div>
+                          <Header hideHeader={false} />
                           <ProfilePage hideHeader={false} />
                         </div>
                       }
@@ -108,7 +110,12 @@ const App = () => {
                       path="/settings"
                       element={
                         <div>
-                          <SettingsPage hideHeader={false} />
+                          <Header hideHeader={false} />
+                          <SettingsPage
+                            pornFilter={pornFilter}
+                            togglePornFilter={() => setPornFilter(!pornFilter)}
+                            hideHeader={false}
+                          />
                         </div>
                       }
                     />
