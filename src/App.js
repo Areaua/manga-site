@@ -7,8 +7,6 @@ import ProfilePage from './components/ProfilePage';
 import SettingsPage from './components/SettingsPage';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
-import Header from './components/Header';
-import AnimeDetails from './components/AnimeDetails'; // Добавляем импорт AnimeDetails
 import './index.css';
 import './welcome-auth.css';
 
@@ -54,63 +52,41 @@ const App = () => {
                     <Route
                       path="/home"
                       element={
-                        <>
-                          <Header hideHeader={false} />
-                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} />
-                        </>
+                        <div>
+                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                        </div>
                       }
                     />
                     <Route
                       path="/favourites"
                       element={
-                        <>
-                          <Header hideHeader={false} />
-                          <FavouritesPage
-                            savedAnimes={savedAnimes}
-                            genreEmojis={genreEmojis}
-                            onSaveClick={(anime) => {
-                              if (!savedAnimes.includes(anime)) {
-                                const updatedAnimes = [...savedAnimes, anime];
-                                setSavedAnimes(updatedAnimes);
-                              }
-                            }}
-                          />
-                        </>
+                        <div>
+                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                        </div>
                       }
                     />
                     <Route
                       path="/profile"
                       element={
-                        <>
-                          <Header hideHeader={false} />
-                          <ProfilePage />
-                        </>
+                        <div>
+                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                        </div>
                       }
                     />
                     <Route
                       path="/settings"
                       element={
-                        <>
-                          <Header hideHeader={false} />
-                          <SettingsPage pornFilter={pornFilter} togglePornFilter={togglePornFilter} />
-                        </>
+                        <div>
+                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={false} />
+                        </div>
                       }
                     />
                     <Route
                       path="/anime/:id"
                       element={
-                        <>
-                          <Header hideHeader={true} />
-                          <AnimeDetails
-                            savedAnimes={savedAnimes}
-                            onSaveClick={(anime) => {
-                              if (!savedAnimes.includes(anime)) {
-                                const updatedAnimes = [...savedAnimes, anime];
-                                setSavedAnimes(updatedAnimes);
-                              }
-                            }}
-                          />
-                        </>
+                        <div>
+                          <HomePage savedAnimes={savedAnimes} setSavedAnimes={setSavedAnimes} hideHeader={true} />
+                        </div>
                       }
                     />
                     <Route path="*" element={<Navigate to="/home" />} />

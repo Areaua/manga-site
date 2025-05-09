@@ -91,6 +91,11 @@ body {
   background-color: var(--body-color);
   transition: var(--tran-05);
   margin-left: 25px;
+  padding-top: 100px; /* Добавляем отступ сверху, чтобы учесть сайдбар */
+}
+
+.no-header .home {
+  padding-top: 100px; /* Оставляем отступ, даже если хедер скрыт */
 }
 
 .sidebar.close ~ .home {

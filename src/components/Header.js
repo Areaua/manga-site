@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ hideHeader }) => {
   const [searchQuery, setSearchQuery] = useState('');
   
   const readAnimeCount = 7;
@@ -14,14 +14,12 @@ const Header = () => {
 
   let currentRank = ranks[0];
   let nextRank = ranks[1];
-  let progressToNext = 0;
 
   for (let i = 0; i < ranks.length; i++) {
     if (readAnimeCount >= ranks[i].threshold) {
       currentRank = ranks[i];
       if (i + 1 < ranks.length) {
         nextRank = ranks[i + 1];
-        progressToNext = nextRank.threshold - readAnimeCount;
       } else {
         nextRank = null;
       }
@@ -32,6 +30,9 @@ const Header = () => {
     setSearchQuery(e.target.value);
     console.log('Поиск:', e.target.value);
   };
+
+  // Если hideHeader === true, не рендерим хедер
+  if (hideHeader) return null;
 
   return (
     <header className="header">

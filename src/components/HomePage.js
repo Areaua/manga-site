@@ -15,7 +15,7 @@ const genreEmojis = {
   Business: '💼',
 };
 
-const HomePage = ({ savedAnimes, setSavedAnimes }) => {
+const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader }) => {
   const [showComicPage, setShowComicPage] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedAnime, setSelectedAnime] = useState(null);
@@ -106,13 +106,14 @@ const HomePage = ({ savedAnimes, setSavedAnimes }) => {
         onBackClick={() => setSelectedAnime(null)}
         savedAnimes={savedAnimes}
         onSaveClick={handleSaveClick}
+        hideHeader={hideHeader}
       />
     );
   }
 
   return (
     <div className="min-h-screen overflow-y-auto">
-      <Header />
+      <Header hideHeader={hideHeader} />
       <MangaSlideshow mangas={mangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
       <GenreSelector genreEmojis={genreEmojis} selectedGenre={selectedGenre} handleGenreClick={handleGenreClick} />
       <div className="p-4 overflow-y-auto">
