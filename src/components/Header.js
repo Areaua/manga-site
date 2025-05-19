@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+// components/Header.js
+import React from 'react';
 import './Header.css';
 
 const Header = ({ hideHeader }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  
   const readAnimeCount = 7;
   const ranks = [
     { name: 'Новичок', threshold: 0 },
@@ -26,28 +25,12 @@ const Header = ({ hideHeader }) => {
     }
   }
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-    console.log('Поиск:', e.target.value);
-  };
-
-  // Если hideHeader === true, не рендерим хедер
   if (hideHeader) return null;
 
   return (
     <header className="header">
       <div className="header-content">
         <h1 className="header-title">AniAria</h1>
-        <div className="search-bar">
-          <i className="bx bx-search search-icon"></i>
-          <input
-            type="text"
-            placeholder="Поиск аниме..."
-            value={searchQuery}
-            onChange={handleSearch}
-            className="search-input"
-          />
-        </div>
         <div className="rank-display">
           <span className="rank-title">{currentRank.name}</span>
           {nextRank && (

@@ -1,3 +1,4 @@
+// components/HomePage.js
 import React, { useState, useEffect } from 'react';
 import MangaSlideshow from './MangaSlideshow';
 import ComicReadingPage from './ComicReadingPage';
@@ -5,6 +6,7 @@ import GenreSelector from './GenreSelector';
 import Header from './Header';
 import AnimeList from './AnimeList';
 import AnimeDetails from './AnimeDetails';
+import './HomePage.css';
 
 const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
   const [showComicPage, setShowComicPage] = useState(false);
@@ -46,18 +48,6 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
     { name: 'Anime Adventure 2', genre: 'Adventure', href: 'https://example.com/page10.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
     { name: 'Anime Business 1', genre: 'Business', href: 'https://example.com/page11.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
     { name: 'Anime Business 2', genre: 'Business', href: 'https://example.com/page12.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Thriller 3', genre: 'Thriller', href: 'https://example.com/page13.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Thriller 4', genre: 'Thriller', href: 'https://example.com/page14.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Drama 3', genre: 'Drama', href: 'https://example.com/page15.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Drama 4', genre: 'Drama', href: 'https://example.com/page16.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Supernatural 3', genre: 'Supernatural', href: 'https://example.com/page17.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Supernatural 4', genre: 'Supernatural', href: 'https://example.com/page18.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Romance 3', genre: 'Romance', href: 'https://example.com/page19.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Romance 4', genre: 'Romance', href: 'https://example.com/page20.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Adventure 3', genre: 'Adventure', href: 'https://example.com/page21.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Adventure 4', genre: 'Adventure', href: 'https://example.com/page22.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Business 3', genre: 'Business', href: 'https://example.com/page23.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Business 4', genre: 'Business', href: 'https://example.com/page24.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
   ];
 
   const adultAnimes = [
@@ -67,12 +57,6 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
     { name: 'Anime Romance 18+', genre: 'Romance', href: 'https://example.com/page28.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
     { name: 'Anime Adventure 18+', genre: 'Adventure', href: 'https://example.com/page29.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
     { name: 'Anime Business 18+', genre: 'Business', href: 'https://example.com/page30.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Thriller 18+ 2', genre: 'Thriller', href: 'https://example.com/page31.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Drama 18+ 2', genre: 'Drama', href: 'https://example.com/page32.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Supernatural 18+ 2', genre: 'Supernatural', href: 'https://example.com/page33.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Romance 18+ 2', genre: 'Romance', href: 'https://example.com/page34.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Adventure 18+ 2', genre: 'Adventure', href: 'https://example.com/page35.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
-    { name: 'Anime Business 18+ 2', genre: 'Business', href: 'https://example.com/page36.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg' },
   ];
 
   const mangas = [
@@ -103,11 +87,11 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
   }
 
   return (
-    <div className="min-h-screen overflow-y-auto">
+    <div className="home-page">
       <Header hideHeader={hideHeader} />
       <MangaSlideshow mangas={mangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
       <GenreSelector genreEmojis={genreEmojis} selectedGenre={selectedGenre} handleGenreClick={handleGenreClick} />
-      <div className="p-4 overflow-y-auto">
+      <div className="home-page__content">
         <AnimeList
           animes={allAnimes}
           handleAnimeClick={handleAnimeClick}

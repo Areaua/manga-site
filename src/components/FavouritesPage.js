@@ -1,3 +1,4 @@
+// components/FavouritesPage.js
 import React, { useState, useEffect } from 'react';
 import AnimeCard from './AnimeCard';
 import GenreSelector from './GenreSelector';
@@ -53,18 +54,18 @@ const FavouritesPage = ({ savedAnimes, genreEmojis, onSaveClick }) => {
   }
 
   return (
-    <div className="min-h-screen overflow-y-auto">
+    <div className="favourites-page">
       <Header />
       <MangaSlideshow mangas={mangas} onReadClick={handleMangaClick} pornFilter={pornFilter} />
       <GenreSelector genreEmojis={genreEmojis} selectedGenre={selectedGenre} handleGenreClick={handleGenreClick} />
-      <div className="p-4 overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-color)' }}>
+      <div className="favourites-page__content">
+        <h2 className="favourites-page__title">
           Favourites
         </h2>
         {allAnimes.length === 0 ? (
-          <p className="text-gray-600">No favourites yet.</p>
+          <p className="favourites-page__empty">No favourites yet.</p>
         ) : (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="favourites-page__grid">
             {allAnimes.map((anime, index) => (
               <AnimeCard
                 key={index}

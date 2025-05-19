@@ -1,0 +1,14 @@
+.home-page {
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.home-page__content {
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.manga-slideshow,
+.anime-list {
+  margin-bottom: 1rem;
+}

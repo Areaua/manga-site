@@ -1,3 +1,4 @@
+/* components/Header.css */
 .header {
   background-color: var(--header-bg-color);
   padding: 10px 20px;
@@ -23,29 +24,8 @@
   color: var(--header-text-color);
   background-color: #ffffff;
   padding: 5px 15px;
-  border-radius: 20px; /* Овал с белой подложкой */
-  display: inline-block;
-}
-
-.search-bar {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
   border-radius: 20px;
-  padding: 5px 10px;
-  width: 300px;
-}
-
-.search-icon {
-  color: #707070;
-  margin-right: 10px;
-}
-
-.search-input {
-  border: none;
-  outline: none;
-  width: 100%;
-  background: transparent;
+  display: inline-block;
 }
 
 .rank-display {

@@ -91,11 +91,11 @@ body {
   background-color: var(--body-color);
   transition: var(--tran-05);
   margin-left: 25px;
-  padding-top: 100px; /* Добавляем отступ сверху, чтобы учесть сайдбар */
+  padding-top: 100px;
 }
 
 .no-header .home {
-  padding-top: 100px; /* Оставляем отступ, даже если хедер скрыт */
+  padding-top: 100px;
 }
 
 .sidebar.close ~ .home {
@@ -160,11 +160,13 @@ body.dark .read-button:hover {
 }
 
 .genre-filter-animation {
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .genre-filter-animation:hover {
   transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .genre-bounce {
@@ -189,6 +191,17 @@ body.dark .read-button:hover {
   }
   100% {
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
@@ -257,18 +270,6 @@ body.dark .toggle-switch-18.settings-toggle:hover {
 
 .fade-in {
   animation: fadeIn 0.5s ease-out forwards;
-}
-
-@keyframes bounce {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-  100% {
-    transform: translateY(0);
-  }
 }
 
 .bounce-animation {
