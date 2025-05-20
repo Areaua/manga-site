@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { ReactComponent as OrangeLogo } from './orange.svg';
@@ -15,10 +15,18 @@ const Header = ({ hideHeader }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [menuTimeout, setMenuTimeout] = useState(null);
   const [notificationTimeout, setNotificationTimeout] = useState(null);
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const [useBlueLogo, setUseBlueLogo] = useState(false);
+  const [isWheelOpen, setIsWheelOpen] = useState(false);
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const searchInputRef = useRef(null);
+  const searchContainerRef = useRef(null);
+  const rightSectionRef = useRef(null);
+  const wheelRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -44,6 +52,19 @@ const Header = ({ hideHeader }) => {
     };
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    if (searchContainerRef.current && rightSectionRef.current) {
+      if (isSearchOpen) {
+        searchContainerRef.current.classList.add('active');
+        rightSectionRef.current.classList.add('active');
+        setTimeout(() => searchInputRef.current?.focus(), 300);
+      } else {
+        searchContainerRef.current.classList.remove('active');
+        rightSectionRef.current.classList.remove('active');
+      }
+    }
+  }, [isSearchOpen]);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -109,6 +130,48 @@ const Header = ({ hideHeader }) => {
     navigate('/profile');
   };
 
+  const toggleSearch = () => {
+    setIsSearchOpen(prev => !prev);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    console.log('Поиск манги:', e.target.value);
+  };
+
+  const toggleWheel = () => {
+    setIsWheelOpen(prev => !prev);
+    if (isWheelOpen) {
+      setSelectedGenre(null);
+      if (wheelRef.current) {
+        wheelRef.current.style.transform = 'rotate(0deg)';
+        wheelRef.current.style.transition = 'none';
+      }
+    }
+  };
+
+  const spinWheel = () => {
+    if (!isWheelOpen || !wheelRef.current) return;
+    const genres = [
+      { name: 'Thr-ler', icon: '💀' },
+      { name: 'Dra-ma', icon: '❤️' },
+      { name: 'Sup-ral', icon: '👻' },
+      { name: 'Romance', icon: '💕' },
+      { name: 'Adv-ture', icon: '🌍' },
+      { name: 'Business', icon: '💼' },
+    ];
+    const fullRotations = 1080; // 3 полных оборота (360° * 3)
+    const randomIndex = Math.floor(Math.random() * genres.length); // Случайный жанр
+    const targetAngle = randomIndex * (360 / genres.length); // Угол целевого сегмента
+    const randomRotation = fullRotations + (360 - (targetAngle % 360)); // 3 оборота + угол для остановки под стрелкой
+    wheelRef.current.style.transition = 'transform 3s ease-out';
+    wheelRef.current.style.transform = `rotate(${randomRotation}deg)`;
+
+    setTimeout(() => {
+      setSelectedGenre(genres[randomIndex].name);
+    }, 3000);
+  };
+
   if (hideHeader) return null;
 
   return (
@@ -163,7 +226,23 @@ const Header = ({ hideHeader }) => {
             <i className={`bx ${isMenuOpen ? 'bx-x' : 'bx-menu'}`}></i>
           </button>
         </div>
-        <div className="right-section">
+        <div className="right-section" ref={rightSectionRef}>
+          <button className="wheel-button" onClick={toggleWheel}>
+            <i className="bx bx-dice-6 wheel-icon"></i>
+          </button>
+          <div className="search-container" ref={searchContainerRef}>
+            <i className="bx bx-search search-icon" onClick={toggleSearch}></i>
+            {isSearchOpen && (
+              <input
+                type="text"
+                placeholder="Search manga..."
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="search-input"
+              />
+            )}
+          </div>
           {!userData.is_premium && (
             <button className="premium-button" onClick={handlePremiumClick}>
               <i className="bx bx-crown premium-icon"></i>
@@ -257,6 +336,35 @@ const Header = ({ hideHeader }) => {
           >
             <i className="bx bx-log-out"></i> Logout
           </button>
+        </div>
+      )}
+      {isWheelOpen && (
+        <div className="genre-wheel-container">
+          <div className="genre-wheel-pointer">↑</div> {/* Добавлена стрелка */}
+          <div className="genre-wheel" ref={wheelRef}>
+            {[
+              { name: 'Thr-ler', icon: '💀' },
+              { name: 'Dra-ma', icon: '❤️' },
+              { name: 'Sup-ral', icon: '👻' },
+              { name: 'Romance', icon: '💕' },
+              { name: 'Adv-ture', icon: '🌍' },
+              { name: 'Business', icon: '💼' },
+            ].map((genre, index) => (
+              <div
+                key={index}
+                className="genre-segment"
+                style={{ transform: `rotate(${index * 60}deg)` }}
+              >
+                <span style={{ transform: `rotate(${-index * 60}deg)` }}>
+                  {genre.icon} {genre.name}
+                </span>
+              </div>
+            ))}
+            <button className="spin-button" onClick={spinWheel}>
+              Spin
+            </button>
+          </div>
+          {selectedGenre && <p className="selected-genre">Selected: {selectedGenre}</p>}
         </div>
       )}
     </header>
