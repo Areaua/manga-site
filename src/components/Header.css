@@ -218,13 +218,19 @@
 
 .genre-wheel-pointer {
   position: absolute;
-  top: -20px;
+  top: -30px; /* Сдвигаем выше для большего размера */
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
-  color: #fff;
+  font-size: 32px; /* Увеличиваем размер стрелки */
+  color: #000; /* Черный цвет по умолчанию */
+  text-shadow: 0 0 0 #ff6200; /* Оранжевая окантовка для светлой темы */
   z-index: 2001;
   pointer-events: none;
+}
+
+:where(.dark) .genre-wheel-pointer {
+  color: #000;
+  text-shadow: 0 0 0 #2196F3; /* Синяя окантовка для темной темы */
 }
 
 .genre-wheel {
@@ -257,12 +263,12 @@
 
 .genre-segment span {
   color: #fff;
-  font-size: 12px;
+  font-size: 24px; /* Увеличиваем размер смайлика */
   font-weight: bold;
   text-align: center;
   transform: rotate(45deg);
   position: absolute;
-  left: 40%; /* Текст ближе к центру */
+  left: 40%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -297,6 +303,10 @@
   color: var(--text-color);
   font-size: 18px;
   font-weight: bold;
+  max-width: 220px; /* Ограничиваем ширину, чтобы не налезали */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @keyframes hue-shift {
@@ -581,7 +591,7 @@
   }
 
   .genre-segment span {
-    font-size: 10px;
+    font-size: 20px; /* Увеличиваем размер смайлика на мобильных */
     left: 35%;
     max-width: 50px;
   }
@@ -593,7 +603,7 @@
   }
 
   .genre-wheel-pointer {
-    font-size: 20px;
-    top: -15px;
+    font-size: 28px; /* Уменьшаем размер стрелки на мобильных */
+    top: -25px;
   }
 }

@@ -153,11 +153,11 @@ const Header = ({ hideHeader }) => {
   const spinWheel = () => {
     if (!isWheelOpen || !wheelRef.current) return;
     const genres = [
-      { name: 'Thr-ler', icon: '💀' },
-      { name: 'Dra-ma', icon: '❤️' },
-      { name: 'Sup-ral', icon: '👻' },
+      { name: 'Thriller', icon: '💀' },
+      { name: 'Drama', icon: '❤️' },
+      { name: 'Supernatural', icon: '👻' },
       { name: 'Romance', icon: '💕' },
-      { name: 'Adv-ture', icon: '🌍' },
+      { name: 'Adventure', icon: '🌍' },
       { name: 'Business', icon: '💼' },
     ];
     const fullRotations = 1080; // 3 полных оборота (360° * 3)
@@ -168,7 +168,7 @@ const Header = ({ hideHeader }) => {
     wheelRef.current.style.transform = `rotate(${randomRotation}deg)`;
 
     setTimeout(() => {
-      setSelectedGenre(genres[randomIndex].name);
+      setSelectedGenre(`${genres[randomIndex].icon} ${genres[randomIndex].name}`);
     }, 3000);
   };
 
@@ -340,14 +340,14 @@ const Header = ({ hideHeader }) => {
       )}
       {isWheelOpen && (
         <div className="genre-wheel-container">
-          <div className="genre-wheel-pointer">↑</div> {/* Добавлена стрелка */}
+          <div className="genre-wheel-pointer"></div> {/* Стрелка теперь в CSS */}
           <div className="genre-wheel" ref={wheelRef}>
             {[
-              { name: 'Thr-ler', icon: '💀' },
-              { name: 'Dra-ma', icon: '❤️' },
-              { name: 'Sup-ral', icon: '👻' },
+              { name: 'Thriller', icon: '💀' },
+              { name: 'Drama', icon: '❤️' },
+              { name: 'Supernatural', icon: '👻' },
               { name: 'Romance', icon: '💕' },
-              { name: 'Adv-ture', icon: '🌍' },
+              { name: 'Adventure', icon: '🌍' },
               { name: 'Business', icon: '💼' },
             ].map((genre, index) => (
               <div
@@ -356,7 +356,7 @@ const Header = ({ hideHeader }) => {
                 style={{ transform: `rotate(${index * 60}deg)` }}
               >
                 <span style={{ transform: `rotate(${-index * 60}deg)` }}>
-                  {genre.icon} {genre.name}
+                  {genre.icon}
                 </span>
               </div>
             ))}
@@ -364,7 +364,7 @@ const Header = ({ hideHeader }) => {
               Spin
             </button>
           </div>
-          {selectedGenre && <p className="selected-genre">Selected: {selectedGenre}</p>}
+          {selectedGenre && <p className="selected-genre">{selectedGenre}</p>}
         </div>
       )}
     </header>
