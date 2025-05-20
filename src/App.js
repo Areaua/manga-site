@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
 import HomePage from './components/HomePage';
 import FavouritesPage from './components/FavouritesPage';
 import ProfilePage from './components/ProfilePage';
@@ -8,18 +7,16 @@ import SettingsPage from './components/SettingsPage';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
 import AnimeDetails from './components/AnimeDetails';
-import Header from './components/Header';
 import './index.css';
 import './welcome-auth.css';
 
-// Компонент-обёртка для обработки параметра :id
 const AnimeDetailsWrapper = ({ savedAnimes, setSavedAnimes }) => {
   const { id } = useParams();
-  const anime = [...savedAnimes].find(a => a.name === id); // Ищем аниме по имени (можно изменить логику поиска)
+  const anime = [...savedAnimes].find(a => a.name === id);
 
   return (
     <AnimeDetails
-      selectedAnime={anime || { name: id, genre: 'Unknown', href: '#', image: '' }} // Заглушка, если аниме не найдено
+      selectedAnime={anime || { name: id, genre: 'Unknown', href: '#', image: '' }}
       savedAnimes={savedAnimes}
       onSaveClick={(anime) => {
         const updatedAnimes = savedAnimes.includes(anime)
@@ -68,66 +65,51 @@ const App = () => {
           element={
             <div className="app-container">
               <div className="main-content">
-                <Sidebar />
                 <div className="home bg-black bg-opacity-50 min-h-screen">
                   <Routes>
                     <Route
                       path="/home"
                       element={
-                        <div>
-                          <HomePage
-                            savedAnimes={savedAnimes}
-                            setSavedAnimes={setSavedAnimes}
-                            hideHeader={false}
-                            genreEmojis={genreEmojis}
-                          />
-                        </div>
+                        <HomePage
+                          savedAnimes={savedAnimes}
+                          setSavedAnimes={setSavedAnimes}
+                          hideHeader={false}
+                          genreEmojis={genreEmojis}
+                        />
                       }
                     />
                     <Route
                       path="/favourites"
                       element={
-                        <div>
-                          <FavouritesPage
-                            savedAnimes={savedAnimes}
-                            setSavedAnimes={setSavedAnimes}
-                            hideHeader={false}
-                            genreEmojis={genreEmojis}
-                          />
-                        </div>
+                        <FavouritesPage
+                          savedAnimes={savedAnimes}
+                          setSavedAnimes={setSavedAnimes}
+                          hideHeader={false}
+                          genreEmojis={genreEmojis}
+                        />
                       }
                     />
                     <Route
                       path="/profile"
-                      element={
-                        <div>
-                          <Header hideHeader={false} />
-                          <ProfilePage hideHeader={false} />
-                        </div>
-                      }
+                      element={<ProfilePage hideHeader={false} />}
                     />
                     <Route
                       path="/settings"
                       element={
-                        <div>
-                          <Header hideHeader={false} />
-                          <SettingsPage
-                            pornFilter={pornFilter}
-                            togglePornFilter={() => setPornFilter(!pornFilter)}
-                            hideHeader={false}
-                          />
-                        </div>
+                        <SettingsPage
+                          pornFilter={pornFilter}
+                          togglePornFilter={() => setPornFilter(!pornFilter)}
+                          hideHeader={false}
+                        />
                       }
                     />
                     <Route
                       path="/anime/:id"
                       element={
-                        <div>
-                          <AnimeDetailsWrapper
-                            savedAnimes={savedAnimes}
-                            setSavedAnimes={setSavedAnimes}
-                          />
-                        </div>
+                        <AnimeDetailsWrapper
+                          savedAnimes={savedAnimes}
+                          setSavedAnimes={setSavedAnimes}
+                        />
                       }
                     />
                     <Route path="*" element={<Navigate to="/home" />} />

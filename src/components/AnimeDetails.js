@@ -11,7 +11,7 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
 
   useEffect(() => {
     console.log('AnimeDetails mounted with:', { isMangaOpen, selectedEpisode, selectedAnime });
-  }, []);
+  }, [isMangaOpen, selectedEpisode, selectedAnime]);
 
   const handleSaveClick = () => {
     onSaveClick(selectedAnime);

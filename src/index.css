@@ -85,22 +85,16 @@ body {
 .home {
   position: absolute;
   top: 0;
-  left: 250px;
+  left: 0;
   height: 100vh;
-  width: calc(100% - 250px);
+  width: 100%;
   background-color: var(--body-color);
   transition: var(--tran-05);
-  margin-left: 25px;
-  padding-top: 100px;
+  padding-top: 60px;
 }
 
 .no-header .home {
-  padding-top: 100px;
-}
-
-.sidebar.close ~ .home {
-  left: 88px;
-  width: calc(100% - 88px);
+  padding-top: 60px;
 }
 
 /* ===== Стили для кнопок ===== */
