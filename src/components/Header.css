@@ -216,21 +216,40 @@
   animation: fadeInWheel 0.3s ease-out;
 }
 
+.hold-progress-bar {
+  width: 220px;
+  height: 10px;
+  background-color: #ccc;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.hold-progress {
+  height: 100%;
+  background-color: #ff6200;
+  transition: width 0.05s linear;
+}
+
+:where(.dark) .hold-progress {
+  background-color: #2196F3;
+}
+
 .genre-wheel-pointer {
   position: absolute;
-  top: -30px; /* Сдвигаем выше для большего размера */
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 32px; /* Увеличиваем размер стрелки */
-  color: #000; /* Черный цвет по умолчанию */
-  text-shadow: 0 0 0 #ff6200; /* Оранжевая окантовка для светлой темы */
+  font-size: 32px;
+  color: #000;
+  text-shadow: 0 0 5px #ff6200;
   z-index: 2001;
   pointer-events: none;
 }
 
 :where(.dark) .genre-wheel-pointer {
   color: #000;
-  text-shadow: 0 0 0 #2196F3; /* Синяя окантовка для темной темы */
+  text-shadow: 0 0 5px #2196F3;
 }
 
 .genre-wheel {
@@ -240,13 +259,14 @@
   position: relative;
   overflow: hidden;
   background: conic-gradient(
-    #FFC107 0deg 60deg, /* Thriller */
-    #FF5722 60deg 120deg, /* Drama */
-    #9C27B0 120deg 180deg, /* Supernatural */
-    #E91E63 180deg 240deg, /* Romance */
-    #4CAF50 240deg 300deg, /* Adventure */
-    #2196F3 300deg 360deg /* Business */
+    #FFC107 0deg 60deg,
+    #FF5722 60deg 120deg,
+    #9C27B0 120deg 180deg,
+    #E91E63 180deg 240deg,
+    #4CAF50 240deg 300deg,
+    #2196F3 300deg 360deg
   );
+  transition: transform 3s cubic-bezier(0.17, 0.67, 0.21, 0.99);
 }
 
 .genre-segment {
@@ -263,16 +283,20 @@
 
 .genre-segment span {
   color: #fff;
-  font-size: 24px; /* Увеличиваем размер смайлика */
+  font-size: 24px;
   font-weight: bold;
   text-align: center;
-  transform: rotate(45deg);
   position: absolute;
-  left: 40%;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 70px;
+  overflow: visible;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .spin-button {
@@ -291,10 +315,17 @@
   font-weight: bold;
   transition: transform 0.3s ease;
   z-index: 2;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
 .spin-button:hover {
   transform: translate(-50%, -50%) scale(1.1);
+}
+
+.spin-button:active {
+  transform: translate(-50%, -50%) scale(0.95);
 }
 
 .selected-genre {
@@ -303,7 +334,7 @@
   color: var(--text-color);
   font-size: 18px;
   font-weight: bold;
-  max-width: 220px; /* Ограничиваем ширину, чтобы не налезали */
+  max-width: 220px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -591,9 +622,10 @@
   }
 
   .genre-segment span {
-    font-size: 20px; /* Увеличиваем размер смайлика на мобильных */
-    left: 35%;
-    max-width: 50px;
+    font-size: 20px;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
   }
 
   .spin-button {
@@ -603,7 +635,13 @@
   }
 
   .genre-wheel-pointer {
-    font-size: 28px; /* Уменьшаем размер стрелки на мобильных */
-    top: -25px;
+    font-size: 28px;
+    top: 0;
+  }
+
+  .hold-progress-bar {
+    width: 160px;
+    height: 8px;
+    margin-bottom: 12px;
   }
 }

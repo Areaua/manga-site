@@ -23,10 +23,13 @@ const Header = ({ hideHeader }) => {
   const [useBlueLogo, setUseBlueLogo] = useState(false);
   const [isWheelOpen, setIsWheelOpen] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState(null);
+  const [isHolding, setIsHolding] = useState(false);
+  const [holdProgress, setHoldProgress] = useState(0);
   const searchInputRef = useRef(null);
   const searchContainerRef = useRef(null);
   const rightSectionRef = useRef(null);
   const wheelRef = useRef(null);
+  const holdTimerRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -143,6 +146,8 @@ const Header = ({ hideHeader }) => {
     setIsWheelOpen(prev => !prev);
     if (isWheelOpen) {
       setSelectedGenre(null);
+      setHoldProgress(0);
+      setIsHolding(false);
       if (wheelRef.current) {
         wheelRef.current.style.transform = 'rotate(0deg)';
         wheelRef.current.style.transition = 'none';
@@ -150,8 +155,33 @@ const Header = ({ hideHeader }) => {
     }
   };
 
-  const spinWheel = () => {
+  const startHold = () => {
     if (!isWheelOpen || !wheelRef.current) return;
+    setIsHolding(true);
+    setHoldProgress(0);
+
+    const maxHoldTime = 3000;
+    const increment = 100 / (maxHoldTime / 50);
+
+    holdTimerRef.current = setInterval(() => {
+      setHoldProgress(prev => {
+        const newProgress = prev + increment;
+        if (newProgress >= 100) {
+          clearInterval(holdTimerRef.current);
+          return 100;
+        }
+        return newProgress;
+      });
+    }, 50);
+  };
+
+  const stopHold = () => {
+    if (!isHolding) return;
+    setIsHolding(false);
+    clearInterval(holdTimerRef.current);
+
+    if (holdProgress === 0) return;
+
     const genres = [
       { name: 'Thriller', icon: '💀' },
       { name: 'Drama', icon: '❤️' },
@@ -160,16 +190,26 @@ const Header = ({ hideHeader }) => {
       { name: 'Adventure', icon: '🌍' },
       { name: 'Business', icon: '💼' },
     ];
-    const fullRotations = 1080; // 3 полных оборота (360° * 3)
-    const randomIndex = Math.floor(Math.random() * genres.length); // Случайный жанр
-    const targetAngle = randomIndex * (360 / genres.length); // Угол целевого сегмента
-    const randomRotation = fullRotations + (360 - (targetAngle % 360)); // 3 оборота + угол для остановки под стрелкой
-    wheelRef.current.style.transition = 'transform 3s ease-out';
+    
+    const minRotations = 360;
+    const maxRotations = 1800;
+    const rotations = minRotations + (maxRotations - minRotations) * (holdProgress / 100);
+    
+    const minDuration = 1;
+    const maxDuration = 5;
+    const duration = minDuration + (maxDuration - minDuration) * (holdProgress / 100);
+
+    const randomIndex = Math.floor(Math.random() * genres.length);
+    const targetAngle = randomIndex * (360 / genres.length);
+    const randomRotation = rotations + (360 - (targetAngle % 360));
+
+    wheelRef.current.style.transition = `transform ${duration}s cubic-bezier(0.17, 0.67, 0.21, 0.99)`;
     wheelRef.current.style.transform = `rotate(${randomRotation}deg)`;
 
     setTimeout(() => {
       setSelectedGenre(`${genres[randomIndex].icon} ${genres[randomIndex].name}`);
-    }, 3000);
+      setHoldProgress(0);
+    }, duration * 1000);
   };
 
   if (hideHeader) return null;
@@ -340,7 +380,13 @@ const Header = ({ hideHeader }) => {
       )}
       {isWheelOpen && (
         <div className="genre-wheel-container">
-          <div className="genre-wheel-pointer"></div> {/* Стрелка теперь в CSS */}
+          <div className="hold-progress-bar">
+            <div
+              className="hold-progress"
+              style={{ width: `${holdProgress}%` }}
+            ></div>
+          </div>
+          <div className="genre-wheel-pointer">↓</div>
           <div className="genre-wheel" ref={wheelRef}>
             {[
               { name: 'Thriller', icon: '💀' },
@@ -360,7 +406,13 @@ const Header = ({ hideHeader }) => {
                 </span>
               </div>
             ))}
-            <button className="spin-button" onClick={spinWheel}>
+            <button
+              className="spin-button"
+              onMouseDown={startHold}
+              onMouseUp={stopHold}
+              onTouchStart={startHold}
+              onTouchEnd={stopHold}
+            >
               Spin
             </button>
           </div>
