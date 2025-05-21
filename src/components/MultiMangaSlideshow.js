@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './MultiMangaSlideshow.css';
 
 const MultiMangaSlideshow = ({ mangas, onReadClick, pornFilter }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const autoPlayTimeoutRef = useRef(null);
   const slidesRef = useRef(null);
@@ -22,34 +21,33 @@ const MultiMangaSlideshow = ({ mangas, onReadClick, pornFilter }) => {
   }
   filteredMangas = uniqueMangas;
 
-  // Ensure at least 3 items for the slideshow
-  while (filteredMangas.length < itemsPerSlide) {
+  // Ensure at least itemsPerSlide*3 items for smooth infinite scrolling
+  while (filteredMangas.length < itemsPerSlide * 3) {
     filteredMangas = [...filteredMangas, ...filteredMangas];
   }
 
-  // Create an extended array for infinite scrolling: [last, ..., first, ..., last, ..., first]
-  const totalRealSlides = Math.ceil(filteredMangas.length / itemsPerSlide);
-  const extendedMangas = [
-    ...filteredMangas.slice(-itemsPerSlide), // Last slide at the start
-    ...filteredMangas,
-    ...filteredMangas.slice(0, itemsPerSlide), // First slide at the end
-  ];
+  // Create an extended array that loops both slides and items within slides
+  const extendedMangas = [...filteredMangas, ...filteredMangas, ...filteredMangas];
 
   const totalSlides = Math.ceil(extendedMangas.length / itemsPerSlide);
+  const realSlidesCount = Math.ceil(filteredMangas.length / itemsPerSlide);
 
-  // Start at the first "real" slide (after the duplicated last slide)
-  const [displayIndex, setDisplayIndex] = useState(1);
+  // Start at the middle section of the extended array
+  const [displayIndex, setDisplayIndex] = useState(realSlidesCount);
 
   useEffect(() => {
     if (filteredMangas.length === 0 || !isAutoPlaying) return;
 
     const interval = setInterval(() => {
-      setDisplayIndex((prevIndex) => prevIndex + 1);
+      setDisplayIndex((prevIndex) => {
+        const newIndex = prevIndex + 1;
+        // If we reach the end of extended array, reset to middle section
+        return newIndex >= totalSlides - 1 ? realSlidesCount : newIndex;
+      });
     }, 5000);
     return () => clearInterval(interval);
-  }, [filteredMangas.length, isAutoPlaying]);
+  }, [filteredMangas.length, isAutoPlaying, totalSlides, realSlidesCount]);
 
-  // Resume auto-play after 10 seconds of manual interaction
   const resumeAutoPlay = () => {
     if (autoPlayTimeoutRef.current) {
       clearTimeout(autoPlayTimeoutRef.current);
@@ -59,23 +57,26 @@ const MultiMangaSlideshow = ({ mangas, onReadClick, pornFilter }) => {
     }, 10000);
   };
 
-  // Handle transition end to reset index for infinite scrolling
   const handleTransitionEnd = () => {
-    if (displayIndex === 0) {
+    // Reset to middle section when near the edges
+    if (displayIndex >= totalSlides - realSlidesCount) {
       slidesRef.current.style.transition = 'none';
-      setDisplayIndex(totalRealSlides);
-    } else if (displayIndex === totalSlides - 1) {
+      setDisplayIndex(realSlidesCount);
+    } else if (displayIndex <= 1) {
       slidesRef.current.style.transition = 'none';
-      setDisplayIndex(1);
+      setDisplayIndex(totalSlides - realSlidesCount - 1);
     }
   };
 
   useEffect(() => {
     // Reset transition after changing displayIndex without animation
-    if (displayIndex === totalRealSlides || displayIndex === 1) {
-      slidesRef.current.style.transition = 'transform 0.5s ease-in-out';
+    if (displayIndex === realSlidesCount || displayIndex === totalSlides - realSlidesCount - 1) {
+      const timer = setTimeout(() => {
+        slidesRef.current.style.transition = 'transform 0.5s ease-in-out';
+      }, 0);
+      return () => clearTimeout(timer);
     }
-  }, [displayIndex]);
+  }, [displayIndex, realSlidesCount, totalSlides]);
 
   const handlePrevClick = () => {
     setDisplayIndex((prevIndex) => prevIndex - 1);
@@ -106,7 +107,7 @@ const MultiMangaSlideshow = ({ mangas, onReadClick, pornFilter }) => {
             <div key={slideIndex} className="multi-manga-slide">
               {extendedMangas.slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide).map((manga, index) => (
                 <div
-                  key={index}
+                  key={`${slideIndex}-${index}`}
                   className="manga-item"
                   onClick={() => onReadClick(manga)}
                 >

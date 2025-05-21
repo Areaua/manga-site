@@ -123,3 +123,70 @@
     margin-top: 0.5rem;
   }
 }
+/* Добавьте это в GenrePanel.css */
+.year-slider {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.year-slider label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+.year-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.year-slider-input {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #d1d5db;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.year-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.year-slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+.year-slider-value {
+  min-width: 40px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.year-slider-input:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* Анимация при изменении значения */
+.year-slider-value.changed {
+  animation: pulseScale 0.5s ease;
+}
+
+@keyframes pulseScale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}

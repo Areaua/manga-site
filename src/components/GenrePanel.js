@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './GenrePanel.css';
 
 const GenrePanel = ({ genreEmojis, selectedGenre, handleGenreClick, selectedYear, handleYearChange }) => {
   const [bouncedGenre, setBouncedGenre] = useState(null);
+  const [yearValue, setYearValue] = useState(selectedYear === 'all' ? 2025 : parseInt(selectedYear));
+  const [valueChanged, setValueChanged] = useState(false);
 
   const onGenreClick = (genre) => {
     setBouncedGenre(genre);
@@ -10,7 +12,19 @@ const GenrePanel = ({ genreEmojis, selectedGenre, handleGenreClick, selectedYear
     setTimeout(() => setBouncedGenre(null), 500);
   };
 
-  const years = ['all', 2020, 2021, 2022, 2023, 2024, 2025];
+  const handleSliderChange = (e) => {
+    const value = parseInt(e.target.value);
+    setYearValue(value);
+    setValueChanged(true);
+    handleYearChange(value.toString());
+  };
+
+  useEffect(() => {
+    if (valueChanged) {
+      const timer = setTimeout(() => setValueChanged(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [valueChanged]);
 
   return (
     <div className="genre-panel">
@@ -47,19 +61,24 @@ const GenrePanel = ({ genreEmojis, selectedGenre, handleGenreClick, selectedYear
             {genre}
           </button>
         ))}
-        <div className="year-filter mt-4">
-          <label className="block text-sm font-medium text-gray-700">Filter by Year:</label>
-          <select
-            value={selectedYear}
-            onChange={(e) => handleYearChange(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          >
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
+        <div className="year-slider">
+          <label htmlFor="yearRange">Year: {yearValue}</label>
+          <div className="year-slider-container">
+            <span>1998</span>
+            <input
+              type="range"
+              id="yearRange"
+              min="1998"
+              max="2025"
+              value={yearValue}
+              onChange={handleSliderChange}
+              className="year-slider-input"
+            />
+            <span>2025</span>
+            <span className={`year-slider-value ${valueChanged ? 'changed' : ''}`}>
+              {yearValue}
+            </span>
+          </div>
         </div>
       </div>
     </div>

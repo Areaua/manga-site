@@ -11,45 +11,40 @@
 }
 
 .layout-button {
-  /* Уменьшаем размер кнопок в 2 раза */
-  padding: 0.25rem 0.5rem; /* Было 0.5rem 1rem */
-  font-size: 0.5rem; /* Было 1rem */
-  line-height: 1; /* Уменьшаем высоту строки для компактности */
-  min-width: 2rem; /* Устанавливаем минимальную ширину для кнопок */
-  min-height: 1.5rem; /* Устанавливаем минимальную высоту */
-  border: none; /* Убираем рамку */
-  border-radius: 15px; /* Закругляем углы */
-  background: linear-gradient(145deg, #e0e0e0, #ffffff); /* Градиентный фон */
-  color: #333; /* Цвет точек */
+  padding: 0.25rem 0.5rem;
+  font-size: 0.5rem;
+  line-height: 1;
+  min-width: 2rem;
+  min-height: 1.5rem;
+  border: none;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #e0e0e0, #ffffff);
+  color: #333;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень */
-  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease; /* Плавные переходы */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
-/* Эффект наведения: пульсация */
 .layout-button:hover {
   animation: pulse 0.5s infinite;
   background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Эффект нажатия */
 .layout-button:active {
-  transform: scale(0.9); /* Уменьшение при нажатии */
+  transform: scale(0.9);
 }
 
-/* Стиль активной кнопки */
 .layout-button.active {
-  background: linear-gradient(145deg, #007bff, #0056b3); /* Градиент для активной кнопки */
-  color: white; /* Цвет точек */
+  background: linear-gradient(145deg, #007bff, #0056b3);
+  color: white;
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
 }
 
-/* Анимация пульсации */
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -64,8 +59,8 @@
 
 .anime-grid {
   display: grid;
-  gap: 1rem;
-  transition: all 0.5s ease; /* Плавный переход при смене раскладки */
+  gap: 1.5rem; /* Увеличиваем отступ между элементами */
+  transition: all 0.5s ease;
 }
 
 .anime-grid.banners-2 {
@@ -82,7 +77,7 @@
 
 .anime-card-wrapper {
   position: relative;
-  transition: transform 0.5s ease; /* Анимация для карточек */
+  transition: transform 0.5s ease;
 }
 
 .anime-card-wrapper:hover {
@@ -98,4 +93,28 @@
   padding: 0.2rem 0.5rem;
   border-radius: 5px;
   font-size: 0.7rem;
+  z-index: 2;
+  animation: bounce 1s infinite alternate, glow 2s infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-5px) scale(1.1);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  }
 }

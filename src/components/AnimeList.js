@@ -4,7 +4,8 @@ import AnimeCard from './AnimeCard';
 import './AnimeList.css';
 
 const AnimeList = ({ animes, handleAnimeClick, genreEmojis, savedAnimes, onSaveClick }) => {
-  const [bannersPerRow, setBannersPerRow] = useState(2); // По умолчанию 2 баннера в ряду
+  const [bannersPerRow, setBannersPerRow] = useState(2);
+  const maxNewItems = 5; // Максимальное количество элементов с меткой NEW
 
   const handleLayoutChange = (num) => {
     setBannersPerRow(num);
@@ -42,7 +43,9 @@ const AnimeList = ({ animes, handleAnimeClick, genreEmojis, savedAnimes, onSaveC
               savedAnimes={savedAnimes}
               onSaveClick={onSaveClick}
             />
-            <span className="new-label">NEW</span>
+            {index < maxNewItems && (
+              <span className="new-label">NEW</span>
+            )}
           </div>
         ))}
       </div>
