@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import MangaSlideshow from './MangaSlideshow';
 import ComicReadingPage from './ComicReadingPage';
-import GenrePanel from './GenrePanel'; // New static panel component
+import GenrePanel from './GenrePanel';
 import Header from './Header';
 import AnimeList from './AnimeList';
 import AnimeDetails from './AnimeDetails';
+import MultiMangaSlideshow from './MultiMangaSlideshow'; // New component
 import './HomePage.css';
 
 const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
   const [showComicPage, setShowComicPage] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('all');
+  const [selectedYear, setSelectedYear] = useState('all');
   const [selectedAnime, setSelectedAnime] = useState(null);
   const [pornFilter, setPornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
 
@@ -23,7 +25,8 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
   }, []);
 
   const handleGenreClick = (genre) => setSelectedGenre(genre);
-  const handleReadClick = () => setShowComicPage(true);
+  const handleYearChange = (year) => setSelectedYear(year);
+  const handleReadClick = (manga) => setShowComicPage(true);
   const handleBackClick = () => setShowComicPage(false);
   const handleAnimeClick = (anime) => setSelectedAnime(anime);
   const handleSaveClick = (anime) => {
@@ -59,17 +62,27 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
   ];
 
   const mangas = [
-    { title: "Cinderella Chef", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false },
-    { title: "Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false },
-    { title: "Yet Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true },
-    { title: "Fourth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: true },
-    { title: "Fifth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false },
-    { title: "Sixth Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false },
+    { title: "Cinderella Chef", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2023 },
+    { title: "Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false, year: 2022 },
+    { title: "Yet Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true, year: 2024 },
+    { title: "Fourth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: true, year: 2021 },
+    { title: "Fifth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2023 },
+    { title: "Sixth Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false, year: 2022 },
+    { title: "Seventh Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2025 },
+    { title: "Eighth Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true, year: 2024 },
+    { title: "Ninth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2021 },
   ];
 
   const filteredAnimes = selectedGenre === 'all' ? animes : animes.filter((anime) => anime.genre === selectedGenre);
   const filteredAdultAnimes = selectedGenre === 'all' ? adultAnimes : adultAnimes.filter((anime) => anime.genre === selectedGenre);
   const allAnimes = pornFilter ? [...filteredAnimes, ...filteredAdultAnimes] : filteredAnimes;
+
+  // Filter mangas by genre and year
+  let filteredMangas = mangas.filter((manga) => {
+    const genreMatch = selectedGenre === 'all' || manga.isAdult === (selectedGenre === 'adult') || manga.genre === selectedGenre;
+    const yearMatch = selectedYear === 'all' || manga.year === parseInt(selectedYear);
+    return genreMatch && yearMatch && (pornFilter || !manga.isAdult);
+  });
 
   if (showComicPage) return <ComicReadingPage onBackClick={handleBackClick} />;
   if (selectedAnime) {
@@ -89,7 +102,8 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
     <div className="home-page">
       <Header hideHeader={hideHeader} />
       <div className="home-page__content">
-        <MangaSlideshow mangas={mangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
+        <MangaSlideshow mangas={filteredMangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
+        <MultiMangaSlideshow mangas={filteredMangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
         <AnimeList
           animes={allAnimes}
           handleAnimeClick={handleAnimeClick}
@@ -102,6 +116,8 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
         genreEmojis={genreEmojis}
         selectedGenre={selectedGenre}
         handleGenreClick={handleGenreClick}
+        selectedYear={selectedYear}
+        handleYearChange={handleYearChange}
       />
     </div>
   );

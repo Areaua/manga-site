@@ -83,6 +83,25 @@
   }
 }
 
+.year-filter {
+  margin-top: 1rem;
+}
+
+.year-filter select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.year-filter select:focus {
+  border-color: #6366f1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+}
+
 @media (max-width: 768px) {
   .genre-panel {
     position: relative;
@@ -97,5 +116,10 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .year-filter {
+    width: 100%;
+    margin-top: 0.5rem;
   }
 }

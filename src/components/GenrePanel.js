@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './GenrePanel.css';
 
-const GenrePanel = ({ genreEmojis, selectedGenre, handleGenreClick }) => {
+const GenrePanel = ({ genreEmojis, selectedGenre, handleGenreClick, selectedYear, handleYearChange }) => {
   const [bouncedGenre, setBouncedGenre] = useState(null);
 
   const onGenreClick = (genre) => {
@@ -9,6 +9,8 @@ const GenrePanel = ({ genreEmojis, selectedGenre, handleGenreClick }) => {
     handleGenreClick(genre);
     setTimeout(() => setBouncedGenre(null), 500);
   };
+
+  const years = ['all', 2020, 2021, 2022, 2023, 2024, 2025];
 
   return (
     <div className="genre-panel">
@@ -45,6 +47,20 @@ const GenrePanel = ({ genreEmojis, selectedGenre, handleGenreClick }) => {
             {genre}
           </button>
         ))}
+        <div className="year-filter mt-4">
+          <label className="block text-sm font-medium text-gray-700">Filter by Year:</label>
+          <select
+            value={selectedYear}
+            onChange={(e) => handleYearChange(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
