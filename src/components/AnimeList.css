@@ -1,0 +1,101 @@
+/* components/AnimeList.css */
+.anime-list {
+  padding: 1rem;
+}
+
+.layout-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.layout-button {
+  /* Уменьшаем размер кнопок в 2 раза */
+  padding: 0.25rem 0.5rem; /* Было 0.5rem 1rem */
+  font-size: 0.5rem; /* Было 1rem */
+  line-height: 1; /* Уменьшаем высоту строки для компактности */
+  min-width: 2rem; /* Устанавливаем минимальную ширину для кнопок */
+  min-height: 1.5rem; /* Устанавливаем минимальную высоту */
+  border: none; /* Убираем рамку */
+  border-radius: 15px; /* Закругляем углы */
+  background: linear-gradient(145deg, #e0e0e0, #ffffff); /* Градиентный фон */
+  color: #333; /* Цвет точек */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень */
+  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease; /* Плавные переходы */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Эффект наведения: пульсация */
+.layout-button:hover {
+  animation: pulse 0.5s infinite;
+  background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Эффект нажатия */
+.layout-button:active {
+  transform: scale(0.9); /* Уменьшение при нажатии */
+}
+
+/* Стиль активной кнопки */
+.layout-button.active {
+  background: linear-gradient(145deg, #007bff, #0056b3); /* Градиент для активной кнопки */
+  color: white; /* Цвет точек */
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+/* Анимация пульсации */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.anime-grid {
+  display: grid;
+  gap: 1rem;
+  transition: all 0.5s ease; /* Плавный переход при смене раскладки */
+}
+
+.anime-grid.banners-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.anime-grid.banners-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.anime-grid.banners-8 {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.anime-card-wrapper {
+  position: relative;
+  transition: transform 0.5s ease; /* Анимация для карточек */
+}
+
+.anime-card-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.new-label {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background-color: #28a745;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.7rem;
+}
