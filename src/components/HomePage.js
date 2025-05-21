@@ -1,8 +1,7 @@
-// components/HomePage.js
 import React, { useState, useEffect } from 'react';
 import MangaSlideshow from './MangaSlideshow';
 import ComicReadingPage from './ComicReadingPage';
-import GenreSelector from './GenreSelector';
+import GenrePanel from './GenrePanel'; // New static panel component
 import Header from './Header';
 import AnimeList from './AnimeList';
 import AnimeDetails from './AnimeDetails';
@@ -89,9 +88,8 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
   return (
     <div className="home-page">
       <Header hideHeader={hideHeader} />
-      <MangaSlideshow mangas={mangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
-      <GenreSelector genreEmojis={genreEmojis} selectedGenre={selectedGenre} handleGenreClick={handleGenreClick} />
       <div className="home-page__content">
+        <MangaSlideshow mangas={mangas} onReadClick={handleReadClick} pornFilter={pornFilter} />
         <AnimeList
           animes={allAnimes}
           handleAnimeClick={handleAnimeClick}
@@ -100,6 +98,11 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis }) => {
           onSaveClick={handleSaveClick}
         />
       </div>
+      <GenrePanel
+        genreEmojis={genreEmojis}
+        selectedGenre={selectedGenre}
+        handleGenreClick={handleGenreClick}
+      />
     </div>
   );
 };

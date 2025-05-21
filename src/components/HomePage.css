@@ -5,10 +5,17 @@
 
 .home-page__content {
   padding: 1rem;
+  margin-right: 220px; /* Space for the fixed genre panel */
   overflow-y: auto;
 }
 
 .manga-slideshow,
 .anime-list {
   margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .home-page__content {
+    margin-right: 0; /* Remove margin on mobile, panel stacks below */
+  }
 }
