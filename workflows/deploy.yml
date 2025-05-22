@@ -1,0 +1,44 @@
+name: Deploy to EC2
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Deploy to EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          PROJECT_PATH: /var/www/manga-site
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key $EC2_USER@$EC2_HOST << 'EOF'
+            # Переходим в папку проекта
+            cd $PROJECT_PATH || { echo "Failed to access $PROJECT_PATH"; exit 1; }
+            
+            # Проверяем, существует ли репозиторий, и клонируем, если его нет
+            if [ ! -d ".git" ]; then
+              git clone git@github.com:Areaua/manga-site.git .
+            fi
+            
+            # Обновляем код
+            git fetch origin
+            git checkout main
+            git pull origin main || { echo "Failed to pull from GitHub"; exit 1; }
+            
+            # Устанавливаем зависимости
+            sudo npm install || { echo "Failed to install dependencies"; exit 1; }
+            
+            # Сборка стилей (для Tailwind CSS)
+            sudo npm run build || { echo "Failed to build Tailwind CSS"; exit 1; }
+            
+            # Перезапускаем приложение с помощью PM2
+            sudo pm2 restart manga-site || { echo "Failed to restart app with PM2"; exit 1; }
+          EOF
+          rm private_key
