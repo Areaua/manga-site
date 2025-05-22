@@ -1,14 +1,16 @@
+/* Основная панель жанров */
 .genre-panel {
   position: fixed;
-  top: 60px; /* Below the header */
+  top: 60px; /* Располагаем под шапкой */
   right: 0;
-  width: 200px; /* Reduced from 250px for balance */
-  height: calc(100vh - 60px);
+  width: 200px; /* Уменьшенная ширина для баланса */
+  height: calc(100vh - 60px); /* Высота минус высота шапки */
   background-color: var(--sidebar-color);
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
+/* Контент панели */
 .genre-panel-content {
   padding: 1rem;
   display: flex;
@@ -16,18 +18,21 @@
   gap: 0.5rem;
 }
 
+/* Кнопки жанров */
 .genre-panel-button {
   background-color: #9ca3af;
   color: white;
   padding: 0.5rem 1rem;
-  border-radius: 9999px;
+  border-radius: 9999px; /* Полностью скругленные углы */
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+/* Эффект при наведении на кнопку */
 .genre-panel-button:hover {
   transform: scale(1.05);
 }
 
+/* Анимация пульсации */
 .pulse-animation {
   animation: pulse 1.5s infinite;
 }
@@ -44,6 +49,7 @@
   }
 }
 
+/* Альтернативная анимация пульсации */
 .genre-pulse-animation {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -67,6 +73,7 @@
   }
 }
 
+/* Анимация подпрыгивания */
 .genre-bounce {
   animation: bounce 0.5s ease;
 }
@@ -83,6 +90,7 @@
   }
 }
 
+/* Фильтр по годам */
 .year-filter {
   margin-top: 1rem;
 }
@@ -102,28 +110,7 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
 }
 
-@media (max-width: 768px) {
-  .genre-panel {
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: auto;
-    box-shadow: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .genre-panel-content {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .year-filter {
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-}
-/* Добавьте это в GenrePanel.css */
+/* Стили для слайдера выбора года */
 .year-slider {
   margin-top: 1rem;
   width: 100%;
@@ -143,8 +130,9 @@
 }
 
 .year-slider-input {
+  appearance: none; /* Стандартное свойство */
+  -webkit-appearance: none; /* Для совместимости с WebKit */
   flex: 1;
-  -webkit-appearance: none;
   height: 6px;
   border-radius: 3px;
   background: #d1d5db;
@@ -153,8 +141,8 @@
 }
 
 .year-slider-input::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
+  appearance: none; /* Стандартное свойство */
+  -webkit-appearance: none; /* Для совместимости с WebKit */
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -189,4 +177,27 @@
   0% { transform: scale(1); }
   50% { transform: scale(1.2); }
   100% { transform: scale(1); }
+}
+
+/* Адаптив для мобильных устройств */
+@media (max-width: 768px) {
+  .genre-panel {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .genre-panel-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .year-filter {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
 }
