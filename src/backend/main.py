@@ -1,3 +1,4 @@
+
 import sys
 import os
 import logging
@@ -7,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from src.backend.routes.auth import router as auth_router
+from datetime import datetime
 
 app = FastAPI()
 
@@ -16,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://13.48.249.148", "http://localhost:3000"],
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

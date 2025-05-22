@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import logging
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -10,4 +11,4 @@ try:
     users_collection = client['manga_db']['users']
 except Exception as e:
     logger.error(f"MongoDB connection error: {e}")
-    raise
+    raise Exception(e)

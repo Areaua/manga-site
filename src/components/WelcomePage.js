@@ -22,7 +22,7 @@ const WelcomePage = () => {
         </p>
         <button
           onClick={handleGetStarted}
-          className="bg-orange-500 text-white px-8 py-4 rounded-full text-xl font-semibold hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 animate-pulse"
+          className="bg-orange-500 text-white px-4 py-4 rounded-full text-xl font-semibold hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 animate-pulse w-auto"
         >
           Давай начнем!
         </button>
