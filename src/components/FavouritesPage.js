@@ -1,14 +1,15 @@
-// components/FavouritesPage.js
 import React, { useState, useEffect } from 'react';
-import AnimeCard from './AnimeCard';
-import GenreSelector from './GenreSelector';
+import GenrePanel from './GenrePanel';
 import MangaSlideshow from './MangaSlideshow';
+import AnimeList from './AnimeList';
 import ComicReadingPage from './ComicReadingPage';
 import AnimeDetails from './AnimeDetails';
 import Header from './Header';
+import './FavouritesPage.css';
 
 const FavouritesPage = ({ savedAnimes, genreEmojis, onSaveClick }) => {
   const [selectedGenre, setSelectedGenre] = useState('all');
+  const [selectedYear, setSelectedYear] = useState('all');
   const [selectedManga, setSelectedManga] = useState(null);
   const [selectedAnime, setSelectedAnime] = useState(null);
   const [pornFilter, setPornFilter] = useState(localStorage.getItem('pornFilter') === 'true');
@@ -23,6 +24,7 @@ const FavouritesPage = ({ savedAnimes, genreEmojis, onSaveClick }) => {
   }, []);
 
   const handleGenreClick = (genre) => setSelectedGenre(genre);
+  const handleYearChange = (year) => setSelectedYear(year);
   const handleMangaClick = (manga) => setSelectedManga(manga);
   const handleBackFromManga = () => setSelectedManga(null);
   const handleAnimeClick = (anime) => setSelectedAnime(anime);
@@ -32,13 +34,20 @@ const FavouritesPage = ({ savedAnimes, genreEmojis, onSaveClick }) => {
   const allAnimes = pornFilter ? filteredAnimes : filteredAnimes.filter((anime) => !anime.name.includes('18+'));
 
   const mangas = [
-    { title: "Cinderella Chef", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false },
-    { title: "Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false },
-    { title: "Yet Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true },
-    { title: "Fourth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: true },
-    { title: "Fifth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false },
-    { title: "Sixth Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false },
+    { title: "Cinderella Chef", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2023 },
+    { title: "Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false, year: 2022 },
+    { title: "Yet Another Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true, year: 2024 },
+    { title: "Fourth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: true, year: 2021 },
+    { title: "Fifth Manga", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2023 },
+    { title: "Sixth Manga", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false, year: 2022 },
   ];
+
+  // Фильтрация манги по жанру и году
+  const filteredMangas = mangas.filter((manga) => {
+    const genreMatch = selectedGenre === 'all' || manga.isAdult === (selectedGenre === 'adult') || manga.genre === selectedGenre;
+    const yearMatch = selectedYear === 'all' || manga.year === parseInt(selectedYear);
+    return genreMatch && yearMatch && (pornFilter || !manga.isAdult);
+  });
 
   if (selectedManga) return <ComicReadingPage onBackClick={handleBackFromManga} />;
   if (selectedAnime) {
@@ -56,29 +65,29 @@ const FavouritesPage = ({ savedAnimes, genreEmojis, onSaveClick }) => {
   return (
     <div className="favourites-page">
       <Header />
-      <MangaSlideshow mangas={mangas} onReadClick={handleMangaClick} pornFilter={pornFilter} />
-      <GenreSelector genreEmojis={genreEmojis} selectedGenre={selectedGenre} handleGenreClick={handleGenreClick} />
       <div className="favourites-page__content">
-        <h2 className="favourites-page__title">
-          Favourites
-        </h2>
-        {allAnimes.length === 0 ? (
-          <p className="favourites-page__empty">No favourites yet.</p>
-        ) : (
-          <div className="favourites-page__grid">
-            {allAnimes.map((anime, index) => (
-              <AnimeCard
-                key={index}
-                anime={anime}
-                onClick={() => handleAnimeClick(anime)}
-                genreEmojis={genreEmojis}
-                savedAnimes={savedAnimes}
-                onSaveClick={onSaveClick}
-                showSaveButton={true}
-              />
-            ))}
-          </div>
-        )}
+        <MangaSlideshow mangas={filteredMangas} onReadClick={handleMangaClick} pornFilter={pornFilter} />
+        <GenrePanel
+          genreEmojis={genreEmojis}
+          selectedGenre={selectedGenre}
+          handleGenreClick={handleGenreClick}
+          selectedYear={selectedYear}
+          handleYearChange={handleYearChange}
+        />
+        <div className="favourites-page__anime-section">
+          <h2 className="favourites-page__title">Favourites</h2>
+          {allAnimes.length === 0 ? (
+            <p className="favourites-page__empty">No favourites yet.</p>
+          ) : (
+            <AnimeList
+              animes={allAnimes}
+              handleAnimeClick={handleAnimeClick}
+              genreEmojis={genreEmojis}
+              savedAnimes={savedAnimes}
+              onSaveClick={onSaveClick}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

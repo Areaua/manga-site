@@ -7,6 +7,7 @@ import SettingsPage from './components/SettingsPage';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
 import AnimeDetails from './components/AnimeDetails';
+import Footer from './components/Footer';
 import './index.css';
 import './welcome-auth.css';
 
@@ -55,6 +56,14 @@ const App = () => {
     Business: '💼',
   };
 
+  const handleSaveClick = (anime) => {
+    const updatedAnimes = savedAnimes.includes(anime)
+      ? savedAnimes.filter((savedAnime) => savedAnime.name !== anime.name)
+      : [...savedAnimes, anime];
+    setSavedAnimes(updatedAnimes);
+    localStorage.setItem('savedAnimes', JSON.stringify(updatedAnimes));
+  };
+
   return (
     <Router>
       <Routes>
@@ -84,6 +93,7 @@ const App = () => {
                         <FavouritesPage
                           savedAnimes={savedAnimes}
                           setSavedAnimes={setSavedAnimes}
+                          onSaveClick={handleSaveClick} // Передаем handleSaveClick
                           hideHeader={false}
                           genreEmojis={genreEmojis}
                         />
@@ -116,6 +126,7 @@ const App = () => {
                   </Routes>
                 </div>
               </div>
+              <Footer />
             </div>
           }
         />

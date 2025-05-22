@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from './Header';
+import './ProfilePage.css';
 
 const ProfilePage = ({ hideHeader }) => {
   const [showEditModal, setShowEditModal] = useState(false);
