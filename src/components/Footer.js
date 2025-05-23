@@ -64,9 +64,9 @@ const Footer = () => {
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleMouseDown}
     >
-      <div className="footer__tab">Потяни меня</div>
+      <div className="footer__tab">Потягни мене</div>
       <div className="footer__content">
-        <p className="footer__text">Все права защищены © {new Date().getFullYear()}</p>
+        <p className="footer__text">Усі права захищено © {new Date().getFullYear()}</p>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-
 import sys
 import os
 import logging
+from src.backend.routes.auth import router as auth_router
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi import FastAPI

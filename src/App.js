@@ -11,13 +11,14 @@ import Footer from './components/Footer';
 import './index.css';
 import './welcome-auth.css';
 
+// Компонент-обгортка для деталей аніме
 const AnimeDetailsWrapper = ({ savedAnimes, setSavedAnimes }) => {
   const { id } = useParams();
   const anime = [...savedAnimes].find(a => a.name === id);
 
   return (
     <AnimeDetails
-      selectedAnime={anime || { name: id, genre: 'Unknown', href: '#', image: '' }}
+      selectedAnime={anime || { name: id, genre: 'Невідомо', href: '#', image: '' }}
       savedAnimes={savedAnimes}
       onSaveClick={(anime) => {
         const updatedAnimes = savedAnimes.includes(anime)
@@ -33,20 +34,35 @@ const AnimeDetailsWrapper = ({ savedAnimes, setSavedAnimes }) => {
 };
 
 const App = () => {
+  // Стан для збережених аніме
   const [savedAnimes, setSavedAnimes] = useState(() => {
     const saved = localStorage.getItem('savedAnimes');
     return saved ? JSON.parse(saved) : [];
   });
-  const [pornFilter, setPornFilter] = useState(() => localStorage.getItem('PornFilter') === 'true');
+
+  // Стан для фільтра 18+ (вимкнено за замовчуванням)
+  const [isAdultContentEnabled, setIsAdultContentEnabled] = useState(() => 
+    localStorage.getItem('isAdultContentEnabled') === 'true' || false
+  );
+
+  // Стан для сповіщень (увімкнено за замовчуванням)
+  const [areNotificationsEnabled, setAreNotificationsEnabled] = useState(() => 
+    localStorage.getItem('areNotificationsEnabled') === 'true' || true
+  );
 
   useEffect(() => {
     localStorage.setItem('savedAnimes', JSON.stringify(savedAnimes));
   }, [savedAnimes]);
 
   useEffect(() => {
-    localStorage.setItem('PornFilter', pornFilter);
-  }, [pornFilter]);
+    localStorage.setItem('isAdultContentEnabled', isAdultContentEnabled);
+  }, [isAdultContentEnabled]);
 
+  useEffect(() => {
+    localStorage.setItem('areNotificationsEnabled', areNotificationsEnabled);
+  }, [areNotificationsEnabled]);
+
+  // Емодзі для жанрів
   const genreEmojis = {
     Thriller: '💀',
     Drama: '💔',
@@ -56,6 +72,7 @@ const App = () => {
     Business: '💼',
   };
 
+  // Обробка збереження/видалення аніме
   const handleSaveClick = (anime) => {
     const updatedAnimes = savedAnimes.includes(anime)
       ? savedAnimes.filter((savedAnime) => savedAnime.name !== anime.name)
@@ -93,7 +110,7 @@ const App = () => {
                         <FavouritesPage
                           savedAnimes={savedAnimes}
                           setSavedAnimes={setSavedAnimes}
-                          onSaveClick={handleSaveClick} // Передаем handleSaveClick
+                          onSaveClick={handleSaveClick}
                           hideHeader={false}
                           genreEmojis={genreEmojis}
                         />
@@ -107,8 +124,10 @@ const App = () => {
                       path="/settings"
                       element={
                         <SettingsPage
-                          pornFilter={pornFilter}
-                          togglePornFilter={() => setPornFilter(!pornFilter)}
+                          isAdultContentEnabled={isAdultContentEnabled}
+                          toggleAdultContent={() => setIsAdultContentEnabled(!isAdultContentEnabled)}
+                          areNotificationsEnabled={areNotificationsEnabled}
+                          toggleNotifications={() => setAreNotificationsEnabled(!areNotificationsEnabled)}
                           hideHeader={false}
                         />
                       }

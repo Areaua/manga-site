@@ -5,10 +5,10 @@ import { ReactComponent as OrangeLogo } from './orange.svg';
 import { ReactComponent as BlueLogo } from './blue.svg';
 import './Header.css';
 
-const Header = ({ hideHeader }) => {
+const Header = ({ hideHeader, areNotificationsEnabled }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [userData, setUserData] = useState({
-    username: 'Guest',
+    username: 'Гість',
     avatar_url: 'https://www.gravatar.com/avatar/?d=mp',
     is_premium: false,
   });
@@ -42,14 +42,14 @@ const Header = ({ hideHeader }) => {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUserData({
-            username: response.data.username || 'Guest',
+            username: response.data.username || 'Гість',
             avatar_url: response.data.avatar_url
               ? `${response.data.avatar_url}?t=${Date.now()}`
               : 'https://www.gravatar.com/avatar/?d=mp',
             is_premium: response.data.is_premium || false,
           });
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error('Помилка отримання даних користувача:', error);
         }
       }
     };
@@ -139,7 +139,7 @@ const Header = ({ hideHeader }) => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    console.log('Поиск манги:', e.target.value);
+    console.log('Пошук манги:', e.target.value);
   };
 
   const toggleWheel = () => {
@@ -183,12 +183,12 @@ const Header = ({ hideHeader }) => {
     if (holdProgress === 0) return;
 
     const genres = [
-      { name: 'Thriller', icon: '💀' },
-      { name: 'Drama', icon: '❤️' },
-      { name: 'Supernatural', icon: '👻' },
-      { name: 'Romance', icon: '💕' },
-      { name: 'Adventure', icon: '🌍' },
-      { name: 'Business', icon: '💼' },
+      { name: 'Трилер', icon: '💀' },
+      { name: 'Драма', icon: '❤️' },
+      { name: 'Надприродне', icon: '👻' },
+      { name: 'Романтика', icon: '💕' },
+      { name: 'Пригоди', icon: '🌍' },
+      { name: 'Бізнес', icon: '💼' },
     ];
     
     const minRotations = 360;
@@ -241,25 +241,25 @@ const Header = ({ hideHeader }) => {
               className={`nav-link ${getActivePage() === 'home' ? 'active' : ''}`}
               onClick={() => navigate('/home')}
             >
-              <i className="bx bx-home-alt"></i> Home
+              <i className="bx bx-home-alt"></i> Головна
             </button>
             <button
               className={`nav-link ${getActivePage() === 'favourites' ? 'active' : ''}`}
               onClick={() => navigate('/favourites')}
             >
-              <i className="bx bx-heart"></i> Favourites
+              <i className="bx bx-heart"></i> Улюблене
             </button>
             <button
               className={`nav-link ${getActivePage() === 'profile' ? 'active' : ''}`}
               onClick={() => navigate('/profile')}
             >
-              <i className="bx bx-user"></i> Profile
+              <i className="bx bx-user"></i> Профіль
             </button>
             <button
               className={`nav-link ${getActivePage() === 'settings' ? 'active' : ''}`}
               onClick={() => navigate('/settings')}
             >
-              <i className="bx bx-cog"></i> Settings
+              <i className="bx bx-cog"></i> Налаштування
             </button>
           </div>
           <button className="menu-toggle" onClick={toggleMenu}>
@@ -275,7 +275,7 @@ const Header = ({ hideHeader }) => {
             {isSearchOpen && (
               <input
                 type="text"
-                placeholder="Search manga..."
+                placeholder="Пошук манги..."
                 ref={searchInputRef}
                 value={searchQuery}
                 onChange={handleSearchChange}
@@ -290,7 +290,7 @@ const Header = ({ hideHeader }) => {
           )}
           <div className="notification-container">
             <i
-              className="bx bx-mail-send notification-icon"
+              className={`bx bx-mail-send notification-icon ${areNotificationsEnabled ? 'animated' : ''}`}
               onClick={handleNotificationClick}
             ></i>
             {isNotificationOpen && (
@@ -298,7 +298,7 @@ const Header = ({ hideHeader }) => {
                 className="notification-menu"
                 onMouseLeave={handleNotificationMouseLeave}
               >
-                <p className="notification-text">Уведомлений нет</p>
+                <p className="notification-text">Сповіщень немає</p>
               </div>
             )}
           </div>
@@ -307,22 +307,24 @@ const Header = ({ hideHeader }) => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <span className="user-name">{userData.username}</span>
-            {userData.is_premium && <span className="user-status">Premium</span>}
+            <div className="user-details">
+              <span className="user-name">{userData.username}</span>
+              {userData.is_premium && <span className="user-status">Преміум</span>}
+            </div>
             <img
               src={userData.avatar_url}
-              alt="User Avatar"
+              alt="Аватар користувача"
               className="user-avatar"
               onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')}
             />
             {isAvatarMenuOpen && (
               <div className="avatar-menu">
                 <button className="avatar-menu-item" onClick={handleLogout}>
-                  <i className="bx bx-log-out"></i> Logout
+                  <i className="bx bx-log-out"></i> Вийти
                 </button>
                 <button className="avatar-menu-item" onClick={toggleDarkMode}>
                   <i className={`bx ${isDarkMode ? 'bx-sun' : 'bx-moon'}`}></i>
-                  {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+                  {isDarkMode ? 'Світла тема' : 'Темна тема'}
                 </button>
               </div>
             )}
@@ -338,7 +340,7 @@ const Header = ({ hideHeader }) => {
               setIsMenuOpen(false);
             }}
           >
-            <i className="bx bx-home-alt"></i> Home
+            <i className="bx bx-home-alt"></i> Головна
           </button>
           <button
             className={`nav-link ${getActivePage() === 'favourites' ? 'active' : ''}`}
@@ -347,7 +349,7 @@ const Header = ({ hideHeader }) => {
               setIsMenuOpen(false);
             }}
           >
-            <i className="bx bx-heart"></i> Favourites
+            <i className="bx bx-heart"></i> Улюблене
           </button>
           <button
             className={`nav-link ${getActivePage() === 'profile' ? 'active' : ''}`}
@@ -356,7 +358,7 @@ const Header = ({ hideHeader }) => {
               setIsMenuOpen(false);
             }}
           >
-            <i className="bx bx-user"></i> Profile
+            <i className="bx bx-user"></i> Профіль
           </button>
           <button
             className={`nav-link ${getActivePage() === 'settings' ? 'active' : ''}`}
@@ -365,7 +367,7 @@ const Header = ({ hideHeader }) => {
               setIsMenuOpen(false);
             }}
           >
-            <i className="bx bx-cog"></i> Settings
+            <i className="bx bx-cog"></i> Налаштування
           </button>
           <button
             className="nav-link"
@@ -374,7 +376,7 @@ const Header = ({ hideHeader }) => {
               setIsMenuOpen(false);
             }}
           >
-            <i className="bx bx-log-out"></i> Logout
+            <i className="bx bx-log-out"></i> Вийти
           </button>
         </div>
       )}
@@ -389,12 +391,12 @@ const Header = ({ hideHeader }) => {
           <div className="genre-wheel-pointer">↓</div>
           <div className="genre-wheel" ref={wheelRef}>
             {[
-              { name: 'Thriller', icon: '💀' },
-              { name: 'Drama', icon: '❤️' },
-              { name: 'Supernatural', icon: '👻' },
-              { name: 'Romance', icon: '💕' },
-              { name: 'Adventure', icon: '🌍' },
-              { name: 'Business', icon: '💼' },
+              { name: 'Трилер', icon: '💀' },
+              { name: 'Драма', icon: '❤️' },
+              { name: 'Надприродне', icon: '👻' },
+              { name: 'Романтика', icon: '💕' },
+              { name: 'Пригоди', icon: '🌍' },
+              { name: 'Бізнес', icon: '💼' },
             ].map((genre, index) => (
               <div
                 key={index}
@@ -413,7 +415,7 @@ const Header = ({ hideHeader }) => {
               onTouchStart={startHold}
               onTouchEnd={stopHold}
             >
-              Spin
+              Крутити
             </button>
           </div>
           {selectedGenre && <p className="selected-genre">{selectedGenre}</p>}

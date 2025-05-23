@@ -1,0 +1,251 @@
+/* Контейнер налаштувань */
+.settings-container {
+  min-height: 100vh;
+  background: var(--body-color);
+  padding: 20px;
+  padding-top: 80px; /* Відступ для хедера */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Контент налаштувань */
+.settings-content {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Заголовок */
+.settings-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Список налаштувань */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Елемент налаштування */
+.settings-item {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+:where(.dark) .settings-item {
+  background: #2a2a2a;
+}
+
+/* Контент елемента */
+.settings-item-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Іконка */
+.settings-item-icon {
+  font-size: 24px;
+}
+
+/* Текст */
+.settings-item-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Стрілка */
+.settings-item-arrow {
+  font-size: 16px;
+  color: #666;
+}
+
+:where(.dark) .settings-item-arrow {
+  color: #999;
+}
+
+/* Перемикач */
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: #ccc;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: #f28c38;
+}
+
+:where(.dark) .toggle-switch.active {
+  background: #ff6200;
+}
+
+/* Ручка перемикача */
+.toggle-knob {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+}
+
+/* Модальне вікно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Контент модального вікна */
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+:where(.dark) .modal-content {
+  background: #2a2a2a;
+}
+
+/* Кнопка закриття модального вікна */
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+:where(.dark) .modal-close {
+  color: #999;
+}
+
+.modal-close:hover {
+  color: #333;
+}
+
+:where(.dark) .modal-close:hover {
+  color: #e0e0e0;
+}
+
+/* Заголовок модального вікна */
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+/* Текстове поле модального вікна */
+.modal-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  resize: none;
+  transition: border-color 0.2s ease;
+}
+
+:where(.dark) .modal-textarea {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.modal-textarea:focus {
+  outline: none;
+  border-color: #f28c38;
+}
+
+/* Кнопка збереження в модальному вікні */
+.modal-save {
+  background: #f28c38;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.modal-save:hover {
+  background: #e07b30;
+}
+
+/* Статус повідомлення */
+.modal-status {
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Статус успіху */
+.status-success {
+  color: #28a745;
+}
+
+/* Статус помилки */
+.status-error {
+  color: #dc3545;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .settings-container {
+    padding: 15px;
+    padding-top: 70px;
+  }
+
+  .settings-title {
+    font-size: 24px;
+  }
+
+  .settings-item {
+    padding: 15px;
+  }
+
+  .settings-item-text {
+    font-size: 14px;
+  }
+
+  .modal-content {
+    max-width: 90%;
+  }
+}

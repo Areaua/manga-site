@@ -1,22 +1,39 @@
+/* Стилі для головної сторінки */
 .home-page {
   min-height: 100vh;
   overflow-y: auto;
+  background: var(--body-color);
 }
 
+/* Контейнер контенту */
 .home-page__content {
   padding: 1rem;
-  margin-right: 220px; /* Space for the fixed genre panel */
+  margin-right: 220px; /* Відступ для фіксованої панелі жанрів */
   overflow-y: auto;
 }
 
+/* Секції слайдшоу та списків */
 .manga-slideshow,
 .multi-manga-slideshow,
 .anime-list {
   margin-bottom: 1rem;
 }
 
+/* Позначка 18+ */
+.adult-badge {
+  display: inline-block;
+  background: #dc3545;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+/* Адаптивність для мобільних пристроїв */
 @media (max-width: 768px) {
   .home-page__content {
-    margin-right: 0; /* Remove margin on mobile, panel stacks below */
+    margin-right: 0; /* Прибираємо відступ на мобільних, панель розташовується знизу */
   }
 }

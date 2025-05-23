@@ -1,11 +1,503 @@
-.profile-page {
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-container {
   min-height: 100vh;
-  overflow-y: auto;
-  padding-bottom: 120px; /* Отступ для футера */
+  background: var(--sidebar-color); /* Фон як у футері */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  padding-bottom: 80px;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+:where(.dark) .profile-card {
+  background: #2a2a2a; /* Темний фон для карти в темній темі */
+}
+
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ffedd5; /* Рамка для контрасту */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+:where(.dark) .profile-avatar {
+  border-color: #444; /* Темна рамка в темній темі */
+}
+
+.profile-avatar:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-button {
+  background: #f28c38; /* Оранжевий колір кнопки */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 15px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.avatar-button:hover {
+  background: #e07b30; /* Темніший оранжевий при наведенні */
+}
+
+.avatar-button:active {
+  transform: scale(0.95);
+}
+
+.profile-info {
+  margin-top: 20px;
+}
+
+.premium-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #e0e0e0;
+  color: #333;
+}
+
+.premium-badge.premium-active {
+  background: #f28c38; /* Оранжевий для преміуму */
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+.premium-badge.premium-active::before {
+  content: '\f521'; /* Font Awesome іконка корони */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  margin-right: 5px;
+  color: #ffd700; /* Золота корона */
+}
+
+:where(.dark) .premium-badge.premium-active::before {
+  color: #c0c0c0; /* Срібна корона в темній темі */
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.profile-username {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 10px 0 5px;
+}
+
+:where(.dark) .profile-username {
+  color: #e0e0e0;
+}
+
+.profile-joined {
+  font-size: 14px;
+  color: #666;
+}
+
+:where(.dark) .profile-joined {
+  color: #999;
+}
+
+.profile-status {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.status-success {
+  color: #28a745;
+  animation: fadeInOut 3s ease forwards;
+}
+
+.status-error {
+  color: #dc3545;
+  animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.action-button {
+  background: #f28c38; /* Оранжевий колір кнопки */
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.action-button:hover {
+  background: #e07b30; /* Темніший оранжевий при наведенні */
+  transform: scale(1.1) rotate(5deg);
+}
+
+.action-button:active {
+  transform: scale(0.95);
+}
+
+.action-button.button-disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.action-button.button-disabled:hover {
+  transform: none;
+}
+
+.action-label {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+:where(.dark) .action-label {
+  color: #999;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+:where(.dark) .modal-content {
+  background: #2a2a2a;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+:where(.dark) .modal-close {
+  color: #999;
+}
+
+.modal-close:hover {
+  color: #333;
+}
+
+:where(.dark) .modal-close:hover {
+  color: #e0e0e0;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+:where(.dark) .modal-title {
+  color: #e0e0e0;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  transition: border-color 0.2s ease;
+}
+
+:where(.dark) .modal-input {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #f28c38; /* Оранжева рамка при фокусі */
+}
+
+.modal-save {
+  background: #f28c38; /* Оранжевий колір кнопки */
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.modal-save:hover {
+  background: #e07b30; /* Темніший оранжевий при наведенні */
+}
+
+.modal-save:active {
+  transform: scale(0.95);
+}
+
+.premium-packages {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1100;
+}
+
+:where(.dark) .premium-packages {
+  background: #2a2a2a;
+}
+
+.packages-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+:where(.dark) .packages-title {
+  color: #e0e0e0;
+}
+
+.packages-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.package-card {
+  background: #f9f9f9;
+  border-radius: 15px;
+  padding: 20px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+:where(.dark) .package-card {
+  background: #333;
+}
+
+.package-card:hover {
+  transform: translateY(-5px);
+}
+
+.package-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+:where(.dark) .package-title {
+  color: #e0e0e0;
+}
+
+.package-price {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f28c38;
+  margin-bottom: 10px;
+}
+
+:where(.dark) .package-price {
+  color: #ff6200;
+}
+
+.package-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+:where(.dark) .package-description {
+  color: #999;
+}
+
+.package-button {
+  background: #f28c38;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.package-button:hover {
+  background: #e07b30;
+}
+
+.package-button:active {
+  transform: scale(0.95);
+}
+
+.close-packages {
+  background: #ccc;
+  color: #333;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 100%;
+  max-width: 200px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 20px auto 0;
+  display: block;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+:where(.dark) .close-packages {
+  background: #555;
+  color: #e0e0e0;
+}
+
+.close-packages:hover {
+  background: #bbb;
+}
+
+:where(.dark) .close-packages:hover {
+  background: #666;
+}
+
+.close-packages:active {
+  transform: scale(0.95);
 }
 
 @media (max-width: 768px) {
-  .profile-page {
-    padding-bottom: 100px; /* Меньший отступ на мобильных */
+  .profile-container {
+    padding: 10px;
+    padding-bottom: 60px;
+  }
+
+  .profile-card {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-username {
+    font-size: 20px;
+  }
+
+  .profile-actions {
+    gap: 15px;
+  }
+
+  .action-button {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .modal-content {
+    max-width: 90%;
+  }
+
+  .premium-packages {
+    padding: 15px;
+  }
+
+  .packages-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .package-card {
+    max-width: 100%;
+  }
+
+  .packages-title {
+    font-size: 18px;
   }
 }

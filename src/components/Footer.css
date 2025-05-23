@@ -3,16 +3,16 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40px; /* Минимальная высота в закрытом состоянии */
+  height: 40px; /* Мінімальна висота в закритому стані */
   background-color: var(--sidebar-color);
   border-top: 1px solid var(--primary-color);
   transition: height 0.3s ease, transform 0.3s ease;
-  transform: translateY(calc(100% - 20px)); /* Показываем только вкладку */
+  transform: translateY(calc(100% - 20px)); /* Показуємо тільки вкладку */
   z-index: 1000;
 }
 
 .footer--open {
-  height: 100px; /* Высота в открытом состоянии */
+  height: 100px; /* Висота у відкритому стані */
   transform: translateY(0);
 }
 
@@ -45,7 +45,7 @@
 
 @media (max-width: 768px) {
   .footer {
-    height: 30px; /* Меньшая высота на мобильных */
+    height: 30px; /* Менша висота на мобільних */
   }
 
   .footer--open {
