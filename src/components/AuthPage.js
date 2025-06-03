@@ -1,4 +1,3 @@
-// AuthPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
@@ -109,7 +108,8 @@ const AuthPage = () => {
       : { username: formData.username, email: formData.email, password: formData.password, confirm_password: formData.passwordConfirm };
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/${endpoint}`, {
+      // Используем внутренний IP бэкенда или localhost, если на одном сервере
+      const response = await fetch(`http://172.31.39.182:8000/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(bodyData)
@@ -255,6 +255,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-
-
-

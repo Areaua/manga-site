@@ -18,6 +18,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 class UpdateUsernameRequest(BaseModel):
     username: str
 
+class UpdateThemeRequest(BaseModel):
+    theme: str
+
 def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     logger.info("Attempting to get current user")
     try:
@@ -65,6 +68,7 @@ async def register(user_data: dict = Body(...)):
             hashed_password=hashed_password,
             avatar_url=None,
             is_premium=False,
+            theme="light",  # По умолчанию светлая тема
             registered_at=datetime.utcnow().isoformat()
         )
         users_collection.insert_one(user_in_db.dict(exclude={"password", "confirm_password"}))
@@ -106,6 +110,7 @@ async def read_users_me(current_user: dict = Depends(get_current_user)):
         "username": current_user.get("username", "Unknown"),
         "avatar_url": current_user.get("avatar_url"),
         "is_premium": current_user.get("is_premium", False),
+        "theme": current_user.get("theme", "light"),
         "registered_at": current_user.get("registered_at", datetime.utcnow().isoformat())
     }
 
@@ -132,6 +137,24 @@ async def update_user(update_data: UpdateUsernameRequest, current_user: dict = D
         logger.error(f"Username update error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
 
+@router.put("/update-theme")
+async def update_theme(update_data: UpdateThemeRequest, current_user: dict = Depends(get_current_user)):
+    logger.info(f"Updating theme for: {current_user['email']} to {update_data.theme}")
+    try:
+        if update_data.theme not in ["light", "dark"]:
+            logger.error(f"Invalid theme: {update_data.theme}")
+            raise HTTPException(status_code=422, detail="Тема має бути 'light' або 'dark'")
+        
+        users_collection.update_one(
+            {"email": current_user["email"]},
+            {"$set": {"theme": update_data.theme}}
+        )
+        logger.info(f"Theme updated for: {current_user['email']}")
+        return {"message": "Тему успішно оновлено"}
+    except Exception as e:
+        logger.error(f"Theme update error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+
 @router.post("/upload-avatar")
 async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     logger.info(f"Avatar upload request for: {current_user['email']}")
@@ -147,7 +170,7 @@ async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depen
             content = await file.read()
             f.write(content)
         
-        avatar_url = f"http://127.0.0.1:8000/avatars/{avatar_filename}"
+        avatar_url = f"http://56.228.42.32:8000/avatars/{avatar_filename}"
         
         users_collection.update_one(
             {"email": current_user["email"]},

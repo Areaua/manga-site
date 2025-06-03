@@ -211,9 +211,6 @@
   font-size: 36px;
   color: var(--header-text-color, #333333);
   cursor: pointer;
-}
-
-.notification-icon.animated {
   animation: bounce 1.5s infinite;
 }
 

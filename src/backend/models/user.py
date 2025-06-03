@@ -17,3 +17,4 @@ class UserInDB(User):
     hashed_password: str
     avatar_url: Optional[str] = None
     is_premium: bool = False
+    theme: str = "light"  # Добавляем поле theme с дефолтным значением

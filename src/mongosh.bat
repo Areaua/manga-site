@@ -1,2 +1,2 @@
 @echo off
-"C:\MongoDB\Shell\mongosh.exe" %*
+"C:\MongoDB\Shell\mongosh.exe" %*a

@@ -34,18 +34,13 @@ const AnimeDetailsWrapper = ({ savedAnimes, setSavedAnimes }) => {
 };
 
 const App = () => {
-  // Стан для збережених аніме
   const [savedAnimes, setSavedAnimes] = useState(() => {
     const saved = localStorage.getItem('savedAnimes');
     return saved ? JSON.parse(saved) : [];
   });
-
-  // Стан для фільтра 18+ (вимкнено за замовчуванням)
   const [isAdultContentEnabled, setIsAdultContentEnabled] = useState(() => 
     localStorage.getItem('isAdultContentEnabled') === 'true' || false
   );
-
-  // Стан для сповіщень (увімкнено за замовчуванням)
   const [areNotificationsEnabled, setAreNotificationsEnabled] = useState(() => 
     localStorage.getItem('areNotificationsEnabled') === 'true' || true
   );
@@ -62,7 +57,14 @@ const App = () => {
     localStorage.setItem('areNotificationsEnabled', areNotificationsEnabled);
   }, [areNotificationsEnabled]);
 
-  // Емодзі для жанрів
+  // Проверка токена при загрузке
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token && window.location.pathname !== '/auth' && window.location.pathname !== '/') {
+      window.location.href = '/auth';
+    }
+  }, []);
+
   const genreEmojis = {
     Thriller: '💀',
     Drama: '💔',
@@ -72,7 +74,6 @@ const App = () => {
     Business: '💼',
   };
 
-  // Обробка збереження/видалення аніме
   const handleSaveClick = (anime) => {
     const updatedAnimes = savedAnimes.includes(anime)
       ? savedAnimes.filter((savedAnime) => savedAnime.name !== anime.name)
@@ -141,7 +142,7 @@ const App = () => {
                         />
                       }
                     />
-                    <Route path="*" element={<Navigate to="/home" />} />
+                    <Route path="*" element={<Navigate to="/auth" />} />
                   </Routes>
                 </div>
               </div>

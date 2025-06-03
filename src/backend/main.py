@@ -1,7 +1,6 @@
 import sys
 import os
 import logging
-from src.backend.routes.auth import router as auth_router
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi import FastAPI
@@ -16,15 +15,16 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Обновляем CORS для фронтенда (внешний IP 56.228.42.32 и внутренний 172.31.39.182)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "http://172.31.39.182:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Монтуємо папку avatars для статичних файлів
+# Монтируем папку avatars для статических файлов
 app.mount("/avatars", StaticFiles(directory="avatars"), name="avatars")
 
 app.include_router(auth_router)
