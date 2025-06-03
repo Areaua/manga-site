@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 try:
-    client = MongoClient('mongodb://user_db:Zh2006L@172.31.35.251:27017/manga_db?authSource=manga_db')
+    client = MongoClient('mongodb://user_db:Zh2006L@172.31.35.251:27017/mongadb?authSource=mongadb')
     logger.info("Connected to MongoDB")
     users_collection = client['manga_db']['users']
 except Exception as e:
