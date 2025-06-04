@@ -17,7 +17,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 class UpdateUsernameRequest(BaseModel):
     username: str
-
+    
 class UpdateThemeRequest(BaseModel):
     theme: str
 

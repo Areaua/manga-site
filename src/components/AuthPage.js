@@ -109,7 +109,7 @@ const AuthPage = () => {
 
     try {
       // Используем внутренний IP бэкенда или localhost, если на одном сервере
-    const response = await fetch(`http://localhost:8000/${endpoint}`, {
+    const response = await fetch(`http://13.53.132.93:8000/${endpoint}`, {
       method: 'POST',
       eaders: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(bodyData)
