@@ -8,7 +8,10 @@ logger = logging.getLogger(__name__)
 try:
     client = MongoClient('mongodb://user_db:Zh2006L@172.31.35.251:27017/mongadb?authSource=mongadb')
     logger.info("Connected to MongoDB")
-    users_collection = client['manga_db']['users']
+    # Проверка подключения
+    client.server_info()  # Вызывает исключение, если подключение не удалось
+    users_collection = client['mongadb']['users']
+    logger.info("Users collection accessed successfully")
 except Exception as e:
     logger.error(f"MongoDB connection error: {e}")
-    raise Exception(e)
+    raise Exception(f"Failed to connect to MongoDB: {e}")
