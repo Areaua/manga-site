@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # Обновляем CORS для фронтенда (внешний IP 56.228.42.32 и внутренний 172.31.39.182)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:8000/register", "http://172.31.39.182","http://localhost:8000"],
+    allow_origins=["http://localhost:3000", "http://13.53.132.93", "http://172.31.39.182","http://localhost:8000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
