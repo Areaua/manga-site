@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
+// Централизованный базовый URL
+const BASE_URL = 'http://13.53.132.93:8000';
+
 const AuthPage = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
@@ -108,14 +111,17 @@ const AuthPage = () => {
       : { username: formData.username, email: formData.email, password: formData.password, confirm_password: formData.passwordConfirm };
 
     try {
-      // Используем внутренний IP бэкенда или localhost, если на одном сервере
-    const response = await fetch(`http://13.53.132.93:8000/${endpoint}`, {
-      method: 'POST',
-      eaders: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(bodyData)
-    });
+      console.log(`Sending request to: ${BASE_URL}/${endpoint}`);
+      console.log('Request body:', bodyData);
+      const response = await fetch(`${BASE_URL}/${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(bodyData)
+      });
 
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (!response.ok) {
         throw new Error(data.detail || 'Щось пішло не так');
