@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
-// Централизованный базовый URL
-const BASE_URL = 'http://13.53.132.93:8000';
+const { BASE_URL, API_PREFIX } = window._env_ || {
+  BASE_URL: '',
+  API_PREFIX: '/api'
+};
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -25,13 +27,7 @@ const AuthPage = () => {
 
   const handleToggleForm = () => {
     setIsLogin(!isLogin);
-    setErrors({
-      email: '',
-      username: '',
-      password: '',
-      passwordConfirm: '',
-      form: ''
-    });
+    setErrors({});
     setFormData({
       email: '',
       username: '',
@@ -53,7 +49,7 @@ const AuthPage = () => {
     if (!formData.email) {
       newErrors.email = 'Пошта обов’язкова';
       isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
       newErrors.email = 'Введіть коректну пошту';
       isValid = false;
     }
@@ -86,7 +82,6 @@ const AuthPage = () => {
       ...prev,
       [name]: value
     }));
-
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -111,9 +106,9 @@ const AuthPage = () => {
       : { username: formData.username, email: formData.email, password: formData.password, confirm_password: formData.passwordConfirm };
 
     try {
-      console.log(`Sending request to: ${BASE_URL}/${endpoint}`);
+      console.log(`Sending request to: ${BASE_URL}${API_PREFIX}/${endpoint}`);
       console.log('Request body:', bodyData);
-      const response = await fetch(`${BASE_URL}/${endpoint}`, {
+      const response = await fetch(`${BASE_URL}${API_PREFIX}/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(bodyData)

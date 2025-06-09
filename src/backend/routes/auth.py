@@ -170,7 +170,7 @@ async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depen
             content = await file.read()
             f.write(content)
         
-        avatar_url = f"http://56.228.42.32:8000/avatars/{avatar_filename}"
+        avatar_url = f"/avatars/{avatar_filename}"  # Відносний шлях
         
         users_collection.update_one(
             {"email": current_user["email"]},
