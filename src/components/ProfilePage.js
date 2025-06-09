@@ -76,6 +76,7 @@ const ProfilePage = ({ hideHeader }) => {
             'Content-Type': 'multipart/form-data'
           }
         });
+        console.log('Avatar URL from server:', response.data.avatar_url); // Дебаг
         setUserData(prev => ({ ...prev, avatar_url: response.data.avatar_url }));
         setUpdateStatus('Аватар успішно оновлено');
         setTimeout(() => setUpdateStatus(''), 3000);
@@ -119,7 +120,7 @@ const ProfilePage = ({ hideHeader }) => {
       >
         <div className="profile-avatar-section">
           <motion.img
-            src={userData.avatar_url || 'https://www.gravatar.com/avatar/?d=mp'}
+            src={userData.avatar_url ? `${userData.avatar_url}?t=${Date.now()}` : 'https://www.gravatar.com/avatar/?d=mp'}
             alt="Аватар"
             className="profile-avatar"
             onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')}

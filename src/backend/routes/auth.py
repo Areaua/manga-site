@@ -177,7 +177,7 @@ async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depen
             {"$set": {"avatar_url": avatar_url}}
         )
         
-        logger.info(f"Avatar uploaded for: {current_user['email']}, URL: {avatar_url}")
+        logger.info(f"Avatar saved at: {avatar_path}, URL: {avatar_url}")  # Доданий лог
         return {"message": "Аватар успішно оновлено", "avatar_url": avatar_url}
     except Exception as e:
         logger.error(f"Avatar upload error: {str(e)}")
