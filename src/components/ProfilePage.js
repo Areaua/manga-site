@@ -20,11 +20,12 @@ const ProfilePage = ({ hideHeader }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
-          console.log(`Fetching from: ${BASE_URL}${API_PREFIX}/me`); // Для дебагу
+          const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: 'http://13.53.132.93', API_PREFIX: '/api' };
+          console.log(`Fetching from: ${BASE_URL}${API_PREFIX}/me`);
           const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });
+          console.log('User data received:', response.data); // Дебаг
           setUserData(response.data);
         } catch (error) {
           console.error('Помилка отримання даних користувача:', error);
@@ -46,8 +47,8 @@ const ProfilePage = ({ hideHeader }) => {
       return;
     }
     try {
-      const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
-      console.log(`Sending to: ${BASE_URL}${API_PREFIX}/me`); // Для дебагу
+      const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: 'http://13.53.132.93', API_PREFIX: '/api' };
+      console.log(`Sending to: ${BASE_URL}${API_PREFIX}/me`);
       const response = await axios.put(`${BASE_URL}${API_PREFIX}/me`, { username: newUsername }, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -68,27 +69,26 @@ const ProfilePage = ({ hideHeader }) => {
       const formData = new FormData();
       formData.append('file', file);
       try {
-        const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
-        console.log(`Uploading to: ${BASE_URL}${API_PREFIX}/upload-avatar`); // Для дебагу
+        const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: 'http://13.53.132.93', API_PREFIX: '/api' };
+        console.log(`Uploading to: ${BASE_URL}${API_PREFIX}/upload-avatar`, 'File size:', file.size);
         const response = await axios.post(`${BASE_URL}${API_PREFIX}/upload-avatar`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
           }
         });
-        console.log('Avatar URL from server:', response.data.avatar_url); // Дебаг
+        console.log('Avatar URL from server:', response.data.avatar_url);
         setUserData(prev => ({ ...prev, avatar_url: response.data.avatar_url }));
         setUpdateStatus('Аватар успішно оновлено');
         setTimeout(() => setUpdateStatus(''), 3000);
       } catch (error) {
         console.error('Помилка завантаження аватара:', error);
-        setUpdateStatus('Не вдалося завантажити аватар');
+        setUpdateStatus(`Не вдалося завантажити аватар: ${error.response?.status} - ${error.response?.data?.detail || error.message}`);
       }
     }
   };
 
   const handleUpgradePremium = (packageType) => {
-    // Заглушка: нічого не відбувається
     console.log(`Вибрано пакет: ${packageType}`);
     setShowPremiumPackages(false);
   };
@@ -120,10 +120,10 @@ const ProfilePage = ({ hideHeader }) => {
       >
         <div className="profile-avatar-section">
           <motion.img
-            src={userData.avatar_url ? `${userData.avatar_url}?t=${Date.now()}` : 'https://www.gravatar.com/avatar/?d=mp'}
+            src={userData.avatar_url ? `http://13.53.132.93${userData.avatar_url}?t=${Date.now()}` : 'https://www.gravatar.com/avatar/?d=mp'}
             alt="Аватар"
             className="profile-avatar"
-            onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')}
+            onError={(e) => { console.error('Image load error:', e); e.target.src = 'https://www.gravatar.com/avatar/?d=mp'; }}
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.3 }}
           />

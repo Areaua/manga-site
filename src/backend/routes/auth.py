@@ -68,7 +68,7 @@ async def register(user_data: dict = Body(...)):
             hashed_password=hashed_password,
             avatar_url=None,
             is_premium=False,
-            theme="light",  # По умолчанию светлая тема
+            theme="light",
             registered_at=datetime.utcnow().isoformat()
         )
         users_collection.insert_one(user_in_db.dict(exclude={"password", "confirm_password"}))
@@ -157,27 +157,28 @@ async def update_theme(update_data: UpdateThemeRequest, current_user: dict = Dep
 
 @router.post("/upload-avatar")
 async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
-    logger.info(f"Avatar upload request for: {current_user['email']}")
+    logger.info(f"Avatar upload request for: {current_user['email']}, filename: {file.filename}")
     try:
-        os.makedirs("avatars", exist_ok=True)
+        avatars_dir = "/var/www/manga-site/avatars"  # Фіксований шлях
+        os.makedirs(avatars_dir, exist_ok=True)
         
         avatar_id = str(uuid.uuid4())
         file_extension = file.filename.split('.')[-1]
         avatar_filename = f"{avatar_id}.{file_extension}"
-        avatar_path = os.path.join("avatars", avatar_filename)
+        avatar_path = os.path.join(avatars_dir, avatar_filename)
         
         with open(avatar_path, "wb") as f:
             content = await file.read()
             f.write(content)
+        logger.info(f"Avatar content length: {len(content)} bytes, saved at: {avatar_path}")
         
-        avatar_url = f"/avatars/{avatar_filename}"  # Відносний шлях
+        avatar_url = f"/avatars/{avatar_filename}"
         
         users_collection.update_one(
             {"email": current_user["email"]},
             {"$set": {"avatar_url": avatar_url}}
         )
         
-        logger.info(f"Avatar saved at: {avatar_path}, URL: {avatar_url}")  # Доданий лог
         return {"message": "Аватар успішно оновлено", "avatar_url": avatar_url}
     except Exception as e:
         logger.error(f"Avatar upload error: {str(e)}")

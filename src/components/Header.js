@@ -38,15 +38,16 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
+          const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: 'http://13.53.132.93', API_PREFIX: '/api' };
           console.log(`Fetching from: ${BASE_URL}${API_PREFIX}/me`); // Для дебагу
           const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+          console.log('User data received in Header:', response.data); // Дебаг
           setUserData({
             username: response.data.username || 'Гість',
             avatar_url: response.data.avatar_url
-              ? `${response.data.avatar_url}?t=${Date.now()}`
+              ? `${BASE_URL}${response.data.avatar_url}?t=${Date.now()}`
               : 'https://www.gravatar.com/avatar/?d=mp',
             is_premium: response.data.is_premium || false,
           });
@@ -317,7 +318,7 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
               src={userData.avatar_url}
               alt="Аватар користувача"
               className="user-avatar"
-              onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')}
+              onError={(e) => { console.error('Header image load error:', e); e.target.src = 'https://www.gravatar.com/avatar/?d=mp'; }}
             />
             {isAvatarMenuOpen && (
               <div className="avatar-menu">

@@ -33,7 +33,7 @@ app.add_middleware(
 )
 
 # Монтируем папку avatars для статических файлов
-app.mount("/avatars", StaticFiles(directory="avatars"), name="avatars")
+app.mount("/avatars", StaticFiles(directory="/var/www/manga-site/avatars"), name="avatars")
 
 app.include_router(auth_router)
 
