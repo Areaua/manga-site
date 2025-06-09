@@ -20,7 +20,9 @@ const ProfilePage = ({ hideHeader }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('http://127.0.0.1:8000/me', {
+          const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
+          console.log(`Fetching from: ${BASE_URL}${API_PREFIX}/me`); // Для дебагу
+          const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setUserData(response.data);
@@ -44,8 +46,9 @@ const ProfilePage = ({ hideHeader }) => {
       return;
     }
     try {
-      console.log('Відправка імені:', newUsername); // Дебаг
-      const response = await axios.put('http://127.0.0.1:8000/me', { username: newUsername }, {
+      const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
+      console.log(`Sending to: ${BASE_URL}${API_PREFIX}/me`); // Для дебагу
+      const response = await axios.put(`${BASE_URL}${API_PREFIX}/me`, { username: newUsername }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUserData(prev => ({ ...prev, username: newUsername }));
@@ -65,7 +68,9 @@ const ProfilePage = ({ hideHeader }) => {
       const formData = new FormData();
       formData.append('file', file);
       try {
-        const response = await axios.post('http://127.0.0.1:8000/upload-avatar', formData, {
+        const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
+        console.log(`Uploading to: ${BASE_URL}${API_PREFIX}/upload-avatar`); // Для дебагу
+        const response = await axios.post(`${BASE_URL}${API_PREFIX}/upload-avatar`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
