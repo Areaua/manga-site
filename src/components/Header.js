@@ -38,7 +38,9 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('http://127.0.0.1:8000/me', {
+          const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: '', API_PREFIX: '/api' };
+          console.log(`Fetching from: ${BASE_URL}${API_PREFIX}/me`); // Для дебагу
+          const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUserData({
