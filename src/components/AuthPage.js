@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
 const { BASE_URL, API_PREFIX } = window._env_ || {
-  BASE_URL: '',
+  BASE_URL: '', // Фallback
   API_PREFIX: '/api'
 };
 
@@ -113,17 +113,21 @@ const AuthPage = () => {
       : { username: formData.username, email: formData.email, password: formData.password, confirm_password: formData.passwordConfirm };
 
     try {
-      console.log(`Sending request to: ${BASE_URL}/${endpoint}`);
+      console.log(`Sending request to: ${BASE_URL}${API_PREFIX}/${endpoint}`);
       console.log('Request body:', bodyData);
-      const response = await fetch(`${BASE_URL}/${endpoint}`, {
+      const response = await fetch(`${BASE_URL}${API_PREFIX}/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(bodyData)
       });
 
       console.log('Response status:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        throw new Error('Сервер повернув невалідну відповідь. Перевірте конфігурацію API.');
+      }
 
       if (!response.ok) {
         throw new Error(data.detail || 'Щось пішло не так');
@@ -199,7 +203,7 @@ const AuthPage = () => {
               <div className="form-group">
                 <label htmlFor="password">Пароль</label>
                 <input
-                  type="password" /* Повертаємо тип password без іконки */
+                  type="password"
                   id="password"
                   name="password"
                   value={formData.password}
@@ -212,7 +216,7 @@ const AuthPage = () => {
                 <div className="form-group">
                   <label htmlFor="passwordConfirm">Підтвердити пароль</label>
                   <input
-                    type="password" /* Повертаємо тип password без іконки */
+                    type="password"
                     id="passwordConfirm"
                     name="passwordConfirm"
                     value={formData.passwordConfirm}
