@@ -26,7 +26,7 @@ async def log_requests(request: Request, call_next):
 # Обновляем CORS для фронтенда
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://13.53.132.93", "http://172.31.39.182"],
+    allow_origins=["http://localhost:3000", "http://13.61.34.1", "http://172.31.39.182"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*", "Authorization", "Content-Type"],
