@@ -5,10 +5,13 @@ import { ReactComponent as OrangeLogo } from './orange.svg';
 import { ReactComponent as BlueLogo } from './blue.svg';
 import './Header.css';
 
+const { BASE_URL, API_PREFIX } = window._env_ || {
+  BASE_URL: 'http://13.53.132.93',
+  API_PREFIX: '/api'
+};
+
 const Header = ({ hideHeader, areNotificationsEnabled }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return document.body.classList.contains('dark');
-  });
+  const [isDarkMode, setIsDarkMode] = useState(() => document.body.classList.contains('dark'));
   const [userData, setUserData] = useState({
     username: 'Гість',
     avatar_url: 'https://www.gravatar.com/avatar/?d=mp',
@@ -40,7 +43,7 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('http://127.0.0.1:8000/me', {
+          const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUserData({
@@ -58,7 +61,6 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
 
     fetchUserData();
 
-    // Слухаємо зміни в localStorage для оновлення даних користувача
     const handleStorageChange = (e) => {
       if (e.key === 'token' || e.key === 'userData') {
         fetchUserData();
@@ -66,7 +68,6 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
     };
     window.addEventListener('storage', handleStorageChange);
 
-    // Очищаємо слухача при демонтажі
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
@@ -94,9 +95,7 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
     setUseBlueLogo(newDarkMode);
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -105,61 +104,21 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
 
   const getActivePage = () => {
     const path = location.pathname;
-    if (path === '/home') return 'home';
-    if (path === '/favourites') return 'favourites';
-    if (path === '/profile') return 'profile';
-    if (path === '/settings') return 'settings';
-    return 'home';
+    return path === '/home' ? 'home' :
+           path === '/favourites' ? 'favourites' :
+           path === '/profile' ? 'profile' :
+           path === '/settings' ? 'settings' : 'home';
   };
 
-  const handleMouseEnter = () => {
-    if (menuTimeout) {
-      clearTimeout(menuTimeout);
-    }
-    setIsAvatarMenuOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setIsAvatarMenuOpen(false);
-    }, 500);
-    setMenuTimeout(timeout);
-  };
-
-  const handleNotificationClick = () => {
-    if (notificationTimeout) {
-      clearTimeout(notificationTimeout);
-    }
-    setIsNotificationOpen(!isNotificationOpen);
-  };
-
-  const handleNotificationMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setIsNotificationOpen(false);
-    }, 500);
-    setNotificationTimeout(timeout);
-  };
-
-  const handleLogoMouseEnter = () => {
-    setIsLogoHovered(true);
-  };
-
-  const handleLogoMouseLeave = () => {
-    setIsLogoHovered(false);
-  };
-
-  const handlePremiumClick = () => {
-    navigate('/profile');
-  };
-
-  const toggleSearch = () => {
-    setIsSearchOpen(prev => !prev);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    console.log('Пошук манги:', e.target.value);
-  };
+  const handleMouseEnter = () => { if (menuTimeout) clearTimeout(menuTimeout); setIsAvatarMenuOpen(true); };
+  const handleMouseLeave = () => { const timeout = setTimeout(() => setIsAvatarMenuOpen(false), 500); setMenuTimeout(timeout); };
+  const handleNotificationClick = () => { if (notificationTimeout) clearTimeout(notificationTimeout); setIsNotificationOpen(!isNotificationOpen); };
+  const handleNotificationMouseLeave = () => { const timeout = setTimeout(() => setIsNotificationOpen(false), 500); setNotificationTimeout(timeout); };
+  const handleLogoMouseEnter = () => setIsLogoHovered(true);
+  const handleLogoMouseLeave = () => setIsLogoHovered(false);
+  const handlePremiumClick = () => navigate('/profile');
+  const toggleSearch = () => setIsSearchOpen(prev => !prev);
+  const handleSearchChange = (e) => { setSearchQuery(e.target.value); console.log('Пошук манги:', e.target.value); };
 
   const toggleWheel = () => {
     setIsWheelOpen(prev => !prev);
@@ -178,53 +137,24 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
     if (!isWheelOpen || !wheelRef.current) return;
     setIsHolding(true);
     setHoldProgress(0);
-
-    const maxHoldTime = 3000;
-    const increment = 100 / (maxHoldTime / 50);
-
-    holdTimerRef.current = setInterval(() => {
-      setHoldProgress(prev => {
-        const newProgress = prev + increment;
-        if (newProgress >= 100) {
-          clearInterval(holdTimerRef.current);
-          return 100;
-        }
-        return newProgress;
-      });
-    }, 50);
+    holdTimerRef.current = setInterval(() => setHoldProgress(prev => Math.min(prev + 100 / (3000 / 50), 100)), 50);
   };
 
   const stopHold = () => {
     if (!isHolding) return;
     setIsHolding(false);
     clearInterval(holdTimerRef.current);
-
     if (holdProgress === 0) return;
 
-    const genres = [
-      { name: 'Трилер', icon: '💀' },
-      { name: 'Драма', icon: '❤️' },
-      { name: 'Надприродне', icon: '👻' },
-      { name: 'Романтика', icon: '💕' },
-      { name: 'Пригоди', icon: '🌍' },
-      { name: 'Бізнес', icon: '💼' },
-    ];
-    
-    const minRotations = 360;
-    const maxRotations = 1800;
-    const rotations = minRotations + (maxRotations - minRotations) * (holdProgress / 100);
-    
-    const minDuration = 1;
-    const maxDuration = 5;
-    const duration = minDuration + (maxDuration - minDuration) * (holdProgress / 100);
-
+    const genres = [{ name: 'Трилер', icon: '💀' }, { name: 'Драма', icon: '❤️' }, { name: 'Надприродне', icon: '👻' }, { name: 'Романтика', icon: '💕' }, { name: 'Пригоди', icon: '🌍' }, { name: 'Бізнес', icon: '💼' }];
+    const rotations = 360 + (1440 * (holdProgress / 100));
+    const duration = 1 + (4 * (holdProgress / 100));
     const randomIndex = Math.floor(Math.random() * genres.length);
     const targetAngle = randomIndex * (360 / genres.length);
     const randomRotation = rotations + (360 - (targetAngle % 360));
 
     wheelRef.current.style.transition = `transform ${duration}s cubic-bezier(0.17, 0.67, 0.21, 0.99)`;
     wheelRef.current.style.transform = `rotate(${randomRotation}deg)`;
-
     setTimeout(() => {
       setSelectedGenre(`${genres[randomIndex].icon} ${genres[randomIndex].name}`);
       setHoldProgress(0);
@@ -236,115 +166,40 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
   return (
     <header className="header">
       <div className="header-content">
-        <div
-          className="logo-container"
-          onMouseEnter={handleLogoMouseEnter}
-          onMouseLeave={handleLogoMouseLeave}
-        >
-          <h1 className={`header-title ${isLogoHovered ? 'fade-out' : 'fade-in'}`}>
-            AniAria
-          </h1>
-          {useBlueLogo ? (
-            <BlueLogo
-              className={`header-logo ${isLogoHovered ? 'fade-in rotate-in' : 'fade-out'}`}
-            />
-          ) : (
-            <OrangeLogo
-              className={`header-logo ${isLogoHovered ? 'fade-in rotate-in' : 'fade-out'}`}
-            />
-          )}
+        <div className="logo-container" onMouseEnter={handleLogoMouseEnter} onMouseLeave={handleLogoMouseLeave}>
+          <h1 className={`header-title ${isLogoHovered ? 'fade-out' : 'fade-in'}`}>AniAria</h1>
+          {useBlueLogo ? <BlueLogo className={`header-logo ${isLogoHovered ? 'fade-in rotate-in' : 'fade-out'}`} /> : <OrangeLogo className={`header-logo ${isLogoHovered ? 'fade-in rotate-in' : 'fade-out'}`} />}
         </div>
         <div className="nav-container">
           <div className="desktop-nav">
-            <button
-              className={`nav-link ${getActivePage() === 'home' ? 'active' : ''}`}
-              onClick={() => navigate('/home')}
-            >
-              <i className="bx bx-home-alt"></i> Головна
-            </button>
-            <button
-              className={`nav-link ${getActivePage() === 'favourites' ? 'active' : ''}`}
-              onClick={() => navigate('/favourites')}
-            >
-              <i className="bx bx-heart"></i> Улюблене
-            </button>
-            <button
-              className={`nav-link ${getActivePage() === 'profile' ? 'active' : ''}`}
-              onClick={() => navigate('/profile')}
-            >
-              <i className="bx bx-user"></i> Профіль
-            </button>
-            <button
-              className={`nav-link ${getActivePage() === 'settings' ? 'active' : ''}`}
-              onClick={() => navigate('/settings')}
-            >
-              <i className="bx bx-cog"></i> Налаштування
-            </button>
+            <button className={`nav-link ${getActivePage() === 'home' ? 'active' : ''}`} onClick={() => navigate('/home')}><i className="bx bx-home-alt"></i> Головна</button>
+            <button className={`nav-link ${getActivePage() === 'favourites' ? 'active' : ''}`} onClick={() => navigate('/favourites')}><i className="bx bx-heart"></i> Улюблене</button>
+            <button className={`nav-link ${getActivePage() === 'profile' ? 'active' : ''}`} onClick={() => navigate('/profile')}><i className="bx bx-user"></i> Профіль</button>
+            <button className={`nav-link ${getActivePage() === 'settings' ? 'active' : ''}`} onClick={() => navigate('/settings')}><i className="bx bx-cog"></i> Налаштування</button>
           </div>
-          <button className="menu-toggle" onClick={toggleMenu}>
-            <i className={`bx ${isMenuOpen ? 'bx-x' : 'bx-menu'}`}></i>
-          </button>
+          <button className="menu-toggle" onClick={toggleMenu}><i className={`bx ${isMenuOpen ? 'bx-x' : 'bx-menu'}`}></i></button>
         </div>
         <div className="right-section" ref={rightSectionRef}>
-          <button className="wheel-button" onClick={toggleWheel}>
-            <i className="bx bx-dice-6 wheel-icon"></i>
-          </button>
+          <button className="wheel-button" onClick={toggleWheel}><i className="bx bx-dice-6 wheel-icon"></i></button>
           <div className="search-container" ref={searchContainerRef}>
             <i className="bx bx-search search-icon" onClick={toggleSearch}></i>
-            {isSearchOpen && (
-              <input
-                type="text"
-                placeholder="Пошук манги..."
-                ref={searchInputRef}
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="search-input"
-              />
-            )}
+            {isSearchOpen && <input type="text" placeholder="Пошук манги..." ref={searchInputRef} value={searchQuery} onChange={handleSearchChange} className="search-input" />}
           </div>
-          {!userData.is_premium && (
-            <button className="premium-button" onClick={handlePremiumClick}>
-              <i className="bx bx-crown premium-icon"></i>
-            </button>
-          )}
+          {!userData.is_premium && <button className="premium-button" onClick={handlePremiumClick}><i className="bx bx-crown premium-icon"></i></button>}
           <div className="notification-container">
-            <i
-              className={`bx bx-mail-send notification-icon ${areNotificationsEnabled ? 'animated' : ''}`}
-              onClick={handleNotificationClick}
-            ></i>
-            {isNotificationOpen && (
-              <div
-                className="notification-menu"
-                onMouseLeave={handleNotificationMouseLeave}
-              >
-                <p className="notification-text">Сповіщень немає</p>
-              </div>
-            )}
+            <i className={`bx bx-mail-send notification-icon ${areNotificationsEnabled ? 'animated' : ''}`} onClick={handleNotificationClick}></i>
+            {isNotificationOpen && <div className="notification-menu" onMouseLeave={handleNotificationMouseLeave}><p className="notification-text">Сповіщень немає</p></div>}
           </div>
-          <div
-            className="user-info"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
+          <div className="user-info" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div className="user-details">
               <span className="user-name">{userData.username}</span>
               {userData.is_premium && <span className="user-status">Преміум</span>}
             </div>
-            <img
-              src={userData.avatar_url}
-              alt="Аватар користувача"
-              className="user-avatar"
-              onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')}
-            />
+            <img src={userData.avatar_url} alt="Аватар користувача" className="user-avatar" onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')} />
             {isAvatarMenuOpen && (
               <div className="avatar-menu">
-                <button className="avatar-menu-item" onClick={handleLogout}>
-                  <i className="bx bx-log-out"></i> Вийти
-                </button>
-                <button className="avatar-menu-item" onClick={toggleDarkMode}>
-                  <i className={`bx ${document.body.classList.contains('dark') ? 'bx-sun' : 'bx-moon'}`}></i>
-                  {document.body.classList.contains('dark') ? 'Світла тема' : 'Темна тема'}
-                </button>
+                <button className="avatar-menu-item" onClick={handleLogout}><i className="bx bx-log-out"></i> Вийти</button>
+                <button className="avatar-menu-item" onClick={toggleDarkMode}><i className={`bx ${document.body.classList.contains('dark') ? 'bx-sun' : 'bx-moon'}`}></i>{document.body.classList.contains('dark') ? 'Світла тема' : 'Темна тема'}</button>
               </div>
             )}
           </div>
@@ -352,90 +207,22 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
       </div>
       {isMenuOpen && (
         <div className="mobile-nav">
-          <button
-            className={`nav-link ${getActivePage() === 'home' ? 'active' : ''}`}
-            onClick={() => {
-              navigate('/home');
-              setIsMenuOpen(false);
-            }}
-          >
-            <i className="bx bx-home-alt"></i> Головна
-          </button>
-          <button
-            className={`nav-link ${getActivePage() === 'favourites' ? 'active' : ''}`}
-            onClick={() => {
-              navigate('/favourites');
-              setIsMenuOpen(false);
-            }}
-          >
-            <i className="bx bx-heart"></i> Улюблене
-          </button>
-          <button
-            className={`nav-link ${getActivePage() === 'profile' ? 'active' : ''}`}
-            onClick={() => {
-              navigate('/profile');
-              setIsMenuOpen(false);
-            }}
-          >
-            <i className="bx bx-user"></i> Профіль
-          </button>
-          <button
-            className={`nav-link ${getActivePage() === 'settings' ? 'active' : ''}`}
-            onClick={() => {
-              navigate('/settings');
-              setIsMenuOpen(false);
-            }}
-          >
-            <i className="bx bx-cog"></i> Налаштування
-          </button>
-          <button
-            className="nav-link"
-            onClick={() => {
-              handleLogout();
-              setIsMenuOpen(false);
-            }}
-          >
-            <i className="bx bx-log-out"></i> Вийти
-          </button>
+          <button className={`nav-link ${getActivePage() === 'home' ? 'active' : ''}`} onClick={() => { navigate('/home'); setIsMenuOpen(false); }}><i className="bx bx-home-alt"></i> Головна</button>
+          <button className={`nav-link ${getActivePage() === 'favourites' ? 'active' : ''}`} onClick={() => { navigate('/favourites'); setIsMenuOpen(false); }}><i className="bx bx-heart"></i> Улюблене</button>
+          <button className={`nav-link ${getActivePage() === 'profile' ? 'active' : ''}`} onClick={() => { navigate('/profile'); setIsMenuOpen(false); }}><i className="bx bx-user"></i> Профіль</button>
+          <button className={`nav-link ${getActivePage() === 'settings' ? 'active' : ''}`} onClick={() => { navigate('/settings'); setIsMenuOpen(false); }}><i className="bx bx-cog"></i> Налаштування</button>
+          <button className="nav-link" onClick={() => { handleLogout(); setIsMenuOpen(false); }}><i className="bx bx-log-out"></i> Вийти</button>
         </div>
       )}
       {isWheelOpen && (
         <div className="genre-wheel-container">
-          <div className="hold-progress-bar">
-            <div
-              className="hold-progress"
-              style={{ width: `${holdProgress}%` }}
-            ></div>
-          </div>
+          <div className="hold-progress-bar"><div className="hold-progress" style={{ width: `${holdProgress}%` }}></div></div>
           <div className="genre-wheel-pointer">↓</div>
           <div className="genre-wheel" ref={wheelRef}>
-            {[
-              { name: 'Трилер', icon: '💀' },
-              { name: 'Драма', icon: '❤️' },
-              { name: 'Надприродне', icon: '👻' },
-              { name: 'Романтика', icon: '💕' },
-              { name: 'Пригоди', icon: '🌍' },
-              { name: 'Бізнес', icon: '💼' },
-            ].map((genre, index) => (
-              <div
-                key={index}
-                className="genre-segment"
-                style={{ transform: `rotate(${index * 60}deg)` }}
-              >
-                <span style={{ transform: `rotate(${-index * 60}deg)` }}>
-                  {genre.icon}
-                </span>
-              </div>
+            {[{ name: 'Трилер', icon: '💀' }, { name: 'Драма', icon: '❤️' }, { name: 'Надприродне', icon: '👻' }, { name: 'Романтика', icon: '💕' }, { name: 'Пригоди', icon: '🌍' }, { name: 'Бізнес', icon: '💼' }].map((genre, index) => (
+              <div key={index} className="genre-segment" style={{ transform: `rotate(${index * 60}deg)` }}><span style={{ transform: `rotate(${-index * 60}deg)` }}>{genre.icon}</span></div>
             ))}
-            <button
-              className="spin-button"
-              onMouseDown={startHold}
-              onMouseUp={stopHold}
-              onTouchStart={startHold}
-              onTouchEnd={stopHold}
-            >
-              Крутити
-            </button>
+            <button className="spin-button" onMouseDown={startHold} onMouseUp={stopHold} onTouchStart={startHold} onTouchEnd={stopHold}>Крутити</button>
           </div>
           {selectedGenre && <p className="selected-genre">{selectedGenre}</p>}
         </div>
