@@ -55,3 +55,23 @@
 .slider-dot.active {
   background-color: var(--primary-color);
 }
+/* Добавим адаптацию */
+@media (max-width: 480px) {
+  .manga-slideshow-container {
+    height: 120px;
+  }
+  
+  .slideshow-arrow {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .slider-dots {
+    bottom: 5px;
+  }
+  
+  .slider-dot {
+    width: 6px;
+    height: 6px;
+  }
+}

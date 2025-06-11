@@ -40,3 +40,15 @@
   .progress-bar-container {
     background-color: rgba(0, 0, 0, 0.1);
   }
+  /* Добавим адаптацию */
+@media (max-width: 768px) {
+  .manga-container {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .manga-container {
+    padding: 0.3rem;
+  }
+}

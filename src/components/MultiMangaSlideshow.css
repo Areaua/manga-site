@@ -97,3 +97,19 @@
     height: 120px;
   }
 }
+/* Добавим адаптацию */
+@media (max-width: 480px) {
+  .multi-manga-slideshow-container {
+    height: 120px;
+  }
+  
+  .slideshow-arrow {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .manga-overlay {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+  }
+}

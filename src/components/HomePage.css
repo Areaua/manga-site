@@ -37,3 +37,20 @@
     margin-right: 0; /* Прибираємо відступ на мобільних, панель розташовується знизу */
   }
 }
+/* Добавим адаптацию */
+@media (max-width: 768px) {
+  .home-page__content {
+    padding: 0.5rem;
+  }
+  
+  .adult-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-page__content {
+    padding: 0.3rem;
+  }
+}

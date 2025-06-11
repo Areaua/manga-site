@@ -118,3 +118,36 @@
     box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
   }
 }
+/* components/AnimeList.css */
+.anime-list {
+  padding: 1rem;
+}
+
+.layout-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Остальные стили без изменений... */
+
+@media (max-width: 768px) {
+  .anime-grid.banners-2,
+  .anime-grid.banners-4,
+  .anime-grid.banners-8 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .layout-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .new-label {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+  }
+}

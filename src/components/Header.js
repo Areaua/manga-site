@@ -6,7 +6,9 @@ import { ReactComponent as BlueLogo } from './blue.svg';
 import './Header.css';
 
 const Header = ({ hideHeader, areNotificationsEnabled }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return document.body.classList.contains('dark');
+  });
   const [userData, setUserData] = useState({
     username: 'Гість',
     avatar_url: 'https://www.gravatar.com/avatar/?d=mp',
@@ -38,16 +40,13 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const { BASE_URL, API_PREFIX } = window._env_ || { BASE_URL: 'http://13.53.132.93', API_PREFIX: '/api' };
-          console.log(`Fetching from: ${BASE_URL}${API_PREFIX}/me`); // Для дебагу
-          const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
+          const response = await axios.get('http://127.0.0.1:8000/me', {
             headers: { Authorization: `Bearer ${token}` },
           });
-          console.log('User data received in Header:', response.data); // Дебаг
           setUserData({
             username: response.data.username || 'Гість',
             avatar_url: response.data.avatar_url
-              ? `${BASE_URL}${response.data.avatar_url}?t=${Date.now()}`
+              ? `${response.data.avatar_url}?t=${Date.now()}`
               : 'https://www.gravatar.com/avatar/?d=mp',
             is_premium: response.data.is_premium || false,
           });
@@ -56,7 +55,23 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
         }
       }
     };
+
     fetchUserData();
+
+    // Слухаємо зміни в localStorage для оновлення даних користувача
+    const handleStorageChange = (e) => {
+      if (e.key === 'token' || e.key === 'userData') {
+        fetchUserData();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    // Очищаємо слухача при демонтажі
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  useEffect(() => {
+    setUseBlueLogo(document.body.classList.contains('dark'));
   }, []);
 
   useEffect(() => {
@@ -73,9 +88,10 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
   }, [isSearchOpen]);
 
   const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.body.classList.toggle('dark', !isDarkMode);
-    setUseBlueLogo(!isDarkMode);
+    const newDarkMode = !document.body.classList.contains('dark');
+    setIsDarkMode(newDarkMode);
+    document.body.classList.toggle('dark', newDarkMode);
+    setUseBlueLogo(newDarkMode);
   };
 
   const toggleMenu = () => {
@@ -318,7 +334,7 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
               src={userData.avatar_url}
               alt="Аватар користувача"
               className="user-avatar"
-              onError={(e) => { console.error('Header image load error:', e); e.target.src = 'https://www.gravatar.com/avatar/?d=mp'; }}
+              onError={(e) => (e.target.src = 'https://www.gravatar.com/avatar/?d=mp')}
             />
             {isAvatarMenuOpen && (
               <div className="avatar-menu">
@@ -326,8 +342,8 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
                   <i className="bx bx-log-out"></i> Вийти
                 </button>
                 <button className="avatar-menu-item" onClick={toggleDarkMode}>
-                  <i className={`bx ${isDarkMode ? 'bx-sun' : 'bx-moon'}`}></i>
-                  {isDarkMode ? 'Світла тема' : 'Темна тема'}
+                  <i className={`bx ${document.body.classList.contains('dark') ? 'bx-sun' : 'bx-moon'}`}></i>
+                  {document.body.classList.contains('dark') ? 'Світла тема' : 'Темна тема'}
                 </button>
               </div>
             )}

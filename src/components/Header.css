@@ -51,17 +51,9 @@
   transition: opacity 0.3s ease, transform 0.5s ease;
 }
 
-.fade-in {
-  opacity: 1;
-}
-
-.fade-out {
-  opacity: 0;
-}
-
-.rotate-in {
-  transform: rotate(360deg);
-}
+.fade-in { opacity: 1; }
+.fade-out { opacity: 0; }
+.rotate-in { transform: rotate(360deg); }
 
 .nav-container {
   display: flex;
@@ -468,113 +460,22 @@
   text-overflow: ellipsis;
 }
 
-@keyframes hue-shift {
-  0% {
-    filter: hue-rotate(0deg);
+@media (max-width: 1024px) {
+  .header-content {
+    padding: 10px;
   }
-  100% {
-    filter: hue-rotate(360deg);
+  .nav-container {
+    gap: 10px;
   }
-}
-
-@keyframes hue-shift-dark {
-  0% {
-    filter: hue-rotate(0deg) brightness(1);
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 14px;
   }
-  50% {
-    filter: hue-rotate(180deg) brightness(1.5);
+  .search-input {
+    width: 150px;
   }
-  100% {
-    filter: hue-rotate(360deg) brightness(1);
-  }
-}
-
-@keyframes searchIconPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2) rotate(15deg);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes wheelPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2) rotate(15deg);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes slideInSearch {
-  0% {
-    width: 0;
-    opacity: 0;
-    right: 40px;
-    transform: translateY(-50%) scale(0.8);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translateY(-50%) scale(0.9);
-  }
-  100% {
-    width: 200px;
-    opacity: 1;
-    right: 40px;
-    transform: translateY(-50%) scale(1);
-  }
-}
-
-@keyframes fadeInWheel {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-@keyframes slideDown {
-  0% {
-    transform: translateY(-10px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-2px);
-  }
-  60% {
-    transform: translateY(-1px);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
+  .right-section.active .wheel-button {
+    transform: translateX(-150px);
   }
 }
 
@@ -582,77 +483,128 @@
   .desktop-nav {
     display: none;
   }
-
   .menu-toggle {
     display: block;
   }
-
   .mobile-nav {
     display: flex;
   }
-
   .user-info {
     display: flex;
   }
-
   .header-content {
     flex-direction: column;
     align-items: flex-start;
   }
-
   .right-section {
     margin-top: 10px;
     align-self: flex-end;
   }
-
   .nav-container {
     justify-content: flex-start;
   }
-
   .search-input {
     right: 30px;
   }
-
   .search-container.active .search-input {
     width: 150px;
     right: 30px;
     transform: translateY(-50%) scale(1);
   }
-
   .right-section.active .wheel-button {
     transform: translateX(-150px);
   }
-
   .genre-wheel-container {
     padding: 15px;
   }
-
   .genre-wheel {
     width: 160px;
     height: 160px;
   }
-
   .genre-segment span {
     font-size: 20px;
     top: 70%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(90deg);
   }
-
   .spin-button {
     width: 50px;
     height: 50px;
     font-size: 14px;
   }
-
   .genre-wheel-pointer {
     font-size: 28px;
     top: 0;
   }
-
   .hold-progress-bar {
     width: 160px;
     height: 8px;
     margin-bottom: 12px;
+  }
+}
+
+/* Header.css - исправления для мобильной версии */
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 15px;
+  }
+
+  .header-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .menu-toggle {
+    order: -1;
+    margin-right: 10px;
+  }
+
+  .logo-container {
+    order: 0;
+    margin-right: auto;
+  }
+
+  .right-section {
+    order: 1;
+    margin-top: 0;
+    margin-left: 0;
+    align-self: center;
+  }
+
+  .mobile-nav {
+    top: 60px;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+  }
+
+  .search-container.active .search-input {
+    width: 150px;
+    right: 30px;
+  }
+
+  .right-section.active .wheel-button {
+    transform: translateX(-150px);
+  }
+}
+
+/* Для очень маленьких экранов (меньше 400px) */
+@media (max-width: 400px) {
+  .header-title {
+    font-size: 20px;
+    padding: 5px 10px;
+  }
+
+  .logo-container {
+    width: 100px;
+  }
+
+  .right-section {
+    gap: 10px;
+  }
+
+  .search-container.active .search-input {
+    width: 120px;
   }
 }

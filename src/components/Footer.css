@@ -62,3 +62,24 @@
     font-size: 0.8rem;
   }
 }
+/* Адаптация уже присутствует в файле, оставляем как есть */
+/* Добавим только дополнительные точки останова */
+@media (max-width: 480px) {
+  .footer {
+    height: 35px;
+  }
+  
+  .footer--open {
+    height: 70px;
+  }
+  
+  .footer__tab {
+    left: 5px;
+    padding: 2px 5px;
+    font-size: 0.6rem;
+  }
+  
+  .footer__text {
+    font-size: 0.7rem;
+  }
+}

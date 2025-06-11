@@ -27,7 +27,13 @@ const AuthPage = () => {
 
   const handleToggleForm = () => {
     setIsLogin(!isLogin);
-    setErrors({});
+    setErrors({
+      email: '',
+      username: '',
+      password: '',
+      passwordConfirm: '',
+      form: ''
+    });
     setFormData({
       email: '',
       username: '',
@@ -49,7 +55,7 @@ const AuthPage = () => {
     if (!formData.email) {
       newErrors.email = 'Пошта обов’язкова';
       isValid = false;
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Введіть коректну пошту';
       isValid = false;
     }
@@ -82,6 +88,7 @@ const AuthPage = () => {
       ...prev,
       [name]: value
     }));
+
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -106,9 +113,9 @@ const AuthPage = () => {
       : { username: formData.username, email: formData.email, password: formData.password, confirm_password: formData.passwordConfirm };
 
     try {
-      console.log(`Sending request to: ${BASE_URL}${API_PREFIX}/${endpoint}`);
+      console.log(`Sending request to: ${BASE_URL}/${endpoint}`);
       console.log('Request body:', bodyData);
-      const response = await fetch(`${BASE_URL}${API_PREFIX}/${endpoint}`, {
+      const response = await fetch(`${BASE_URL}/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(bodyData)
@@ -159,7 +166,7 @@ const AuthPage = () => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h1 className="auth-title">Вхід</h1>
+        <h1 className="auth-title">{isLogin ? 'Вхід' : 'Реєстрація'}</h1>
         <div className="auth-content">
           <div className="form-block">
             <form id="authForm" onSubmit={handleSubmit}>
@@ -192,7 +199,7 @@ const AuthPage = () => {
               <div className="form-group">
                 <label htmlFor="password">Пароль</label>
                 <input
-                  type="password"
+                  type="password" /* Повертаємо тип password без іконки */
                   id="password"
                   name="password"
                   value={formData.password}
@@ -205,7 +212,7 @@ const AuthPage = () => {
                 <div className="form-group">
                   <label htmlFor="passwordConfirm">Підтвердити пароль</label>
                   <input
-                    type="password"
+                    type="password" /* Повертаємо тип password без іконки */
                     id="passwordConfirm"
                     name="passwordConfirm"
                     value={formData.passwordConfirm}
