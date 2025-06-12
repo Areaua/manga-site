@@ -1,15 +1,27 @@
-/* Контейнер налаштувань */
+/* Основные настройки */
+:root {
+  --body-color: #ffffff;
+  --text-color: #333333;
+}
+
+:where(.dark) {
+  --body-color: #1a1a1a;
+  --text-color: #f0f0f0;
+}
+
+/* Контейнер настроек */
 .settings-container {
   min-height: 100vh;
   background: var(--body-color);
   padding: 20px;
-  padding-top: 80px; /* Відступ для хедера */
+  padding-top: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: background 0.3s ease;
 }
 
-/* Контент налаштувань */
+/* Контент настроек */
 .settings-content {
   width: 100%;
   max-width: 600px;
@@ -22,16 +34,17 @@
   color: var(--text-color);
   text-align: center;
   margin-bottom: 30px;
+  transition: color 0.3s ease;
 }
 
-/* Список налаштувань */
+/* Список настроек */
 .settings-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-/* Елемент налаштування */
+/* Элемент настройки */
 .settings-item {
   background: white;
   border-radius: 15px;
@@ -41,22 +54,25 @@
   align-items: center;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 :where(.dark) .settings-item {
   background: #2a2a2a;
 }
 
-/* Контент елемента */
+/* Контент элемента */
 .settings-item-content {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* Іконка */
+/* Иконка */
 .settings-item-icon {
   font-size: 24px;
+  color: var(--text-color);
+  transition: color 0.3s ease;
 }
 
 /* Текст */
@@ -64,50 +80,63 @@
   font-size: 16px;
   font-weight: 500;
   color: var(--text-color);
+  transition: color 0.3s ease;
 }
 
-/* Стрілка */
+/* Стрелка */
 .settings-item-arrow {
   font-size: 16px;
   color: #666;
+  transition: color 0.3s ease;
 }
 
 :where(.dark) .settings-item-arrow {
   color: #999;
 }
 
-/* Перемикач */
+/* ИСПРАВЛЕННЫЙ ПЕРЕКЛЮЧАТЕЛЬ */
 .toggle-switch {
-  position: relative;
-  width: 40px;
+  display: inline-flex;
+  align-items: center;
+  width: 44px;
   height: 22px;
-  background: #ccc;
-  border-radius: 25px;
+  background: #cccccc;
+  border-radius: 11px;
+  padding: 3px;
   cursor: pointer;
   transition: background 0.3s ease;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.toggle-knob {
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  left: 3px;
 }
 
 .toggle-switch.active {
   background: #f28c38;
 }
 
+.toggle-switch.active .toggle-knob {
+  transform: translateX(22px);
+}
+
+:where(.dark) .toggle-switch {
+  background: #555555;
+}
+
 :where(.dark) .toggle-switch.active {
   background: #ff6200;
 }
 
-/* Ручка перемикача */
-.toggle-knob {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  background: white;
-  border-radius: 50%;
-  top: 50%;
-  left: 3px;
-  transform: translateY(-50%);
-}
-
-/* Модальне вікно */
+/* Модальное окно */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -121,7 +150,6 @@
   z-index: 1000;
 }
 
-/* Контент модального вікна */
 .modal-content {
   background: white;
   border-radius: 15px;
@@ -130,13 +158,13 @@
   max-width: 400px;
   position: relative;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
 }
 
 :where(.dark) .modal-content {
   background: #2a2a2a;
 }
 
-/* Кнопка закриття модального вікна */
 .modal-close {
   position: absolute;
   top: 10px;
@@ -144,46 +172,45 @@
   background: none;
   border: none;
   font-size: 16px;
-  color: #666;
+  color: #666666;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 :where(.dark) .modal-close {
-  color: #999;
+  color: #999999;
 }
 
 .modal-close:hover {
-  color: #333;
+  color: #333333;
 }
 
 :where(.dark) .modal-close:hover {
   color: #e0e0e0;
 }
 
-/* Заголовок модального вікна */
 .modal-title {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-color);
   margin-bottom: 15px;
+  transition: color 0.3s ease;
 }
 
-/* Текстове поле модального вікна */
 .modal-textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border-radius: 8px;
   font-size: 14px;
   margin-bottom: 15px;
   resize: none;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 :where(.dark) .modal-textarea {
-  background: #333;
-  border-color: #555;
+  background: #333333;
+  border-color: #555555;
   color: #e0e0e0;
 }
 
@@ -192,7 +219,6 @@
   border-color: #f28c38;
 }
 
-/* Кнопка збереження в модальному вікні */
 .modal-save {
   background: #f28c38;
   color: white;
@@ -209,24 +235,21 @@
   background: #e07b30;
 }
 
-/* Статус повідомлення */
 .modal-status {
   margin-top: 10px;
   font-size: 14px;
   text-align: center;
 }
 
-/* Статус успіху */
 .status-success {
   color: #28a745;
 }
 
-/* Статус помилки */
 .status-error {
   color: #dc3545;
 }
 
-/* Адаптивність */
+/* Адаптивность */
 @media (max-width: 768px) {
   .settings-container {
     padding: 15px;
