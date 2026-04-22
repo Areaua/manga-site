@@ -1,70 +1,196 @@
-# Getting Started with Create React App
+# 📚 AniAria — Manga & Anime Reading Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> A full-stack web platform for browsing manga and anime with user accounts, personalised libraries, and a clean adaptive UI.
 
-## Available Scripts
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-coming%20soon-lightgrey?style=for-the-badge)](#)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## About
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+AniAria is a full-stack manga and anime catalogue platform built as a diploma project and later modernised from legacy production code. Users can browse titles by genre, manage a favourites list, customise their profile, and switch between light and dark themes — all backed by a secure JWT-authenticated REST API.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The project was refactored from a working but unmaintained EC2 deployment: secrets were extracted to environment variables, the venv was purged from git history, the backend was restructured for local development, and security gaps were addressed throughout.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## ✨ Features
 
-### `npm run build`
+- **Authentication** — register, log in, JWT-based sessions with bcrypt password hashing
+- **Manga & Anime catalogue** — genre filtering with emoji indicators, year filters, multi-item carousels
+- **Favourites** — save and manage titles across sessions
+- **User profiles** — avatar upload, username editing, premium badge
+- **Adult content toggle** — 18+ filter in user settings
+- **Dark / Light theme** — persisted per user account
+- **Adaptive UI** — desktop navigation + mobile hamburger menu
+- **Genre wheel** — random genre picker with spin animation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠 Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Frontend
+| Technology | Version |
+|---|---|
+| React | 18.3.1 |
+| React Router DOM | 6.30.0 |
+| Tailwind CSS | 3.4.14 |
+| Framer Motion | 12.12.1 |
+| Axios | 1.9.0 |
 
-### `npm run eject`
+### Backend
+| Technology | Version |
+|---|---|
+| FastAPI | 0.115.6 |
+| Uvicorn | 0.34.0 |
+| PyMongo | 4.10.1 |
+| python-jose | 3.3.0 |
+| passlib (bcrypt) | 1.7.4 |
+| Pydantic | 2.10.4 |
+| python-dotenv | 1.0.1 |
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Database
+- **MongoDB Atlas** — cloud-hosted MongoDB cluster
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### DevOps
+- GitHub Actions CI/CD
+- Environment-based config via `.env` files
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🚀 Getting Started
 
-## Learn More
+### Prerequisites
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Python 3.11+
+- Node.js 18+
+- A [MongoDB Atlas](https://www.mongodb.com/atlas) account (free tier works)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 1. Clone the repo
 
-### Code Splitting
+```bash
+git clone https://github.com/Areaua/manga-site.git
+cd manga-site
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 2. Backend setup
 
-### Analyzing the Bundle Size
+```bash
+# Create and activate a virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS / Linux
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Install dependencies
+pip install -r requirements.txt
 
-### Making a Progressive Web App
+# Configure environment
+cp .env.example .env
+# Open .env and fill in MONGODB_URL, MONGODB_DB_NAME, SECRET_KEY
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Generate a secure `SECRET_KEY`:
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(64))"
+```
 
-### Advanced Configuration
+### 3. Frontend setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+npm install
+# .env.development already points to http://localhost:8000 — no changes needed for local dev
+```
 
-### Deployment
+### 4. Run
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+# Backend (from project root)
+start_backend.bat           # Windows
+# or:
+python -m uvicorn src.backend.main:app --reload --port 8000 --reload-dir src/backend
 
-### `npm run build` fails to minify
+# Frontend (separate terminal)
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Open **http://localhost:3000**
+
+---
+
+## 📸 Screenshots
+
+> _Screenshots coming soon_
+
+| Home | Profile | Auth |
+|---|---|---|
+| ![home](docs/screenshots/home.png) | ![profile](docs/screenshots/profile.png) | ![auth](docs/screenshots/auth.png) |
+
+---
+
+## 🏗 Project Structure
+
+```
+manga-site/
+├── src/
+│   ├── backend/              # FastAPI application
+│   │   ├── main.py           # App entry point, CORS, middleware
+│   │   ├── database.py       # MongoDB connection
+│   │   ├── models/           # Pydantic models
+│   │   ├── routes/           # API route handlers
+│   │   └── utils/            # Security helpers, config
+│   ├── components/           # React components
+│   └── config.js             # Frontend API base URL config
+├── .env.example              # Environment variable template
+├── requirements.txt          # Python dependencies
+├── start_backend.bat         # Dev server launcher (Windows)
+└── package.json
+```
+
+---
+
+## 🔒 Security
+
+- All secrets and configuration loaded from environment variables (`.env`) — no hardcoded credentials
+- Passwords hashed with **bcrypt** via passlib
+- Sessions protected with **JWT** (HS256, configurable expiry)
+- **CORS** restricted to whitelisted frontend origins
+- Avatar uploads saved with UUID filenames
+- Generic error responses — internal exception details not exposed to clients
+- `SECRET_KEY` required at startup; app refuses to start if missing
+
+---
+
+## 📝 Recent Refactoring Highlights
+
+This project was restored and modernised from a legacy EC2 deployment. Key changes made during the refactor:
+
+- **Migrated database** from self-hosted MongoDB on EC2 to MongoDB Atlas
+- **Removed hardcoded secrets** — DB password, JWT key, and server IPs were all in source code
+- **Moved all config to environment variables** — `MONGODB_URL`, `SECRET_KEY`, `AVATARS_DIR`, `FRONTEND_URL`, `REACT_APP_API_BASE_URL`
+- **Purged 3 200+ committed venv files** from git and updated `.gitignore`
+- **Added `/api` prefix** to the REST router for consistent URL structure
+- **Centralised frontend config** via `src/config.js` — single source for `API_BASE_URL`
+- **Tightened CORS** — restricted `allow_headers` from `*` to an explicit list
+- **Improved startup reliability** — `serverSelectionTimeoutMS=5000` for fast DB failure detection; `RuntimeError` on missing required env vars
+- **Removed 14 debug `console.log` statements** from production frontend code
+
+---
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome — feel free to open one if you spot a bug or have a suggestion.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 👤 Author
+
+**Pavlo Zhelikhovskyi**
+
+- GitHub: [@Areaua](https://github.com/Areaua)
+- LinkedIn: [pavlo-zhelikhovskyi](https://www.linkedin.com/in/pavlo-zhelikhovskyi-b71a6029a/)
