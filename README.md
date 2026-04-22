@@ -184,7 +184,7 @@ Issues and pull requests are welcome — feel free to open one if you spot a bug
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+© 2026 Pavlo Zhelikhovskyi. All Rights Reserved. See [LICENSE](LICENSE) for details.
 
 ---
 
