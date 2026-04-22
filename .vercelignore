@@ -1,0 +1,9 @@
+requirements.txt
+.python-version
+runtime.txt
+src/backend
+venv
+avatars
+avatars_storage
+*.py
+__pycache__
