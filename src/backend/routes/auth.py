@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from src.backend.models.user import User, UserInDB
 from src.backend.utils.security import get_password_hash, verify_password, create_access_token, decode_access_token
 from src.backend.database import users_collection
+from src.backend.utils.config import AVATARS_DIR
 
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
@@ -159,9 +160,7 @@ async def update_theme(update_data: UpdateThemeRequest, current_user: dict = Dep
 async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     logger.info(f"Avatar upload request for: {current_user['email']}, filename: {file.filename}")
     try:
-        avatars_dir = "/var/www/manga-site/avatars"  # Фіксований шлях
-        os.makedirs(avatars_dir, exist_ok=True)
-        
+        avatars_dir = str(AVATARS_DIR)
         avatar_id = str(uuid.uuid4())
         file_extension = file.filename.split('.')[-1]
         avatar_filename = f"{avatar_id}.{file_extension}"
