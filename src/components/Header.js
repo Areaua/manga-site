@@ -4,11 +4,7 @@ import axios from 'axios';
 import { ReactComponent as OrangeLogo } from './orange.svg';
 import { ReactComponent as BlueLogo } from './blue.svg';
 import './Header.css';
-
-const { BASE_URL, API_PREFIX } = window._env_ || {
-  BASE_URL: 'http://13.53.132.93',
-  API_PREFIX: '/api'
-};
+import { API_BASE_URL, API_PREFIX } from '../config';
 
 const Header = ({ hideHeader, areNotificationsEnabled }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => document.body.classList.contains('dark'));
@@ -43,7 +39,7 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
+          const response = await axios.get(`${API_BASE_URL}${API_PREFIX}/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUserData({
@@ -118,7 +114,7 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
   const handleLogoMouseLeave = () => setIsLogoHovered(false);
   const handlePremiumClick = () => navigate('/profile');
   const toggleSearch = () => setIsSearchOpen(prev => !prev);
-  const handleSearchChange = (e) => { setSearchQuery(e.target.value); console.log('Пошук манги:', e.target.value); };
+  const handleSearchChange = (e) => { setSearchQuery(e.target.value); };
 
   const toggleWheel = () => {
     setIsWheelOpen(prev => !prev);

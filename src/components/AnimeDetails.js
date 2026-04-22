@@ -9,33 +9,25 @@ const AnimeDetails = ({ selectedAnime, genreEmojis, onBackClick, savedAnimes, on
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [sortOrder, setSortOrder] = useState('desc');
 
-  useEffect(() => {
-    console.log('AnimeDetails mounted with:', { isMangaOpen, selectedEpisode, selectedAnime });
-  }, [isMangaOpen, selectedEpisode, selectedAnime]);
-
   const handleSaveClick = () => {
     onSaveClick(selectedAnime);
     setIsSaved(!isSaved);
   };
 
   const handleEpisodeClick = (episode) => {
-    console.log('Episode clicked:', episode);
     setSelectedEpisode(episode);
     setIsMangaOpen(true);
   };
 
   const handleMangaClose = () => {
-    console.log('Closing MangaReader');
     setIsMangaOpen(false);
     setSelectedEpisode(null);
   };
 
   const handleBackClick = () => {
-    console.log('Back button clicked');
     if (onBackClick) {
       onBackClick();
     } else {
-      console.warn('onBackClick is not defined, falling back to window.history.back()');
       window.history.back();
     }
   };

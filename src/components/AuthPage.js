@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
-
-const { BASE_URL, API_PREFIX } = window._env_ || {
-  BASE_URL: '', // Фallback
-  API_PREFIX: '/api'
-};
+import { API_BASE_URL, API_PREFIX } from '../config';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -113,15 +109,12 @@ const AuthPage = () => {
       : { username: formData.username, email: formData.email, password: formData.password, confirm_password: formData.passwordConfirm };
 
     try {
-      console.log(`Sending request to: ${BASE_URL}${API_PREFIX}/${endpoint}`);
-      console.log('Request body:', bodyData);
-      const response = await fetch(`${BASE_URL}${API_PREFIX}/${endpoint}`, {
+      const response = await fetch(`${API_BASE_URL}${API_PREFIX}/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(bodyData)
       });
 
-      console.log('Response status:', response.status);
       let data;
       try {
         data = await response.json();
@@ -150,7 +143,6 @@ const AuthPage = () => {
         });
       }
     } catch (error) {
-      console.error('Помилка авторизації:', error);
       setErrors(prev => ({
         ...prev,
         form: error.message || 'Сталася помилка. Спробуйте ще раз.'

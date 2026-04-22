@@ -3,11 +3,7 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from './Header';
 import './ProfilePage.css';
-
-const { BASE_URL, API_PREFIX } = window._env_ || {
-  BASE_URL: 'http://13.53.132.93',
-  API_PREFIX: '/api'
-};
+import { API_BASE_URL, API_PREFIX } from '../config';
 
 const ProfilePage = ({ hideHeader }) => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -25,7 +21,7 @@ const ProfilePage = ({ hideHeader }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get(`${BASE_URL}${API_PREFIX}/me`, {
+          const response = await axios.get(`${API_BASE_URL}${API_PREFIX}/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setUserData(response.data);
@@ -50,8 +46,7 @@ const ProfilePage = ({ hideHeader }) => {
       return;
     }
     try {
-      console.log('Відправка імені:', newUsername);
-      const response = await axios.put(`${BASE_URL}${API_PREFIX}/me`, { username: newUsername }, {
+      const response = await axios.put(`${API_BASE_URL}${API_PREFIX}/me`, { username: newUsername }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUserData(prev => ({ ...prev, username: newUsername }));
@@ -60,8 +55,7 @@ const ProfilePage = ({ hideHeader }) => {
       setShowEditModal(false);
       setTimeout(() => setUpdateStatus(''), 3000);
     } catch (error) {
-      console.error('Помилка оновлення імені користувача:', error);
-      setUpdateStatus(error.response?.data?.detail || 'Не вдалося оновити ім’я користувача');
+      setUpdateStatus(error.response?.data?.detail || ‘Не вдалося оновити ім’я користувача’);
     }
   };
 
@@ -72,7 +66,7 @@ const ProfilePage = ({ hideHeader }) => {
       const formData = new FormData();
       formData.append('file', file);
       try {
-        const response = await axios.post(`${BASE_URL}${API_PREFIX}/upload-avatar`, formData, {
+        const response = await axios.post(`${API_BASE_URL}${API_PREFIX}/upload-avatar`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -83,14 +77,12 @@ const ProfilePage = ({ hideHeader }) => {
         localStorage.setItem('userData', JSON.stringify({ ...userData, avatar_url: response.data.avatar_url }));
         setTimeout(() => setUpdateStatus(''), 3000);
       } catch (error) {
-        console.error('Помилка завантаження аватара:', error);
         setUpdateStatus('Не вдалося завантажити аватар');
       }
     }
   };
 
   const handleUpgradePremium = (packageType) => {
-    console.log(`Вибрано пакет: ${packageType}`);
     setShowPremiumPackages(false);
   };
 
