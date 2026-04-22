@@ -55,7 +55,7 @@ const ProfilePage = ({ hideHeader }) => {
       setShowEditModal(false);
       setTimeout(() => setUpdateStatus(''), 3000);
     } catch (error) {
-      setUpdateStatus(error.response?.data?.detail || ‘Не вдалося оновити ім’я користувача’);
+      setUpdateStatus(error.response?.data?.detail || "Не вдалося оновити імʼя користувача");
     }
   };
 
