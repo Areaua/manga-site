@@ -39,7 +39,7 @@ app.add_middleware(
 
 app.mount("/avatars", StaticFiles(directory=str(AVATARS_DIR)), name="avatars")
 
-app.include_router(auth_router)
+app.include_router(auth_router, prefix="/api")
 
 @app.get("/")
 async def root():
