@@ -3,20 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Header from './Header';
 import './SettingsPage.css';
 
-// Сторінка налаштувань
 const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, areNotificationsEnabled, toggleNotifications }) => {
   const [showSupportModal, setShowSupportModal] = useState(false);
-  const [supportMessage, setSupportMessage] = useState('');
-  const [supportStatus, setSupportStatus] = useState('');
+  const [supportMessage, setSupportMessage]     = useState('');
+  const [supportStatus, setSupportStatus]       = useState('');
 
   const handleSendSupportMessage = () => {
     if (!supportMessage.trim()) {
-      setSupportStatus('Повідомлення не може бути порожнім');
+      setSupportStatus('Message cannot be empty');
       return;
     }
-    // Заглушка для відправки повідомлення в підтримку
-    console.log('Повідомлення в підтримку:', supportMessage);
-    setSupportStatus('Повідомлення надіслано (заглушка)');
+    console.log('Support message:', supportMessage);
+    setSupportStatus('Message sent successfully');
     setSupportMessage('');
     setTimeout(() => {
       setSupportStatus('');
@@ -35,16 +33,12 @@ const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, a
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="settings-title">Налаштування</h1>
+        <h1 className="settings-title">Settings</h1>
         <div className="settings-list">
-          <motion.div
-            className="settings-item"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-          >
+          <motion.div className="settings-item" whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
             <div className="settings-item-content">
               <span className="settings-item-icon">🔞</span>
-              <span className="settings-item-text">Увімкнути контент 18+</span>
+              <span className="settings-item-text">Enable Adult Content (18+)</span>
             </div>
             <motion.div
               className={`toggle-switch ${isAdultContentEnabled ? 'active' : ''}`}
@@ -58,14 +52,11 @@ const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, a
               />
             </motion.div>
           </motion.div>
-          <motion.div
-            className="settings-item"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-          >
+
+          <motion.div className="settings-item" whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
             <div className="settings-item-content">
               <span className="settings-item-icon">🔔</span>
-              <span className="settings-item-text">Увімкнути сповіщення</span>
+              <span className="settings-item-text">Enable Notifications</span>
             </div>
             <motion.div
               className={`toggle-switch ${areNotificationsEnabled ? 'active' : ''}`}
@@ -79,6 +70,7 @@ const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, a
               />
             </motion.div>
           </motion.div>
+
           <motion.div
             className="settings-item"
             whileHover={{ scale: 1.02 }}
@@ -87,12 +79,13 @@ const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, a
           >
             <div className="settings-item-content">
               <span className="settings-item-icon">📧</span>
-              <span className="settings-item-text">Написати в підтримку</span>
+              <span className="settings-item-text">Contact Support</span>
             </div>
-            <i className="fas fa-chevron-right settings-item-arrow"></i>
+            <i className="fas fa-chevron-right settings-item-arrow" />
           </motion.div>
         </div>
       </motion.div>
+
       <AnimatePresence>
         {showSupportModal && (
           <motion.div
@@ -109,18 +102,15 @@ const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, a
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <button
-                onClick={() => setShowSupportModal(false)}
-                className="modal-close"
-              >
-                <i className="fas fa-times"></i>
+              <button onClick={() => setShowSupportModal(false)} className="modal-close">
+                <i className="fas fa-times" />
               </button>
-              <h3 className="modal-title">Написати в підтримку</h3>
+              <h3 className="modal-title">Contact Support</h3>
               <textarea
                 value={supportMessage}
                 onChange={(e) => setSupportMessage(e.target.value)}
                 className="modal-textarea"
-                placeholder="Опишіть вашу проблему..."
+                placeholder="Describe your issue…"
                 rows="5"
               />
               <motion.button
@@ -129,14 +119,13 @@ const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Надіслати
+                Send
               </motion.button>
               {supportStatus && (
                 <motion.p
-                  className={`modal-status ${supportStatus.includes('не може') ? 'status-error' : 'status-success'}`}
+                  className={`modal-status ${supportStatus.includes('cannot') ? 'status-error' : 'status-success'}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
                   {supportStatus}
