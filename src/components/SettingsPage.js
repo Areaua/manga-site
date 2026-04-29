@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Mail } from 'lucide-react';
 import Header from './Header';
 import './SettingsPage.css';
 
@@ -78,7 +79,9 @@ const SettingsPage = ({ hideHeader, isAdultContentEnabled, toggleAdultContent, a
             onClick={() => setShowSupportModal(true)}
           >
             <div className="settings-item-content">
-              <span className="settings-item-icon">📧</span>
+              <span className="settings-item-icon">
+                <Mail size={22} className="text-violet-500" />
+              </span>
               <span className="settings-item-text">Contact Support</span>
             </div>
             <i className="fas fa-chevron-right settings-item-arrow" />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Crown, Edit2 } from 'lucide-react';
 import Header from './Header';
 import './ProfilePage.css';
 import { API_BASE_URL, API_PREFIX } from '../config';
@@ -139,14 +140,14 @@ const ProfilePage = ({ hideHeader }) => {
               onClick={userData.is_premium ? undefined : () => setShowPremiumPackages((p) => !p)}
               disabled={userData.is_premium}
             >
-              <i className="fas fa-crown" />
+              <Crown size={22} />
             </button>
             <span className="action-label">Get Premium</span>
           </motion.div>
 
           <motion.div className="action-item" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <button className="action-button" onClick={() => setShowEditModal(true)}>
-              <i className="fas fa-edit" />
+              <Edit2 size={22} />
             </button>
             <span className="action-label">Edit Profile</span>
           </motion.div>

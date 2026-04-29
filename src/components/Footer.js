@@ -32,7 +32,7 @@ const Footer = () => {
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleMouseDown}
     >
-      <div className="footer__tab">Pull up</div>
+      <div className="footer__tab" style={{ fontSize: '0.7rem', opacity: 0.75 }}>Pull to refresh</div>
       <div className="footer__content">
         <p className="footer__text">All rights reserved © {new Date().getFullYear()}</p>
       </div>
