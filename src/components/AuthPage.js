@@ -10,164 +10,132 @@ const AuthPage = () => {
     email: '',
     username: '',
     password: '',
-    passwordConfirm: ''
+    passwordConfirm: '',
   });
   const [errors, setErrors] = useState({
     email: '',
     username: '',
     password: '',
     passwordConfirm: '',
-    form: ''
+    form: '',
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const resetState = () => ({
+    email: '',
+    username: '',
+    password: '',
+    passwordConfirm: '',
+    form: '',
+  });
+
   const handleToggleForm = () => {
     setIsLogin(!isLogin);
-    setErrors({
-      email: '',
-      username: '',
-      password: '',
-      passwordConfirm: '',
-      form: ''
-    });
-    setFormData({
-      email: '',
-      username: '',
-      password: '',
-      passwordConfirm: ''
-    });
+    setErrors(resetState());
+    setFormData({ email: '', username: '', password: '', passwordConfirm: '' });
   };
 
   const validateForm = () => {
-    let isValid = true;
-    const newErrors = {
-      email: '',
-      username: '',
-      password: '',
-      passwordConfirm: '',
-      form: ''
-    };
+    let valid = true;
+    const e = resetState();
 
     if (!formData.email) {
-      newErrors.email = 'Пошта обов’язкова';
-      isValid = false;
+      e.email = 'Email is required';
+      valid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Введіть коректну пошту';
-      isValid = false;
+      e.email = 'Enter a valid email address';
+      valid = false;
     }
 
     if (!isLogin && !formData.username) {
-      newErrors.username = 'Нік обов’язковий';
-      isValid = false;
+      e.username = 'Username is required';
+      valid = false;
     }
 
     if (!formData.password) {
-      newErrors.password = 'Пароль обов’язковий';
-      isValid = false;
+      e.password = 'Password is required';
+      valid = false;
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Пароль має бути не менше 6 символів';
-      isValid = false;
+      e.password = 'Password must be at least 6 characters';
+      valid = false;
     }
 
     if (!isLogin && formData.password !== formData.passwordConfirm) {
-      newErrors.passwordConfirm = 'Паролі не співпадають';
-      isValid = false;
+      e.passwordConfirm = 'Passwords do not match';
+      valid = false;
     }
 
-    setErrors(newErrors);
-    return isValid;
+    setErrors(e);
+    return valid;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsLoading(true);
-    setErrors(prev => ({ ...prev, form: '' }));
+    setErrors((prev) => ({ ...prev, form: '' }));
 
     const endpoint = isLogin ? 'login' : 'register';
-    const bodyData = isLogin
+    const body = isLogin
       ? { email: formData.email, password: formData.password }
-      : { username: formData.username, email: formData.email, password: formData.password, confirm_password: formData.passwordConfirm };
+      : {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          confirm_password: formData.passwordConfirm,
+        };
 
     try {
       const response = await fetch(`${API_BASE_URL}${API_PREFIX}/${endpoint}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(bodyData)
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(body),
       });
 
       let data;
       try {
         data = await response.json();
-      } catch (jsonError) {
-        throw new Error('Сервер повернув невалідну відповідь. Перевірте конфігурацію API.');
+      } catch {
+        throw new Error('Server returned an invalid response. Check your API configuration.');
       }
 
-      if (!response.ok) {
-        throw new Error(data.detail || 'Щось пішло не так');
-      }
+      if (!response.ok) throw new Error(data.detail || 'Something went wrong');
 
       if (isLogin) {
         localStorage.setItem('token', data.access_token);
         navigate('/home');
       } else {
-        setErrors(prev => ({
-          ...prev,
-          form: 'Реєстрація успішна! Увійдіть.'
-        }));
+        setErrors((prev) => ({ ...prev, form: 'Registration successful! Please sign in.' }));
         setIsLogin(true);
-        setFormData({
-          email: formData.email,
-          username: '',
-          password: '',
-          passwordConfirm: ''
-        });
+        setFormData({ email: formData.email, username: '', password: '', passwordConfirm: '' });
       }
-    } catch (error) {
-      setErrors(prev => ({
-        ...prev,
-        form: error.message || 'Сталася помилка. Спробуйте ще раз.'
-      }));
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, form: err.message || 'An error occurred. Please try again.' }));
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleForgotPassword = () => {
-    setErrors(prev => ({
-      ...prev,
-      form: 'Зверніться до підтримки, щоб скинути пароль.'
-    }));
+    setErrors((prev) => ({ ...prev, form: 'Contact support to reset your password.' }));
   };
 
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h1 className="auth-title">{isLogin ? 'Вхід' : 'Реєстрація'}</h1>
+        <h1 className="auth-title">{isLogin ? 'Sign In' : 'Sign Up'}</h1>
         <div className="auth-content">
           <div className="form-block">
             <form id="authForm" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="email">Електронна пошта</label>
+                <label htmlFor="email">Email</label>
                 <input
                   type="email"
                   id="email"
@@ -178,9 +146,10 @@ const AuthPage = () => {
                 />
                 {errors.email && <p className="error">{errors.email}</p>}
               </div>
+
               {!isLogin && (
                 <div className="form-group">
-                  <label htmlFor="username">Нік</label>
+                  <label htmlFor="username">Username</label>
                   <input
                     type="text"
                     id="username"
@@ -192,8 +161,9 @@ const AuthPage = () => {
                   {errors.username && <p className="error">{errors.username}</p>}
                 </div>
               )}
+
               <div className="form-group">
-                <label htmlFor="password">Пароль</label>
+                <label htmlFor="password">Password</label>
                 <input
                   type="password"
                   id="password"
@@ -204,9 +174,10 @@ const AuthPage = () => {
                 />
                 {errors.password && <p className="error">{errors.password}</p>}
               </div>
+
               {!isLogin && (
                 <div className="form-group">
-                  <label htmlFor="passwordConfirm">Підтвердити пароль</label>
+                  <label htmlFor="passwordConfirm">Confirm Password</label>
                   <input
                     type="password"
                     id="passwordConfirm"
@@ -218,39 +189,44 @@ const AuthPage = () => {
                   {errors.passwordConfirm && <p className="error">{errors.passwordConfirm}</p>}
                 </div>
               )}
+
               <button type="submit" disabled={isLoading}>
                 {isLoading ? (
                   <>
-                    <span className="spinner"></span> Обробка...
+                    <span className="spinner" /> Processing...
                   </>
-                ) : isLogin ? 'Увійти' : 'Зареєструватися'}
+                ) : isLogin ? (
+                  'Sign In'
+                ) : (
+                  'Create Account'
+                )}
               </button>
             </form>
           </div>
+
           <div className="social-block">
-            <h2>Або увійдіть через:</h2>
+            <h2>Or sign in with:</h2>
             <button className="social-btn google">Google</button>
             <button className="social-btn facebook">Facebook</button>
             <button className="social-btn whatsapp">WhatsApp</button>
             <button className="social-btn telegram">Telegram</button>
           </div>
         </div>
+
         <div className="toggle-block">
           <p>
-            {isLogin ? 'Немає акаунта? ' : 'Вже є акаунт? '}
+            {isLogin ? "Don't have an account? " : 'Already have an account? '}
             <button onClick={handleToggleForm} disabled={isLoading}>
-              {isLogin ? 'Зареєструватися' : 'Увійти'}
+              {isLogin ? 'Sign up' : 'Sign in'}
             </button>
           </p>
           {isLogin && (
             <button onClick={handleForgotPassword} className="forgot-password" disabled={isLoading}>
-              Забули пароль?
+              Forgot password?
             </button>
           )}
           {errors.form && (
-            <p className={errors.form.includes('успішна') ? 'success' : 'error'}>
-              {errors.form}
-            </p>
+            <p className={errors.form.includes('successful') ? 'success' : 'error'}>{errors.form}</p>
           )}
         </div>
       </div>

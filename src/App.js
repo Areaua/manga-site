@@ -92,7 +92,7 @@ const App = () => {
           element={
             <div className="app-container">
               <div className="main-content">
-                <div className="home bg-black bg-opacity-50 min-h-screen">
+                <div className="min-h-screen">
                   <Routes>
                     <Route
                       path="/home"

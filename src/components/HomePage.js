@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MangaSlideshow from './MangaSlideshow';
 import ComicReadingPage from './ComicReadingPage';
 import GenrePanel from './GenrePanel';
@@ -6,87 +6,60 @@ import Header from './Header';
 import AnimeList from './AnimeList';
 import AnimeDetails from './AnimeDetails';
 import MultiMangaSlideshow from './MultiMangaSlideshow';
-import './HomePage.css';
 
-// Головна сторінка з мангою та аніме
+const ANIMES = [
+  { name: 'Thriller Anime 1',      genre: 'Thriller',     href: 'https://example.com/page1.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Thriller Anime 2',      genre: 'Thriller',     href: 'https://example.com/page2.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Drama Anime 1',         genre: 'Drama',        href: 'https://example.com/page3.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Drama Anime 2',         genre: 'Drama',        href: 'https://example.com/page4.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Supernatural Anime 1',  genre: 'Supernatural', href: 'https://example.com/page5.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Supernatural Anime 2',  genre: 'Supernatural', href: 'https://example.com/page6.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Romance Anime 1',       genre: 'Romance',      href: 'https://example.com/page7.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Romance Anime 2',       genre: 'Romance',      href: 'https://example.com/page8.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Adventure Anime 1',     genre: 'Adventure',    href: 'https://example.com/page9.html',  image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Adventure Anime 2',     genre: 'Adventure',    href: 'https://example.com/page10.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Business Anime 1',      genre: 'Business',     href: 'https://example.com/page11.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+  { name: 'Business Anime 2',      genre: 'Business',     href: 'https://example.com/page12.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
+];
+
+const MANGAS = [
+  { title: 'Cinderella Chef',    image: 'https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg', isAdult: false, year: 2023 },
+  { title: 'Shadow Chronicles',  image: 'https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg', isAdult: false, year: 2022 },
+  { title: 'Starfall Academy',   image: 'https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg', isAdult: false, year: 2024 },
+  { title: 'Crimson Pact',       image: 'https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg', isAdult: false, year: 2021 },
+  { title: 'Bloom in Winter',    image: 'https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg', isAdult: false, year: 2023 },
+  { title: 'Neon Labyrinth',     image: 'https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg', isAdult: false, year: 2022 },
+  { title: 'The Seventh Gate',   image: 'https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg', isAdult: false, year: 2025 },
+  { title: 'Phantom Melody',     image: 'https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg', isAdult: false, year: 2024 },
+  { title: 'Iron Blossom',       image: 'https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg', isAdult: false, year: 2021 },
+];
+
 const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis, isAdultContentEnabled, areNotificationsEnabled }) => {
   const [showComicPage, setShowComicPage] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('all');
-  const [selectedYear, setSelectedYear] = useState('all');
+  const [selectedYear, setSelectedYear]   = useState('all');
   const [selectedAnime, setSelectedAnime] = useState(null);
 
-  // Обробка вибору жанру
-  const handleGenreClick = (genre) => setSelectedGenre(genre);
-
-  // Обробка вибору року
-  const handleYearChange = (year) => setSelectedYear(year);
-
-  // Відкриття сторінки манги
-  const handleReadClick = (manga) => setShowComicPage(true);
-
-  // Повернення назад
-  const handleBackClick = () => setShowComicPage(false);
-
-  // Вибір аніме
-  const handleAnimeClick = (anime) => setSelectedAnime(anime);
-
-  // Збереження/видалення аніме
   const handleSaveClick = (anime) => {
-    const updatedAnimes = savedAnimes.includes(anime)
-      ? savedAnimes.filter((savedAnime) => savedAnime.name !== anime.name)
+    const updated = savedAnimes.includes(anime)
+      ? savedAnimes.filter((a) => a.name !== anime.name)
       : [...savedAnimes, anime];
-    setSavedAnimes(updatedAnimes);
-    localStorage.setItem('savedAnimes', JSON.stringify(updatedAnimes));
+    setSavedAnimes(updated);
+    localStorage.setItem('savedAnimes', JSON.stringify(updated));
   };
 
-  // Список аніме
-  const animes = [
-    { name: 'Аніме Трилер 1', genre: 'Трилер', href: 'https://example.com/page1.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Трилер 2', genre: 'Трилер', href: 'https://example.com/page2.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Драма 1', genre: 'Драма', href: 'https://example.com/page3.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Драма 2', genre: 'Драма', href: 'https://example.com/page4.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Надприродне 1', genre: 'Надприродне', href: 'https://example.com/page5.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Надприродне 2', genre: 'Надприродне', href: 'https://example.com/page6.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Романтика 1', genre: 'Романтика', href: 'https://example.com/page7.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Романтика 2', genre: 'Романтика', href: 'https://example.com/page8.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Пригоди 1', genre: 'Пригоди', href: 'https://example.com/page9.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Пригоди 2', genre: 'Пригоди', href: 'https://example.com/page10.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Бізнес 1', genre: 'Бізнес', href: 'https://example.com/page11.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Бізнес 2', genre: 'Бізнес', href: 'https://example.com/page12.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: false },
-    { name: 'Аніме Трилер 18+', genre: 'Трилер', href: 'https://example.com/page25.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: true },
-    { name: 'Аніме Драма 18+', genre: 'Драма', href: 'https://example.com/page26.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: true },
-    { name: 'Аніме Надприродне 18+', genre: 'Надприродне', href: 'https://example.com/page27.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: true },
-    { name: 'Аніме Романтика 18+', genre: 'Романтика', href: 'https://example.com/page28.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: true },
-    { name: 'Аніме Пригоди 18+', genre: 'Пригоди', href: 'https://example.com/page29.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: true },
-    { name: 'Аніме Бізнес 18+', genre: 'Бізнес', href: 'https://example.com/page30.html', image: 'https://storage.googleapis.com/a1aa/image/UiUwkO3dOFZXGp7f3JLCbH2G0WfaA5si1GHXNGdaZUErAmvTA.jpg', isAdult: true },
-  ];
+  const filteredAnimes = ANIMES.filter(
+    (a) => (selectedGenre === 'all' || a.genre === selectedGenre) && (isAdultContentEnabled || !a.isAdult)
+  );
 
-  // Список манги
-  const mangas = [
-    { title: "Шеф-кухар Попелюшка", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2023 },
-    { title: "Інша манга", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false, year: 2022 },
-    { title: "Ще одна манга", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true, year: 2024 },
-    { title: "Четверта манга", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: true, year: 2021 },
-    { title: "П'ята манга", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2023 },
-    { title: "Шоста манга", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: false, year: 2022 },
-    { title: "Сьома манга", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2025 },
-    { title: "Восьма манга", image: "https://storage.googleapis.com/a1aa/image/UdGsLfffIlcz0pfHAkLoBI5wXDPVzyzSdEOSNvA67M7NugedC.jpg", isAdult: true, year: 2024 },
-    { title: "Дев'ята манга", image: "https://storage.googleapis.com/a1aa/image/aBzENfwKiJzoRKKEAQkYIdYlnVDuoReOHeTosFLUxdbEXQfOB.jpg", isAdult: false, year: 2021 },
-  ];
-
-  // Фільтрація аніме за жанром і 18+
-  const filteredAnimes = selectedGenre === 'all' 
-    ? animes.filter(anime => isAdultContentEnabled || !anime.isAdult)
-    : animes.filter(anime => anime.genre === selectedGenre && (isAdultContentEnabled || !anime.isAdult));
-
-  // Фільтрація манги за жанром, роком і 18+
-  const filteredMangas = mangas.filter((manga) => {
-    const genreMatch = selectedGenre === 'all' || manga.isAdult === (selectedGenre === 'adult') || manga.genre === selectedGenre;
-    const yearMatch = selectedYear === 'all' || manga.year === parseInt(selectedYear);
-    return genreMatch && yearMatch && (isAdultContentEnabled || !manga.isAdult);
+  const filteredMangas = MANGAS.filter((m) => {
+    const yearOk  = selectedYear === 'all' || m.year === parseInt(selectedYear);
+    const adultOk = isAdultContentEnabled || !m.isAdult;
+    return yearOk && adultOk;
   });
 
-  if (showComicPage) return <ComicReadingPage onBackClick={handleBackClick} />;
+  if (showComicPage) return <ComicReadingPage onBackClick={() => setShowComicPage(false)} />;
+
   if (selectedAnime) {
     return (
       <AnimeDetails
@@ -101,26 +74,54 @@ const HomePage = ({ savedAnimes, setSavedAnimes, hideHeader, genreEmojis, isAdul
   }
 
   return (
-    <div className="home-page">
+    <div className="min-h-screen">
       <Header hideHeader={hideHeader} areNotificationsEnabled={areNotificationsEnabled} />
-      <div className="home-page__content">
-        <MangaSlideshow mangas={filteredMangas} onReadClick={handleReadClick} isAdultContentEnabled={isAdultContentEnabled} />
-        <MultiMangaSlideshow mangas={filteredMangas} onReadClick={handleReadClick} isAdultContentEnabled={isAdultContentEnabled} />
-        <AnimeList
-          animes={filteredAnimes}
-          handleAnimeClick={handleAnimeClick}
-          genreEmojis={genreEmojis}
-          savedAnimes={savedAnimes}
-          onSaveClick={handleSaveClick}
-        />
+
+      <div className="pt-16">
+        <div className="max-w-7xl mx-auto px-4 py-6 flex gap-6 items-start">
+
+          {/* Main content */}
+          <main className="flex-1 min-w-0 space-y-8">
+            <MangaSlideshow
+              mangas={filteredMangas}
+              onReadClick={() => setShowComicPage(true)}
+              pornFilter={isAdultContentEnabled}
+            />
+
+            <section>
+              <h2 className="text-lg font-bold text-ink-900 dark:text-cream-50 mb-4">New &amp; Trending</h2>
+              <MultiMangaSlideshow
+                mangas={filteredMangas}
+                onReadClick={() => setShowComicPage(true)}
+                pornFilter={isAdultContentEnabled}
+                savedAnimes={savedAnimes}
+                onSaveClick={handleSaveClick}
+              />
+            </section>
+
+            <AnimeList
+              animes={filteredAnimes}
+              handleAnimeClick={(anime) => setSelectedAnime(anime)}
+              genreEmojis={genreEmojis}
+              savedAnimes={savedAnimes}
+              onSaveClick={handleSaveClick}
+            />
+          </main>
+
+          {/* Sidebar */}
+          <aside className="w-64 shrink-0 hidden lg:block">
+            <div className="sticky top-20">
+              <GenrePanel
+                genreEmojis={genreEmojis}
+                selectedGenre={selectedGenre}
+                handleGenreClick={(g) => setSelectedGenre(g)}
+                selectedYear={selectedYear}
+                handleYearChange={(y) => setSelectedYear(y)}
+              />
+            </div>
+          </aside>
+        </div>
       </div>
-      <GenrePanel
-        genreEmojis={genreEmojis}
-        selectedGenre={selectedGenre}
-        handleGenreClick={handleGenreClick}
-        selectedYear={selectedYear}
-        handleYearChange={handleYearChange}
-      />
     </div>
   );
 };

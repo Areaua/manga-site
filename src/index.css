@@ -7,7 +7,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 /* ===== Скрытие скроллбаров с сохранением прокрутки ===== */
@@ -49,36 +49,40 @@ body {
 
 /* ===== Цветовые переменные ===== */
 :root {
-  /* Светлая тема: светло-желтая */
-  --body-color: #fff9e6;
-  --sidebar-color: #fff9e6;
-  --primary-color: #f97316;
-  --primary-color-light: #fed7aa;
-  --toggle-color: #fed7aa;
-  --text-color: #707070;
-  --header-text-color: #fff9e6;
-  --header-bg-color: #f97316;
+  --body-color: #FFFAF5;
+  --sidebar-color: #FFFFFF;
+  --primary-color: #F43F5E;
+  --primary-color-light: #FFE4E6;
+  --toggle-color: #FFE4E6;
+  --text-color: #1E293B;
+  --header-text-color: #FFFFFF;
+  --header-bg-color: #F43F5E;
   --tran-03: all 0.3s ease;
   --tran-05: all 0.5s ease;
 }
 
 body.dark {
-  /* Тёмная тема: сине-синяя */
-  --body-color: #2a3b5b;
-  --sidebar-color: #2a3b5b;
-  --primary-color: #1e90ff;
-  --primary-color-light: #e6f0fa;
-  --toggle-color: #add8e6;
-  --text-color: #ffffff;
-  --header-text-color: #ffffff;
-  --header-bg-color: #1e90ff;
+  --body-color: #1E293B;
+  --sidebar-color: #0F172A;
+  --primary-color: #A78BFA;
+  --primary-color-light: #4C1D95;
+  --toggle-color: #A78BFA;
+  --text-color: #F1F5F9;
+  --header-text-color: #F1F5F9;
+  --header-bg-color: #0F172A;
 }
 
 /* ===== Базовые стили ===== */
 body {
   min-height: 100vh;
-  background-color: var(--body-color);
+  background: linear-gradient(180deg, #FFFAF5 0%, #FFF1F2 100%);
+  color: #1E293B;
   transition: var(--tran-05);
+}
+
+body.dark {
+  background: linear-gradient(180deg, #1E293B 0%, #0F172A 100%);
+  color: #F1F5F9;
 }
 
 /* ===== Основной контент ===== */
