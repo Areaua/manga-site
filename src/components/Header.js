@@ -15,7 +15,7 @@ const NAV_LINKS = [
 ];
 
 const Header = ({ hideHeader, areNotificationsEnabled }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => document.body.classList.contains('dark'));
+  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
   const [userData, setUserData] = useState({
     username: 'Guest',
     avatar_url: 'https://www.gravatar.com/avatar/?d=mp',
@@ -30,6 +30,11 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Apply saved theme on mount (before user interacts)
+  useEffect(() => {
+    document.body.classList.toggle('dark', isDarkMode);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -68,9 +73,19 @@ const Header = ({ hideHeader, areNotificationsEnabled }) => {
   };
 
   const toggleDarkMode = () => {
-    const next = !document.body.classList.contains('dark');
+    const next = !isDarkMode;
     setIsDarkMode(next);
     document.body.classList.toggle('dark', next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+    // Fire-and-forget: sync theme to backend, never block UX
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.put(
+        `${API_BASE_URL}${API_PREFIX}/update-theme`,
+        { theme: next ? 'dark' : 'light' },
+        { headers: { Authorization: `Bearer ${token}` } }
+      ).catch(() => {});
+    }
   };
 
   const handleLogout = () => {

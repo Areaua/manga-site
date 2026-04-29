@@ -62,15 +62,19 @@ const ProfilePage = ({ hideHeader }) => {
     const formData = new FormData();
     formData.append('file', file);
     try {
+      // Do NOT set Content-Type manually — browser must set multipart boundary
       const response = await axios.post(`${API_BASE_URL}${API_PREFIX}/upload-avatar`, formData, {
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setUserData((prev) => ({ ...prev, avatar_url: response.data.avatar_url }));
+      const raw     = response.data.avatar_url;
+      const fullUrl = raw && raw.startsWith('http') ? raw : `${API_BASE_URL}${raw}`;
+      setUserData((prev) => ({ ...prev, avatar_url: `${fullUrl}?t=${Date.now()}` }));
       setUpdateStatus('Avatar updated successfully');
-      localStorage.setItem('userData', JSON.stringify({ ...userData, avatar_url: response.data.avatar_url }));
+      localStorage.setItem('userData', JSON.stringify({ ...userData, avatar_url: fullUrl }));
       setTimeout(() => setUpdateStatus(''), 3000);
-    } catch {
-      setUpdateStatus('Failed to upload avatar');
+    } catch (error) {
+      console.error('Avatar upload error:', error);
+      setUpdateStatus(error.response?.data?.detail || 'Failed to upload avatar');
     }
   };
 
