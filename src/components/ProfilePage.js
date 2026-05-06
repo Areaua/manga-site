@@ -3,12 +3,14 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, Edit2 } from 'lucide-react';
 import Header from './Header';
+import LoadingSpinner from './LoadingSpinner';
 import './ProfilePage.css';
 import { API_BASE_URL, API_PREFIX } from '../config';
 
 const ProfilePage = ({ hideHeader }) => {
   const [showEditModal, setShowEditModal]             = useState(false);
   const [showPremiumPackages, setShowPremiumPackages] = useState(false);
+  const [isLoading, setIsLoading]                     = useState(true);
   const [userData, setUserData] = useState({
     username: '',
     avatar_url: '',
@@ -20,7 +22,7 @@ const ProfilePage = ({ hideHeader }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('token');
-      if (!token) return;
+      if (!token) { setIsLoading(false); return; }
       try {
         const response = await axios.get(`${API_BASE_URL}${API_PREFIX}/me`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -30,6 +32,8 @@ const ProfilePage = ({ hideHeader }) => {
       } catch (error) {
         console.error('Failed to fetch user data:', error);
         setUpdateStatus('Failed to load profile data');
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchUserData();
@@ -86,6 +90,7 @@ const ProfilePage = ({ hideHeader }) => {
   const isError = updateStatus.includes('Failed') || updateStatus.includes('expired') || updateStatus.includes('cannot');
 
   if (hideHeader) return null;
+  if (isLoading) return <LoadingSpinner label="Loading profile..." />;
 
   return (
     <div className="profile-container">

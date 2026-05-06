@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import FavouritesPage from './components/FavouritesPage';
 import ProfilePage from './components/ProfilePage';
@@ -7,6 +7,7 @@ import SettingsPage from './components/SettingsPage';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
 import AnimeDetails from './components/AnimeDetails';
+import NotFoundPage from './components/NotFoundPage';
 import Footer from './components/Footer';
 import './index.css';
 import './welcome-auth.css';
@@ -142,7 +143,7 @@ const App = () => {
                         />
                       }
                     />
-                    <Route path="*" element={<Navigate to="/auth" />} />
+                    <Route path="*" element={<NotFoundPage />} />
                   </Routes>
                 </div>
               </div>

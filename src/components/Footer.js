@@ -1,43 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import './Footer.css';
+import React from 'react';
 
-const Footer = () => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [isOpen, setIsOpen]         = useState(false);
-  const [startY, setStartY]         = useState(0);
-  const [currentY, setCurrentY]     = useState(0);
-
-  const handleTouchStart = (e) => { setIsDragging(true); setStartY(e.touches[0].clientY); };
-  const handleTouchMove  = (e) => { if (isDragging) setCurrentY(e.touches[0].clientY); };
-  const handleTouchEnd   = ()  => { setIsDragging(false); setIsOpen(startY - currentY > 50); };
-  const handleMouseDown  = (e) => { setIsDragging(true); setStartY(e.clientY); };
-
-  const handleMouseMove = useCallback((e) => { if (isDragging) setCurrentY(e.clientY); }, [isDragging]);
-  const handleMouseUp   = useCallback(() => { setIsDragging(false); setIsOpen(startY - currentY > 50); }, [startY, currentY]);
-
-  useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
-
-  return (
-    <div
-      className={`footer ${isOpen ? 'footer--open' : ''}`}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-    >
-      <div className="footer__tab" style={{ fontSize: '0.7rem', opacity: 0.75 }}>Pull to refresh</div>
-      <div className="footer__content">
-        <p className="footer__text">All rights reserved © {new Date().getFullYear()}</p>
-      </div>
-    </div>
-  );
-};
+const Footer = () => (
+  <footer className="bg-white border-t border-blush-100 py-6 text-center dark:bg-ink-900 dark:border-ink-600/20">
+    <p className="text-sm text-ink-600 dark:text-ink-400">
+      © {new Date().getFullYear()} AniAria. All rights reserved. · Made with ❤️ by Pavlo Z.
+    </p>
+  </footer>
+);
 
 export default Footer;

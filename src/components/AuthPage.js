@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, User, Lock, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import LoadingSpinner from './LoadingSpinner';
 import { API_BASE_URL, API_PREFIX } from '../config';
 
 const FormField = ({
@@ -256,7 +257,9 @@ const AuthPage = () => {
               disabled={isLoading}
               className="w-full py-3 rounded-xl bg-gradient-to-r from-coral-500 to-violet-500 hover:from-coral-600 hover:to-violet-600 text-white font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-md"
             >
-              {isLoading ? 'Processing…' : isLogin ? 'Sign In' : 'Create Account'}
+              {isLoading
+                ? <LoadingSpinner size={20} />
+                : isLogin ? 'Sign In' : 'Create Account'}
             </button>
           </form>
 
