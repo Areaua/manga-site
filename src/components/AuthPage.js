@@ -258,7 +258,7 @@ const AuthPage = () => {
               className="w-full py-3 rounded-xl bg-gradient-to-r from-coral-500 to-violet-500 hover:from-coral-600 hover:to-violet-600 text-white font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-md"
             >
               {isLoading
-                ? <LoadingSpinner size={20} />
+                ? <LoadingSpinner size={20} inline />
                 : isLogin ? 'Sign In' : 'Create Account'}
             </button>
           </form>
