@@ -18,7 +18,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 class UpdateUsernameRequest(BaseModel):
     username: str
-    
+
 class UpdateThemeRequest(BaseModel):
     theme: str
 
@@ -28,12 +28,12 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
         payload = decode_access_token(token)
         if payload is None:
             logger.error("Invalid or expired token")
-            raise HTTPException(status_code=401, detail="Невалідний або прострочений токен")
+            raise HTTPException(status_code=401, detail="Invalid or expired token")
         email = payload.get("sub")
         user = users_collection.find_one({"email": email})
         if user is None:
             logger.error(f"User not found for email: {email}")
-            raise HTTPException(status_code=401, detail="Користувача не знайдено")
+            raise HTTPException(status_code=401, detail="User not found")
         logger.info(f"User retrieved: {email}")
         return user
     except Exception as e:
@@ -46,21 +46,21 @@ async def register(user_data: dict = Body(...)):
     try:
         if not user_data.get("email") or not user_data.get("password") or not user_data.get("username"):
             logger.error("Missing required fields")
-            raise HTTPException(status_code=422, detail="Email, пароль та ім'я користувача обов'язкові")
-        
+            raise HTTPException(status_code=422, detail="Email, password, and username are required")
+
         existing_user_by_username = users_collection.find_one({"username": user_data["username"]})
         if existing_user_by_username:
             logger.error(f"Username already taken: {user_data['username']}")
-            raise HTTPException(status_code=400, detail="Ім'я користувача вже зайнято")
-        
+            raise HTTPException(status_code=400, detail="Username already taken")
+
         if user_data["password"] != user_data["confirm_password"]:
             logger.error("Passwords do not match")
-            raise HTTPException(status_code=422, detail="Паролі не співпадають")
+            raise HTTPException(status_code=422, detail="Passwords do not match")
 
         existing_user_by_email = users_collection.find_one({"email": user_data["email"]})
         if existing_user_by_email:
             logger.error(f"Email already registered: {user_data['email']}")
-            raise HTTPException(status_code=400, detail="Email вже зареєстровано")
+            raise HTTPException(status_code=400, detail="Email already registered")
 
         hashed_password = get_password_hash(user_data["password"])
         user_in_db = UserInDB(
@@ -74,7 +74,7 @@ async def register(user_data: dict = Body(...)):
         )
         users_collection.insert_one(user_in_db.dict(exclude={"password", "confirm_password"}))
         logger.info(f"User registered successfully: {user_data['email']}")
-        return {"message": "Користувача успішно зареєстровано"}
+        return {"message": "User registered successfully"}
     except Exception as e:
         logger.error(f"Registration error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -87,15 +87,15 @@ async def login(credentials: dict = Body(...)):
         password = credentials.get("password")
         if not identifier or not password:
             logger.error("Missing email/username or password")
-            raise HTTPException(status_code=422, detail="Email/ім'я користувача та пароль обов'язкові")
+            raise HTTPException(status_code=422, detail="Email/username and password are required")
 
         db_user = users_collection.find_one({"$or": [{"email": identifier}, {"username": identifier}]})
         if db_user is None:
             logger.error(f"User not found: {identifier}")
-            raise HTTPException(status_code=401, detail="Невірний email/ім'я користувача або пароль")
+            raise HTTPException(status_code=401, detail="Invalid email or password")
         if not verify_password(password, db_user["hashed_password"]):
             logger.error("Invalid password")
-            raise HTTPException(status_code=401, detail="Невірний email/ім'я користувача або пароль")
+            raise HTTPException(status_code=401, detail="Invalid email or password")
         access_token = create_access_token(data={"sub": db_user["email"]}, expires_delta=timedelta(minutes=30))
         logger.info(f"Login successful for: {db_user['email']}")
         return {"access_token": access_token, "token_type": "bearer"}
@@ -121,19 +121,19 @@ async def update_user(update_data: UpdateUsernameRequest, current_user: dict = D
     try:
         if not update_data.username.strip():
             logger.error("Username cannot be empty")
-            raise HTTPException(status_code=422, detail="Ім'я користувача не може бути порожнім")
-        
+            raise HTTPException(status_code=422, detail="Username cannot be empty")
+
         existing_user = users_collection.find_one({"username": update_data.username, "email": {"$ne": current_user["email"]}})
         if existing_user:
             logger.error(f"Username already taken: {update_data.username}")
-            raise HTTPException(status_code=400, detail="Ім'я користувача вже зайнято")
-        
+            raise HTTPException(status_code=400, detail="Username already taken")
+
         users_collection.update_one(
             {"email": current_user["email"]},
             {"$set": {"username": update_data.username}}
         )
         logger.info(f"Username updated for: {current_user['email']}")
-        return {"message": "Ім'я користувача успішно оновлено"}
+        return {"message": "Username updated successfully"}
     except Exception as e:
         logger.error(f"Username update error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -144,14 +144,14 @@ async def update_theme(update_data: UpdateThemeRequest, current_user: dict = Dep
     try:
         if update_data.theme not in ["light", "dark"]:
             logger.error(f"Invalid theme: {update_data.theme}")
-            raise HTTPException(status_code=422, detail="Тема має бути 'light' або 'dark'")
-        
+            raise HTTPException(status_code=422, detail="Theme must be 'light' or 'dark'")
+
         users_collection.update_one(
             {"email": current_user["email"]},
             {"$set": {"theme": update_data.theme}}
         )
         logger.info(f"Theme updated for: {current_user['email']}")
-        return {"message": "Тему успішно оновлено"}
+        return {"message": "Theme updated successfully"}
     except Exception as e:
         logger.error(f"Theme update error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -165,20 +165,20 @@ async def upload_avatar(file: UploadFile = File(...), current_user: dict = Depen
         file_extension = file.filename.split('.')[-1]
         avatar_filename = f"{avatar_id}.{file_extension}"
         avatar_path = os.path.join(avatars_dir, avatar_filename)
-        
+
         with open(avatar_path, "wb") as f:
             content = await file.read()
             f.write(content)
         logger.info(f"Avatar content length: {len(content)} bytes, saved at: {avatar_path}")
-        
+
         avatar_url = f"/avatars/{avatar_filename}"
-        
+
         users_collection.update_one(
             {"email": current_user["email"]},
             {"$set": {"avatar_url": avatar_url}}
         )
-        
-        return {"message": "Аватар успішно оновлено", "avatar_url": avatar_url}
+
+        return {"message": "Avatar updated successfully", "avatar_url": avatar_url}
     except Exception as e:
         logger.error(f"Avatar upload error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -192,7 +192,7 @@ async def upgrade_premium(current_user: dict = Depends(get_current_user)):
             {"$set": {"is_premium": True}}
         )
         logger.info(f"Premium upgraded for: {current_user['email']}")
-        return {"message": "Преміум-підписку активовано"}
+        return {"message": "Premium subscription activated"}
     except Exception as e:
         logger.error(f"Premium upgrade error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
